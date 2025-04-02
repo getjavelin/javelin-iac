@@ -1,5 +1,35 @@
-# Object file
-*.o
+**k8s-file-secrets.yml
+**k8s-secrets.yml
+**values-secrets.yml
+**.terraform**
+**terraform.tfstate**
+.idea
+.DS_Store
+.vscode
+venv
+**.venv**
+**compose.env
 
-# Ada Library Information
-*.ali
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytestcacheInstance/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
