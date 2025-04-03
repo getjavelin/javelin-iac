@@ -1,0 +1,196 @@
+## Change it for each namespace
+logNamespace: ${service_namespace}
+projectName: ${project_name}
+
+## Actual Helm chart Value file https://github.com/fluent/helm-charts/blob/main/charts/fluent-bit/values.yaml
+## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/configuration-file
+config:
+  service: |
+    [SERVICE]
+        Daemon Off
+        Flush {{ .Values.flush }}
+        Log_Level {{ .Values.logLevel }}
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.metricsPort }}
+        Health_Check On
+
+  ## https://docs.fluentbit.io/manual/pipeline/inputs
+  inputs: |
+    [INPUT]
+        # admin
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-admin*.log
+        Tag {{ .Values.projectName }}-admin.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # aispm
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-aispm*.log
+        Tag {{ .Values.projectName }}-aispm.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # core
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-core*.log
+        Tag {{ .Values.projectName }}-core.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # webapp
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-webapp*.log
+        Tag {{ .Values.projectName }}-webapp.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # redteam
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-redteam*.log
+        Tag {{ .Values.projectName }}-redteam.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # eval
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-eval*.log
+        Tag {{ .Values.projectName }}-eval.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # dlp
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-dlp*.log
+        Tag {{ .Values.projectName }}-dlp.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # guard-cm
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-guard-cm*.log
+        Tag {{ .Values.projectName }}-guard-cm.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+    [INPUT]
+        # guard
+        Name tail
+        Path /var/log/containers/*_{{ .Values.logNamespace }}_{{ .Values.projectName }}-guard*.log
+        Tag {{ .Values.projectName }}-guard.*
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+  ## https://docs.fluentbit.io/manual/pipeline/filters
+  filters: |
+    [FILTER]
+        # admin
+        Name kubernetes
+        Match {{ .Values.projectName }}-admin.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        Name grep
+        Match {{ .Values.projectName }}-admin.*
+        Exclude log /.*/v1/admin/healthz*./
+        Exclude msg /.*/v1/admin/healthz*./
+    [FILTER]
+        # aispm
+        Name kubernetes
+        Match {{ .Values.projectName }}-aispm.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        Name grep
+        Match {{ .Values.projectName }}-aispm.*
+        Exclude log /.*/v1/admin/aispm/healthz*./
+        Exclude msg /.*/v1/admin/aispm/healthz*./
+    [FILTER]
+        # core
+        Name kubernetes
+        Match {{ .Values.projectName }}-core.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        Name grep
+        Match {{ .Values.projectName }}-core.*
+        Exclude log /.*/v1/system/healthz*./
+        Exclude msg /.*/v1/system/healthz*./
+    [FILTER]
+        # webapp
+        Name kubernetes
+        Match {{ .Values.projectName }}-webapp.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        # redteam
+        Name kubernetes
+        Match {{ .Values.projectName }}-redteam.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        # eval
+        Name kubernetes
+        Match {{ .Values.projectName }}-eval.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        # dlp
+        Name kubernetes
+        Match {{ .Values.projectName }}-dlp.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        # guard-cm
+        Name kubernetes
+        Match {{ .Values.projectName }}-guard-cm.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+    [FILTER]
+        # guard
+        Name kubernetes
+        Match {{ .Values.projectName }}-guard.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+
+  ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
+  ## This configuration is deprecated, please use `extraFiles` instead.
+  upstream: {}
+
+  ## https://docs.fluentbit.io/manual/pipeline/parsers
+  customParsers: |
+    [PARSER]
+        Name docker_no_time
+        Format json
+        Time_Keep Off
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L

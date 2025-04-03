@@ -1,0 +1,9 @@
+fullnameOverride: aws-cluster-autoscaler
+awsRegion: ${aws_region}
+autoDiscovery:
+  clusterName: ${k8s_cluster_name}
+rbac:
+  serviceAccount:
+    name: ${service_account_name}
+extraArgs:
+  scale-down-delay-after-add: "1m"

@@ -59,3 +59,8 @@ variable "custom_nodes_properties" {
     eks_node_max_size        = number
   }))
 }
+
+variable "common_tags" {
+  description = "Common tags"
+  type        = map(string)
+}

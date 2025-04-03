@@ -54,18 +54,6 @@ resource "aws_vpc_security_group_egress_rule" "eks_cluster_default_ipv6_egress_r
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "eks_cluster_bastion_ingress_rule" {
-  from_port                    = var.https_port
-  to_port                      = var.https_port
-  ip_protocol                  = "tcp"
-  referenced_security_group_id = var.bastion_sg_id
-  security_group_id            = aws_security_group.eks_cluster_sg.id
-  description                  = "terraform - eks access from bastion"
-  tags = {
-    Name = "terraform - eks access from bastion"
-  }
-}
-
 resource "aws_vpc_security_group_ingress_rule" "eks_cluster_additional_ingress_rule" {
   for_each                     = toset(var.additional_whitelist_cidr)
 
