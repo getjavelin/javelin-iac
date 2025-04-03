@@ -2,7 +2,7 @@
 
 Infrastructure Code for the Javelin Deployment
 
-**⚠️ WARNING**
+**ℹ️ IMPORTANT NOTICE**
 
 This Terraform configuration is designed for general cloud provider environments without any custom networking or VPC-level policies. 
 
