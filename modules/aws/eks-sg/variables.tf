@@ -18,11 +18,6 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "bastion_sg_id" {
-  description = "Bastion SG ID"
-  type        = string
-}
-
 variable "sg_egress_from_port" {
   description = "Default Egress from Port"
   type        = number

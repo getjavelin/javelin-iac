@@ -1,0 +1,101 @@
+## Change it for each namespace
+region: ${region}
+logRetention: ${cloudwatch_log_retention}
+k8sCluster: ${k8s_cluster_name}
+projectName: ${project_name}
+
+## Actual Helm chart Value file https://github.com/fluent/helm-charts/blob/main/charts/fluent-bit/values.yaml
+## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/configuration-file
+config:
+  ## https://docs.fluentbit.io/manual/pipeline/outputs
+  outputs: |
+    [OUTPUT]
+        # admin
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-admin.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-admin
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # aispm
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-aispm.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-aispm
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # core
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-core.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-core
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # webapp
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-webapp.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-webapp
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # redteam
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-redteam.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-redteam
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # eval
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-eval.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-eval
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # dlp
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-dlp.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-dlp
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # guard-cm
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-guard-cm.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-guard-cm
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
+    [OUTPUT]
+        # guard
+        Name cloudwatch_logs
+        Match {{ .Values.projectName }}-guard.*
+        region {{ .Values.region }}
+        log_group_name {{ .Values.k8sCluster }}-service-log
+        # log_stream_prefix javelin-
+        log_stream_name {{ .Values.projectName }}-guard
+        log_retention_days {{ .Values.logRetention }}
+        auto_create_group On
