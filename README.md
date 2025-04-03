@@ -2,11 +2,11 @@
 
 Infrastructure Code for the Javelin Deployment
 
-**_WARNING_**
+**⚠️ WARNING**
 
-```code
-This Terraform code will work for any Cloud environment (Choose the specific cloud providers in the terraform code setup) without any custom policies in the networking or VPC level. If there are any organization policies configured for your cloud provider, then please fork this repo and patch the terraform code to match with org policies
-```
+This Terraform configuration is designed for general cloud provider environments without any custom networking or VPC-level policies. 
+
+If your organization enforces specific network or cloud provider policies, please fork this repository and adjust the Terraform code accordingly to ensure compliance with your organization's standards.
 
 ## Directory Structure
 
