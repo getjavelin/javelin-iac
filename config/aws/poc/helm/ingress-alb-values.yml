@@ -1,0 +1,6 @@
+replicaCount: ${ingress_replicas}
+serviceAccount:
+  create: false
+  name: ${k8s_service_account}
+clusterName: ${k8s_cluster_name}
+enableBackendSecurityGroup: false
