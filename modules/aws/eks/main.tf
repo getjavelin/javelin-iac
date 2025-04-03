@@ -1,12 +1,10 @@
 ########## Locals ##########
 locals {
   cluster_name                  = join("-", [var.project_name, var.project_env, "eks"])
-  tags = {
-    ManagedBy                   = "Terraform"
-    Project                     = var.project_name
-    Environment                 = var.project_env
-    EKSCluster                  = local.cluster_name
-  }
+  tags                          = merge(var.common_tags,
+                                      {
+                                        EKSCluster = local.cluster_name
+                                      })
 }
 
 ########## Launch_Template ##########
@@ -41,32 +39,26 @@ resource "aws_launch_template" "eks_cluster" {
 
   tag_specifications {
     resource_type = "instance"
-    tags          = {
-      ManagedBy                 = "Terraform"
-      Project                   = var.project_name
-      Environment               = var.project_env
-      Name                      = local.cluster_name
-    }
+    tags          = merge(local.tags,
+                        {
+                          Name = local.cluster_name
+                        })
   }
 
   tag_specifications {
     resource_type = "volume"
-    tags          = {
-      ManagedBy                 = "Terraform"
-      Project                   = var.project_name
-      Environment               = var.project_env
-      Name                      = local.cluster_name
-    }
+    tags          = merge(local.tags,
+                        {
+                          Name = local.cluster_name
+                        })
   }
 
   tag_specifications {
     resource_type = "network-interface"
-    tags          = {
-      ManagedBy                 = "Terraform"
-      Project                   = var.project_name
-      Environment               = var.project_env
-      Name                      = local.cluster_name
-    }
+    tags          = merge(local.tags,
+                        {
+                          Name = local.cluster_name
+                        })
   }
 
   lifecycle {
@@ -109,22 +101,6 @@ module "eks_cluster" {
     create = "15m"
     update = "15m"
     delete = "15m"
-  }
-
-  access_entries = {
-    bastion_access = {
-      kubernetes_groups = []
-      principal_arn     = "arn:aws:iam::${var.aws_account_id}:role/${var.bastion_role_name}"
-
-      policy_associations = {
-        AmazonEKSClusterAdminPolicy = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-          access_scope = {
-            type       = "cluster"
-          }
-        }
-      }
-    }
   }
 
   tags = merge(var.tags.eks, local.tags)

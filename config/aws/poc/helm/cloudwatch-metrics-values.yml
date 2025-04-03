@@ -1,0 +1,4 @@
+clusterName: ${k8s_cluster_name}
+serviceAccount:
+  create: true
+  name: aws-cloudwatch

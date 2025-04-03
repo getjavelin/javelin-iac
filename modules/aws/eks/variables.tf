@@ -18,11 +18,6 @@ variable "vpc_id" {
   type        = string
 }
 
-# variable "bastion_sg_id" {
-#   description = "Bastion SG ID"
-#   type        = string
-# }
-
 variable "eks_cluster_sg_id" {
   description = "EKS Cluster SG ID"
   type        = string
@@ -86,11 +81,6 @@ variable "addons" {
       version = "not-using"
     }
   ]
-}
-
-variable "bastion_role_name" {
-  description = "Bastion Role Name"
-  type        = string
 }
 
 variable "eks_cloudwatch_retention" {
@@ -162,4 +152,9 @@ variable "devops_public_cidr" {
   description = "DevOps User ISP Gateway CIDR"
   type        = string
   default     = "0.0.0.0/0"
+}
+
+variable "common_tags" {
+  description = "Common tags"
+  type        = map(string)
 }

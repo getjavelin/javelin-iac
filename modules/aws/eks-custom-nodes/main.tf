@@ -1,11 +1,9 @@
 ########## Locals ##########
 locals {
-  tags = {
-    ManagedBy                       = "Terraform"
-    Project                         = var.project_name
-    Environment                     = var.project_env
-    EKSCluster                      = var.cluster_name
-  }
+  tags                              = merge(var.common_tags,
+                                          {
+                                            EKSCluster = var.cluster_name
+                                          })
 }
 
 ########## EKS_Custom_NodeGroup ##########
