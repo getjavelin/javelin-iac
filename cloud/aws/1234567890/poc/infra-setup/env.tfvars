@@ -51,7 +51,7 @@ eks_custom_nodes_properties              = [
                                                 # {
                                                 #     name                           = "gpu"
                                                 #     eks_node_ami_type              = "AL2_x86_64_GPU"
-                                                #     eks_node_instance_type         = "g5.xlarge"
+                                                #     eks_node_instance_type         = "g4dn.2xlarge"
                                                 #     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
                                                 #     eks_node_min_size              = 1
                                                 #     eks_node_max_size              = 1
