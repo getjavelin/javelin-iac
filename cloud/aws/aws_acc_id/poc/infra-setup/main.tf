@@ -72,6 +72,7 @@ module "eks_sg" {
   sg_egress_cidr                          = var.sg_egress_cidr
   sg_ipv6_egress_enable                   = var.sg_ipv6_egress_enable
   sg_ipv6_egress_cidr                     = var.sg_ipv6_egress_cidr
+  custom_egress_port_list                 = var.custom_egress_port_list
   vpc_id                                  = module.vpc[0].vpc_id
 }
 
