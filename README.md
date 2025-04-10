@@ -1,6 +1,6 @@
 # javelin-iac
 
-[Javelin Architecture Details](./Docs.md)
+[Javelin Architecture Details](./docs/Architecture.md)
 
 **ℹ️ IMPORTANT NOTICE**
 
