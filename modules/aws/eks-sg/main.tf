@@ -211,3 +211,17 @@ resource "aws_vpc_security_group_ingress_rule" "eks_cluster_nodes_ingress_rule" 
     Name = "terraform - eks nodes access to eks cluster"
   }
 }
+
+resource "aws_vpc_security_group_egress_rule" "eks_nodes_custom_egress_rule" {
+  count             = length(var.custom_egress_port_list)
+  
+  from_port         = "${var.custom_egress_port_list[count.index]}"
+  to_port           = "${var.custom_egress_port_list[count.index]}"
+  ip_protocol       = var.sg_egress_protocol
+  cidr_ipv4         = "${var.sg_egress_cidr}"
+  security_group_id = aws_security_group.eks_nodegroup_sg.id
+  description       = "terraform - ${var.custom_egress_port_list[count.index]} egress"
+  tags = {
+    Name = "terraform - ${var.custom_egress_port_list[count.index]} egress"
+  }
+}

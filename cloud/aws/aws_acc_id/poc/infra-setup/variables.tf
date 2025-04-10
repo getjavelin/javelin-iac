@@ -179,3 +179,9 @@ variable "common_tags" {
   description = "Common tags"
   type        = map(string)
 }
+
+variable "custom_egress_port_list" {
+  description = "Custom Egress port list for enabling outbound connectivity"
+  type        = list(string)
+  default     = []
+}
