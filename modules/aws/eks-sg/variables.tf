@@ -59,3 +59,8 @@ variable "additional_whitelist_cidr" {
   type        = list(string)
   default     = []
 }
+
+variable "custom_egress_port_list" {
+  description = "Custom Egress port list for enabling outbound connectivity"
+  type        = list(string)
+}
