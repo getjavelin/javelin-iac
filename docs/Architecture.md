@@ -10,9 +10,9 @@ Javelin AI Gateway can be deployed in cross region if the cloud provider meets t
 
 **ℹ️ IMPORTANT NOTICE**
 
-The Terraform doesn't support the cross region deployment. If you are choosing croiss region deployment, then please fork this repository and adjust the Terraform code accordingly to ensure that the following resources configured properly
+The Terraform doesn't support the cross region deployment. If you are choosing cross region deployment, then please fork this repository and adjust the Terraform code accordingly to ensure that the following resources configured properly
 
-* `AWS Application Load Balancer` with cross region with dns based failover setup, you can find the offical docs [here](https://docs.aws.amazon.com/whitepapers/latest/real-time-communication-on-aws/cross-region-dns-based-load-balancing-and-failover.html)
+* `AWS Application Load Balancer` cross region dns based failover setup, you can find the offical docs [here](https://docs.aws.amazon.com/whitepapers/latest/real-time-communication-on-aws/cross-region-dns-based-load-balancing-and-failover.html)
 
 * `Postgres Active - Active Cluster` with help of `pgactive extension`, checkout the official [docs](https://aws.amazon.com/blogs/database/using-pgactive-active-active-replication-extension-for-postgresql-on-amazon-rds-for-postgresql/)
 
