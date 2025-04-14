@@ -14,7 +14,17 @@ The Terraform doesn't support the cross region deployment. If you are choosing c
 
 * `AWS Application Load Balancer` cross region dns based failover setup, you can find the offical docs [here](https://docs.aws.amazon.com/whitepapers/latest/real-time-communication-on-aws/cross-region-dns-based-load-balancing-and-failover.html)
 
-* `Postgres Active - Active Cluster` with help of `pgactive extension`, checkout the official [docs](https://aws.amazon.com/blogs/database/using-pgactive-active-active-replication-extension-for-postgresql-on-amazon-rds-for-postgresql/)
+### Before you start
+
+Achieving HA comes at a cost. The environment requirements are sizable as each component needs to be multiplied, which comes with additional actual and maintenance costs. you can achieve distributed environments in different regions by accepting the following considerations
+
+* Most of the routes are region specific, for example `bedrock models`, If the region 1 goes down then the bedrock in that region is not accessible even our Javelin is available in the second region. So the route should be always region specific
+
+* The Database won't be in sync, each cluster will have its own data and stored separately
+
+* Each cluster must have same sets of gateweay and routes with api keys with exact same name. currently this need to be set manually from the UI
+
+* The Cloud provider need to support DNS specific health check and route traffic to both cluster (Route53 or Global loadbalancer)
 
 ![Javelin AWS HA Infra](./img/aws-ha-architecture.png)
 
