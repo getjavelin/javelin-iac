@@ -93,9 +93,10 @@ variable "svc_iam_policy_list" {
   description = "List of IAM Policies for Service"
   type        = list(string)
   default     = [
-                  "arn:aws:iam::aws:policy/AmazonBedrockReadOnly",
+                  "arn:aws:iam::aws:policy/AmazonBedrockFullAccess",
                   "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess",
-                  "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+                  "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess",
+                  "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
                 ]
 }
 
