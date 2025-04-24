@@ -48,6 +48,11 @@ variable "enable_svc_iam" {
   type        = bool
 }
 
+variable "enable_svc_kms" {
+  description = "enable svc kms"
+  type        = bool
+}
+
 variable "azs" {
   description = "A list of availability zones names or ids in the region"
   type        = list(string)
