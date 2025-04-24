@@ -7,6 +7,7 @@ enable_redis                             = false
 enable_eks                               = false
 enable_alb_sg                            = false
 enable_svc_iam                           = false
+enable_svc_kms                           = false
 ## Resource Variables
 common_tags                              = {
                                                ManagedBy   = "Terraform"
