@@ -134,3 +134,12 @@ module "svc_iam" {
   eks_cluster_oidc_provider               = module.eks[0].eks_cluster_oidc_provider
   eks_cluster_oidc_provider_arn           = module.eks[0].eks_cluster_oidc_provider_arn
 }
+
+module "svc_kms" {
+  count                                   = var.enable_svc_kms == true ? 1 : 0
+  source                                  = "../../../../../modules/aws/svc-kms"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  aws_account_id                          = local.aws_account_id
+  svc_iam_role_arn                        = module.svc_iam[0].iam_role_arn
+}
