@@ -262,18 +262,6 @@ client.update_template(fetched_template)
 console.log(f":shield: [bold green]Data Protection template updated:[/] {template_name}")
 test_results["SDK - Setting Up Data Protection"] = "PASS"
 
-# --- Features (Remove dummy feature tests) ---
-# features = [
-#     "Features - Secrets Vault",
-#     "Features - Prompt Injection Detection",
-#     "Features - Sensitive Data Protection",
-#     "Features - Trust & Safety",
-#     "Features - Content Filtering",
-#     "Features - Security Filters",
-# ]
-# for feat in features:
-#     test_results[feat] = "PASS"
-
 # --- Custom Prompt Tests for Guardrails ---
 console.rule("[bold blue]GUARDRAIL PROMPT TESTS")
 custom_prompts = [
