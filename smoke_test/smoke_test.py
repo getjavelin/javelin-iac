@@ -25,7 +25,7 @@ else:
 
 required_keys = {
     "x-api-key": "Javelin API Key",
-    "openai_api_key": "OpenAI API Key",
+    "llm_api_key": "OpenAI API Key",
     "secrets_provider": "Secrets Provider (must be either 'aws' or 'kubernetes')",
     "base_url": "API Backend URL"
 }
@@ -42,16 +42,33 @@ with open(config_path, "w") as f:
     json.dump(config_json, f, indent=2)
 
 JAVELIN_API_KEY = config_json["x-api-key"]
-OPENAI_API_KEY = config_json["openai_api_key"]
+LLM_API_KEY = config_json["llm_api_key"]
 SECRETS_PROVIDER = config_json["secrets_provider"]
 BASE_URL = config_json["base_url"]
+
+# Bail out early if config has dummy values
+DUMMY_VALUES = {
+    "x-api-key": "javelin-api-key",
+    "llm_api_key": "openai-api-key",
+    "base_url": "http://your-backend-url.com"
+}
+dummy_found = [k for k, v in DUMMY_VALUES.items() if config_json.get(k) == v]
+if dummy_found:
+    console.print(Panel(
+        "[bold red]Configuration contains dummy values![/]\n" +
+        "Please update the following keys in config.json with real values before running the smoke test:\n" +
+        "\n".join(f"• {k}: {DUMMY_VALUES[k]}" for k in dummy_found),
+        title="Configuration Error",
+        border_style="red"
+    ))
+    exit(1)
 
 # Validate required configuration
 missing_configs = []
 if not JAVELIN_API_KEY:
     missing_configs.append("x-api-key (Javelin API Key)")
-if not OPENAI_API_KEY:
-    missing_configs.append("openai_api_key (OpenAI API Key)") 
+if not LLM_API_KEY:
+    missing_configs.append("llm_api_key (OpenAI API Key)") 
 if not SECRETS_PROVIDER:
     missing_configs.append("secrets_provider (must be either 'aws' or 'kubernetes')")
 if not BASE_URL:
@@ -162,7 +179,7 @@ console.log(f":bookmark_tabs: [bold green]Template created:[/] {template_name}")
 secret_name = f"openai-vkey1-{RANDOM_SUFFIX}"
 secret_data = {
     "api_key": secret_name,
-    "api_key_secret_key": OPENAI_API_KEY,
+    "api_key_secret_key": LLM_API_KEY,
     "provider_name": provider_name,
     "header_key": "Authorization",
     "query_param_key": "",
