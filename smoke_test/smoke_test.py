@@ -8,27 +8,71 @@ from rich.panel import Panel
 from rich import box
 from rich.text import Text
 
-import dotenv
 import datetime
 import uuid
 import json
+import os
 
 console = Console()
 
-# Load API keys from config.json
-with open("config.json", "r") as f:
-    config_json = json.load(f)
+# Load API keys from config.json, prompt for missing values, and update config.json
+config_path = "config.json"
+if os.path.exists(config_path):
+    with open(config_path, "r") as f:
+        config_json = json.load(f)
+else:
+    config_json = {}
+
+required_keys = {
+    "x-api-key": "Javelin API Key",
+    "openai_api_key": "OpenAI API Key",
+    "secrets_provider": "Secrets Provider (must be either 'aws' or 'kubernetes')",
+    "base_url": "API Backend URL"
+}
+
+for key, desc in required_keys.items():
+    value = config_json.get(key)
+    if not value:
+        prompt = f"Enter {desc}: "
+        value = input(prompt)
+        config_json[key] = value
+
+# Write back to config.json if any were missing
+with open(config_path, "w") as f:
+    json.dump(config_json, f, indent=2)
+
 JAVELIN_API_KEY = config_json["x-api-key"]
 OPENAI_API_KEY = config_json["openai_api_key"]
+SECRETS_PROVIDER = config_json["secrets_provider"]
+BASE_URL = config_json["base_url"]
 
-dotenv.load_dotenv()
+# Validate required configuration
+missing_configs = []
+if not JAVELIN_API_KEY:
+    missing_configs.append("x-api-key (Javelin API Key)")
+if not OPENAI_API_KEY:
+    missing_configs.append("openai_api_key (OpenAI API Key)") 
+if not SECRETS_PROVIDER:
+    missing_configs.append("secrets_provider (must be either 'aws' or 'kubernetes')")
+if not BASE_URL:
+    missing_configs.append("base_url (API Backend URL)")
+
+if missing_configs:
+    console.print(Panel(
+        "[bold red]Missing Required Configuration[/]\n" + 
+        "The following configuration items are required but not set:\n" +
+        "\n".join(f"• {item}" for item in missing_configs),
+        title="Configuration Error",
+        border_style="red"
+    ))
+    raise ValueError("Missing required configuration values")
 
 # Generate a random suffix for all resource names
 RANDOM_SUFFIX = uuid.uuid4().hex[:8]
 
 # Create Javelin configuration
 config = JavelinConfig(
-    base_url="https://api-dev.javelin.live",
+    base_url=BASE_URL,
     javelin_api_key=JAVELIN_API_KEY
 )
 
@@ -123,6 +167,7 @@ secret_data = {
     "header_key": "Authorization",
     "query_param_key": "",
     "enabled": True,
+    "secrets_provider": SECRETS_PROVIDER
 }
 client.create_secret(secret_data)
 console.log(f":key: [bold green]Secret created:[/] {secret_name}")
