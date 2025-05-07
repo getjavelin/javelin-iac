@@ -2,7 +2,11 @@
 
 Follow these steps to set up and run the smoke test:
 
-## 1. Create and Activate a Python Virtual Environment
+## 1. Move to Smoke Test Directory and Create Virtual Environment
+
+```sh
+cd smoke_test
+```
 
 **Windows:**
 ```sh
