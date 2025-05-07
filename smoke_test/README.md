@@ -23,15 +23,22 @@ With your virtual environment activated, run:
 pip install -r requirements.txt
 ```
 
-## 3. Configure API Keys
+## 3. Configure API Keys and Backend Settings
 
-Edit the `config.json` file and set your API keys:
+Edit the `config.json` file and set your API keys and backend settings:
 ```json
 {
     "x-api-key": "<your-javelin-api-key>",
-    "openai_api_key": "<your-openai-api-key>"
+    "llm_api_key": "<your-openai-api-key>",
+    "base_url": "<your-backend-url>",
+    "secrets_provider": "<your-secrets-provider>"
 }
 ```
+
+- `x-api-key`: Your Javelin API key.
+- `llm_api_key`: Your Provider API key.
+- `base_url`: The base URL of your backend (e.g., `http://your-backend-url.com`).
+- `secrets_provider`: The secrets provider in use (e.g., `kubernetes`).
 
 ## 4. Run the Smoke Test
 
@@ -157,3 +164,13 @@ If you are testing on a new gateway, ensure you have set up the correct processo
 **Note:**
 - Adjust processor configurations as needed for your environment.
 - Ensure both chains are properly set up before running the smoke test on a new gateway.
+
+---
+
+## Configuring Different LLM Providers and Models
+
+To test different models or providers, update the provider configuration and route directly in the `smoke_test.py` script. Look for variables or configuration sections related to the provider and route, and modify them as needed for your use case.
+
+For a list of supported LLMs and their configuration details, refer to the official Javelin documentation: [Supported Language Models](https://docs.getjavelin.io/docs/javelin-core/supported-llms)
+
+---
