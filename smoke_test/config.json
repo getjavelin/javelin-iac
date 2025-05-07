@@ -1,4 +1,6 @@
 {
     "x-api-key": "javelin-api-key",
-    "openai_api_key": "openai-api-key"
+    "openai_api_key": "openai-api-key",
+    "base_url": "http://your-backend-url.com",
+    "secrets_provider": "kubernetes"
 }
