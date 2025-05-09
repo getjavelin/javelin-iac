@@ -43,7 +43,7 @@ eks_cluster_version                      = "1.32"
 eks_custom_nodes_properties              = [
                                                 {
                                                     name                           = "general"
-                                                    eks_node_ami_type              = "AL2_x86_64"
+                                                    eks_node_ami_type              = "AL2023_x86_64_STANDARD"
                                                     eks_node_instance_type         = "c5.4xlarge"
                                                     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
                                                     eks_node_min_size              = 3
@@ -51,7 +51,7 @@ eks_custom_nodes_properties              = [
                                                 }
                                                 # {
                                                 #     name                           = "gpu"
-                                                #     eks_node_ami_type              = "AL2_x86_64_GPU"
+                                                #     eks_node_ami_type              = "AL2023_x86_64_NVIDIA"
                                                 #     eks_node_instance_type         = "g4dn.2xlarge"
                                                 #     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
                                                 #     eks_node_min_size              = 1

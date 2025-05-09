@@ -3,6 +3,11 @@ output "eks_workernode_template_id" {
   value       = aws_launch_template.eks_cluster.id
 }
 
+output "eks_kms_key_arn" {
+  description = "EKS KMS Key ARN"
+  value       = aws_kms_key.eks_kms.arn
+}
+
 output "k8s_cluster_name" {
   description = "K8s cluste name"
   value       = module.eks_cluster.cluster_name
