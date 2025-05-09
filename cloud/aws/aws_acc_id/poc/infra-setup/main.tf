@@ -82,6 +82,7 @@ module "eks" {
   aws_account_id                          = local.aws_account_id
   project_name                            = var.project_name
   project_env                             = var.project_env
+  region                                  = var.region
   eks_cluster_version                     = var.eks_cluster_version
   eks_cloudwatch_retention                = var.eks_cloudwatch_retention
   common_tags                             = local.tags
