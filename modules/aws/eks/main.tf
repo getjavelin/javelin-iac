@@ -7,65 +7,6 @@ locals {
                                       })
 }
 
-########## Launch_Template ##########
-resource "aws_launch_template" "eks_cluster" {
-  name_prefix                   = "${local.cluster_name}-launch-template"
-  update_default_version        = true
-
-  block_device_mappings {
-    device_name                 = "/dev/xvda"
-
-    ebs {
-      volume_size               = var.eks_node_disk_size
-      volume_type               = "gp3"
-      delete_on_termination     = true
-    }
-  }
-
-  monitoring {
-    enabled                     = true
-  }
-
-  metadata_options {
-    http_endpoint               = "enabled"
-    http_tokens                 = "required"
-  }
-
-  network_interfaces {
-    associate_public_ip_address = false
-    delete_on_termination       = true
-    security_groups             = [ var.eks_nodegroup_sg_id ]
-  }
-
-  tag_specifications {
-    resource_type = "instance"
-    tags          = merge(local.tags,
-                        {
-                          Name = local.cluster_name
-                        })
-  }
-
-  tag_specifications {
-    resource_type = "volume"
-    tags          = merge(local.tags,
-                        {
-                          Name = local.cluster_name
-                        })
-  }
-
-  tag_specifications {
-    resource_type = "network-interface"
-    tags          = merge(local.tags,
-                        {
-                          Name = local.cluster_name
-                        })
-  }
-
-  lifecycle {
-    create_before_destroy       = true
-  }
-}
-
 ########## EKS_Cluster ##########
 module "eks_cluster" {
   source                                   = "terraform-aws-modules/eks/aws"
@@ -104,6 +45,173 @@ module "eks_cluster" {
   }
 
   tags = merge(var.tags.eks, local.tags)
+}
+
+########## KMS ##########
+data "aws_iam_policy_document" "eks_kms" {
+  statement {
+    effect                      = "Allow"
+    resources                   = [ "*" ]
+    actions                     = [ "kms:*" ]
+
+    principals {
+      type                      = "AWS"
+      identifiers               = [ "arn:aws:iam::${var.aws_account_id}:root" ]
+    }
+  }
+
+  statement {
+    effect                      = "Allow"
+    resources                   = [ "*" ]
+    actions                     = [
+                                    "kms:Encrypt",
+                                    "kms:Decrypt",
+                                    "kms:GenerateDataKey*",
+                                    "kms:ReEncrypt*",
+                                    "kms:DescribeKey"
+                                  ]
+
+    principals {
+      type                      = "AWS"
+      identifiers               = [ "arn:aws:iam::${var.aws_account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling" ]
+    }
+
+    condition {
+      test                      = "StringEquals"
+      variable                  = "kms:CallerAccount"
+      values                    = [ "${var.aws_account_id}" ] 
+    }
+  }
+
+  statement {
+    effect                      = "Allow"
+    resources                   = [ "*" ]
+    actions                     = [
+                                    "kms:CreateGrant"
+                                  ]
+
+    principals {
+      type                      = "AWS"
+      identifiers               = [ "arn:aws:iam::${var.aws_account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling" ]
+    }
+
+    condition {
+      test                      = "StringEquals"
+      variable                  = "kms:CallerAccount"
+      values                    = [ "${var.aws_account_id}" ] 
+    }
+
+    condition {
+      test                      = "Bool"
+      variable                  = "kms:GrantIsForAWSResource"
+      values                    = [ true ] 
+    }
+  }
+
+  statement {
+    effect                      = "Allow"
+    resources                   = [ "*" ]
+    actions                     = [
+                                    "kms:Encrypt",
+                                    "kms:Decrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*",
+                                    "kms:CreateGrant",
+                                    "kms:DescribeKey"
+                                  ]
+
+    principals {
+      type                      = "AWS"
+      identifiers               = [ "*" ]
+    }
+
+    condition {
+      test                      = "StringEquals"
+      variable                  = "kms:CallerAccount"
+      values                    = [ "${var.aws_account_id}" ] 
+    }
+
+    condition {
+      test                      = "StringEquals"
+      variable                  = "kms:ViaService"
+      values                    = [ "ec2.${var.region}.amazonaws.com" ] 
+    }
+  }
+}
+
+resource "aws_kms_key" "eks_kms" {
+  description             = "KMS key for encrypt/decrypt operations"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+  policy                  = data.aws_iam_policy_document.eks_kms.json
+}
+
+resource "aws_kms_alias" "eks_kms" {
+  name                    = "alias/${local.cluster_name}"
+  target_key_id           = aws_kms_key.eks_kms.key_id
+}
+
+########## Launch_Template ##########
+resource "aws_launch_template" "eks_cluster" {
+  name_prefix                   = "${local.cluster_name}-launch-template"
+  update_default_version        = true
+
+  block_device_mappings {
+    device_name                 = "/dev/xvda"
+
+    ebs {
+      volume_size               = var.eks_node_disk_size
+      volume_type               = "gp3"
+      delete_on_termination     = true
+      encrypted                 = true
+      kms_key_id                = aws_kms_key.eks_kms.arn
+    }
+  }
+
+  monitoring {
+    enabled                     = true
+  }
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 5
+    instance_metadata_tags      = "enabled"
+  }
+
+  network_interfaces {
+    associate_public_ip_address = false
+    delete_on_termination       = true
+    security_groups             = [ var.eks_nodegroup_sg_id ]
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+    tags          = merge(local.tags,
+                        {
+                          Name = local.cluster_name
+                        })
+  }
+
+  tag_specifications {
+    resource_type = "volume"
+    tags          = merge(local.tags,
+                        {
+                          Name = local.cluster_name
+                        })
+  }
+
+  tag_specifications {
+    resource_type = "network-interface"
+    tags          = merge(local.tags,
+                        {
+                          Name = local.cluster_name
+                        })
+  }
+
+  lifecycle {
+    create_before_destroy       = true
+  }
 }
 
 ########## EKS_NodeGroup_ON_Demand ##########

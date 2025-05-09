@@ -35,6 +35,8 @@ module "storageclass" {
   project_name                       = var.project_name
   project_env                        = var.project_env
   storage_classname                  = var.storage_classname
+  common_tags                        = local.tags
+  kms_key_id                         = data.terraform_remote_state.infra_setup_tf.outputs.eks_kms_key_arn
 }
 
 module "autoscaler" {
