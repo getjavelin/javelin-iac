@@ -4,6 +4,11 @@ output "eks_workernode_template_id" {
   value       = var.enable_eks ? module.eks[0].eks_workernode_template_id : null
 }
 
+output "eks_kms_key_arn" {
+  description = "EKS KMS Key ARN"
+  value       = var.enable_eks ? module.eks[0].eks_kms_key_arn : null
+}
+
 output "k8s_cluster_name" {
   description = "K8s cluste name"
   value       = var.enable_eks ? module.eks[0].k8s_cluster_name : null

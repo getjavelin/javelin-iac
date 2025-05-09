@@ -8,6 +8,11 @@ variable "project_env" {
   type        = string
 }
 
+variable "region" {
+  description = "AWS Region"
+  type        = string
+}
+
 variable "aws_account_id" {
   description = "AWS Account ID"
   type        = string
@@ -139,7 +144,7 @@ variable "eks_spot_node_instance_type" {
 variable "eks_node_ami_type" {
   description = "EKS node ami type"
   type        = string
-  default     = "AL2_x86_64"
+  default     = "AL2023_x86_64_STANDARD"
 }
 
 variable "eks_node_disk_size" {
