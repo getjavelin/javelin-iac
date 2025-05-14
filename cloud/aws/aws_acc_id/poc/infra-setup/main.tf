@@ -21,17 +21,13 @@ module "vpc" {
   database_subnets                        = var.database_subnets
 }
 
-module "postgres" {
-  count                                   = var.enable_postgres == true ? 1 : 0
+module "postgres_deps" {
+  count                                   = var.enable_postgres_deps == true ? 1 : 0
   depends_on                              = [ module.vpc ]
-  source                                  = "../../../../../modules/aws/postgres"
+  source                                  = "../../../../../modules/aws/postgres-deps"
   vpc_cidr                                = var.vpc_cidr
-  rds_multi_az                            = var.rds_multi_az
   project_name                            = var.project_name
   project_env                             = var.project_env
-  rds_instance_db_class                   = var.rds_instance_db_class
-  rds_allocated_storage                   = var.rds_allocated_storage
-  rds_max_allocated_storage               = var.rds_max_allocated_storage
   sg_egress_from_port                     = var.sg_egress_from_port
   sg_egress_to_port                       = var.sg_egress_to_port
   sg_egress_protocol                      = var.sg_egress_protocol
@@ -40,6 +36,36 @@ module "postgres" {
   sg_ipv6_egress_cidr                     = var.sg_ipv6_egress_cidr
   vpc_id                                  = module.vpc[0].vpc_id
   private_subnet_ids                      = module.vpc[0].private_subnet_ids
+}
+
+module "postgres" {
+  count                                   = var.enable_postgres_primary == true ? 1 : 0
+  depends_on                              = [ module.vpc ]
+  source                                  = "../../../../../modules/aws/postgres-primary"
+  rds_multi_az                            = var.rds_multi_az
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  rds_instance_db_class                   = var.rds_instance_db_class
+  rds_allocated_storage                   = var.rds_allocated_storage
+  rds_max_allocated_storage               = var.rds_max_allocated_storage
+  secret_id                               = module.postgres_deps[0].postgres_secret_id
+  parameter_grp                           = module.postgres_deps[0].postgres_pramas_grp
+  security_grp                            = module.postgres_deps[0].postgres_security_grp
+  subnet_grp                              = module.postgres_deps[0].postgres_subnet_grp
+}
+
+module "postgres_secondary" {
+  count                                   = var.enable_postgres_secondary == true ? 1 : 0
+  source                                  = "../../../../../modules/aws/postgres-secondary"
+  rds_multi_az                            = var.rds_multi_az
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  replicate_source_db                     = var.rds_replicate_source_db
+  rds_replica_kms                         = var.rds_replica_kms
+  rds_instance_db_class                   = var.rds_instance_db_class
+  parameter_grp                           = module.postgres_deps[0].postgres_pramas_grp
+  security_grp                            = module.postgres_deps[0].postgres_security_grp
+  subnet_grp                              = module.postgres_deps[0].postgres_subnet_grp
 }
 
 module "redis" {
