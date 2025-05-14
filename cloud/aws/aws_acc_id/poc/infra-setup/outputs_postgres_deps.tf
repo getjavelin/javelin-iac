@@ -18,11 +18,6 @@ output "postgres_deps_secret_name" {
   value       = var.enable_postgres_deps ? module.postgres_deps[0].postgres_secret_name : null
 }
 
-output "postgres_deps_secret_id" {
-  description = "Database Password Secret ID"
-  value       = var.enable_postgres_deps ? module.postgres_deps[0].postgres_secret_id : null
-}
-
 output "postgres_deps_secret_arn" {
   description = "Database Password Secret ARN"
   value       = var.enable_postgres_deps ? module.postgres_deps[0].postgres_secret_arn : null
