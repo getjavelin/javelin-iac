@@ -40,13 +40,3 @@ output "db_javelin_admins_pass" {
   value       = random_password.javelin_admins_password.result
   sensitive   = true
 }
-
-output "secret_name" {
-  description = "Database Password Secret Name"
-  value       = aws_secretsmanager_secret.rds_password.name
-}
-
-output "secret_arn" {
-  description = "Database Password Secret ARN"
-  value       = aws_secretsmanager_secret.rds_password.arn
-}
