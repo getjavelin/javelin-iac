@@ -48,7 +48,7 @@ module "postgres" {
   rds_instance_db_class                   = var.rds_instance_db_class
   rds_allocated_storage                   = var.rds_allocated_storage
   rds_max_allocated_storage               = var.rds_max_allocated_storage
-  secret_id                               = module.postgres_deps[0].postgres_secret_id
+  secret_id                               = module.postgres_deps[0].postgres_secret_arn
   parameter_grp                           = module.postgres_deps[0].postgres_pramas_grp
   security_grp                            = module.postgres_deps[0].postgres_security_grp
   subnet_grp                              = module.postgres_deps[0].postgres_subnet_grp

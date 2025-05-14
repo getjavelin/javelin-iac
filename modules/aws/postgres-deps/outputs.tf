@@ -18,11 +18,6 @@ output "postgres_secret_name" {
   value       = aws_secretsmanager_secret.rds_password.name
 }
 
-output "postgres_secret_id" {
-  description = "Database Password Secret ID"
-  value       = aws_secretsmanager_secret.rds_password.id
-}
-
 output "postgres_secret_arn" {
   description = "Database Password Secret ARN"
   value       = aws_secretsmanager_secret.rds_password.arn
