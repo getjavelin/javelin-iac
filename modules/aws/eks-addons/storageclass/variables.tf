@@ -30,3 +30,13 @@ variable "fs_type" {
   type        = string
   default     = "ext4"
 }
+
+variable "common_tags" {
+  description = "Common tags"
+  type        = map(string)
+}
+
+variable "kms_key_id" {
+  description = "KMS Encryption Key ID"
+  type        = string
+}

@@ -8,21 +8,6 @@ variable "project_name" {
   type        = string
 }
 
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
-}
-
-variable "vpc_cidr" {
-  description = "VPC CIDR Block"
-  type        = string
-}
-
-variable "private_subnet_ids" {
-  description = "Private subnet IDs"
-  type        = list(string)
-}
-
 variable "rds_multi_az" {
   type        = bool
   description = "Specifies if the RDS instance is multi-AZ."
@@ -32,12 +17,6 @@ variable "engine" {
   description = "Database engine"
   type        = string
   default     = "postgres"
-}
-
-variable "family" {
-  description = "Database family"
-  type        = string
-  default     = "postgres17"
 }
 
 variable "engine_version" {
@@ -100,7 +79,7 @@ variable "backup_retention_period" {
 variable "skip_final_snapshot" {
   description = "Skip final snapshot"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "copy_tags_to_snapshot" {
@@ -115,36 +94,6 @@ variable "psql_port" {
   default     = 5432
 }
 
-variable "sg_egress_from_port" {
-  description = "Default Egress from Port"
-  type        = number
-}
-
-variable "sg_egress_to_port" {
-  description = "Default Egress to Port"
-  type        = number
-}
-
-variable "sg_egress_protocol" {
-  description = "Default Egress Protocol"
-  type        = string
-}
-
-variable "sg_egress_cidr" {
-  description = "Default Egress cidr"
-  type        = string
-}
-
-variable "sg_ipv6_egress_enable" {
-  description = "Enable Egress ipv6 cidr"
-  type        = bool
-}
-
-variable "sg_ipv6_egress_cidr" {
-  description = "Default Egress ipv6 cidr"
-  type        = string
-}
-
 variable "rds_storage_type" {
   description = "Storage Type"
   type        = string
@@ -157,8 +106,22 @@ variable "performance_insights_retention_period" {
   default     = 7
 }
 
-variable "additional_whitelist_cidr" {
-  description = "Additional CIDR to whitelist"
-  type        = list(string)
-  default     = []
+variable "secret_id" {
+  description = "Secret ID"
+  type        = string
+}
+
+variable "subnet_grp" {
+  description = "subnet group ID"
+  type        = string
+}
+
+variable "parameter_grp" {
+  description = "parameter group ID"
+  type        = string
+}
+
+variable "security_grp" {
+  description = "security group ID"
+  type        = string
 }

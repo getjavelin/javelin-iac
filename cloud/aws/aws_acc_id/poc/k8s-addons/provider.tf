@@ -44,26 +44,6 @@ provider "aws" {
   }
 }
 
-# ## EKS Created with this Terraform
-# provider "kubernetes" {
-#   host                   = module.eks.eks_cluster_endpoint
-#   cluster_ca_certificate = module.eks.eks_cluster_certificate_authority_data
-#   token                  = module.eks.eks_cluster_token
-# }
-
-# provider "helm" {
-#   kubernetes {
-#     host                   = module.eks.eks_cluster_endpoint
-#     cluster_ca_certificate = module.eks.eks_cluster_certificate_authority_data
-#     token                  = module.eks.eks_cluster_token
-#   }
-#   burst_limit = 3600
-#   debug       = true
-#   # experiments {
-#   #   manifest = true
-#   # }
-# }
-
 # Deploying into the existing EKS
 provider "kubernetes" {
   config_path    = var.local_kube_config
