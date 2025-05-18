@@ -23,8 +23,18 @@ variable "enable_vpc" {
   type        = bool
 }
 
-variable "enable_postgres" {
-  description = "enable postgres"
+variable "enable_postgres_deps" {
+  description = "enable postgre deps"
+  type        = bool
+}
+
+variable "enable_postgres_primary" {
+  description = "enable postgres primary"
+  type        = bool
+}
+
+variable "enable_postgres_secondary" {
+  description = "enable postgres secondary"
   type        = bool
 }
 
@@ -87,6 +97,18 @@ variable "rds_multi_az" {
   description = "Specifies if the RDS instance is multi-AZ."
   type        = bool
   default     = false
+}
+
+variable "rds_replicate_source_db" {
+  description = "Source postgres for secondary"
+  type        = string
+  default     = ""
+}
+
+variable "rds_replica_kms" {
+  description = "RDS KMS ARN"
+  type        = string
+  default     = ""
 }
 
 variable "rds_instance_db_class" {

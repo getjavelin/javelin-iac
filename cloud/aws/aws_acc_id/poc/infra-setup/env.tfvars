@@ -2,7 +2,9 @@
 bucket                                   = "javelin-tf-poc"
 ## Enable required services
 enable_vpc                               = false
-enable_postgres                          = false
+enable_postgres_deps                     = false
+enable_postgres_primary                  = false
+enable_postgres_secondary                = false
 enable_redis                             = false
 enable_eks                               = false
 enable_alb_sg                            = false
@@ -38,12 +40,14 @@ database_subnets                         = [
                                             ]
 redis_node_type                          = "cache.m5.large"
 rds_instance_db_class                    = "db.m5.large"
+rds_replicate_source_db                  = ""
+rds_replica_kms                          = ""
 eks_cloudwatch_retention                 = 30
 eks_cluster_version                      = "1.32"
 eks_custom_nodes_properties              = [
                                                 {
                                                     name                           = "general"
-                                                    eks_node_ami_type              = "AL2_x86_64"
+                                                    eks_node_ami_type              = "AL2023_x86_64_STANDARD"
                                                     eks_node_instance_type         = "c5.4xlarge"
                                                     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
                                                     eks_node_min_size              = 3
@@ -51,7 +55,7 @@ eks_custom_nodes_properties              = [
                                                 }
                                                 # {
                                                 #     name                           = "gpu"
-                                                #     eks_node_ami_type              = "AL2_x86_64_GPU"
+                                                #     eks_node_ami_type              = "AL2023_x86_64_NVIDIA"
                                                 #     eks_node_instance_type         = "g4dn.2xlarge"
                                                 #     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
                                                 #     eks_node_min_size              = 1

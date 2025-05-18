@@ -1,26 +1,32 @@
 ########## Locals ##########
 locals {
-  yaml_data = <<YAML
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: ${var.storage_classname}
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
-provisioner: ${var.storage_provisioner}
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  fsType: ${var.fs_type}
-  type: ${var.storage_type}
-  tagSpecification_1: "ManagedBy=Terraform"
-  tagSpecification_2: "Environment=${var.project_env}"
-  tagSpecification_3: "Project=${var.project_name}"
-YAML
+  tag_list                = [for k, v in var.common_tags : "${k}=${v}"]
+  tag_spec_map            = zipmap(
+                                    [ for i in range(length(local.tag_list)) : "tagSpecification_${i + 1}" ],
+                                    local.tag_list
+                                  )
+  custom_params           = merge(
+                              local.tag_spec_map,
+                              {
+                                fsType              = var.fs_type
+                                type                = var.storage_type
+                                kmsKeyId            = var.kms_key_id
+                                encrypted           = "true"
+                              }
+                            )
 }
 
-########## Kubectl ##########
-resource "kubernetes_manifest" "storage_class" {
-    manifest = yamldecode(local.yaml_data)
+########## StorageClass ##########
+resource "kubernetes_storage_class" "storage_class" {
+  metadata {
+    name                  = var.storage_classname
+    annotations           = {
+                              "storageclass.kubernetes.io/is-default-class" = "false"
+                            }
+  }
+  allow_volume_expansion  = true
+  volume_binding_mode     = "WaitForFirstConsumer"
+  storage_provisioner     = var.storage_provisioner
+  reclaim_policy          = "Delete"
+  parameters              = local.custom_params
 }
