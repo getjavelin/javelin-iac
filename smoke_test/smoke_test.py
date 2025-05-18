@@ -284,7 +284,7 @@ if not secret_obj or not secret_obj.api_key_secret_key_javelin:
     raise Exception("Virtual API key not found in the secret object.")
 
 config = JavelinConfig(
-    base_url="https://api-dev.javelin.live",
+    base_url=BASE_URL,
     javelin_api_key=JAVELIN_API_KEY,
     javelin_virtualapikey=secret_obj.api_key_secret_key_javelin
 )
