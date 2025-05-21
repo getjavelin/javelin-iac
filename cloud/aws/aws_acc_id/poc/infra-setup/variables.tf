@@ -96,17 +96,11 @@ variable "redis_node_type" {
 variable "rds_multi_az" {
   description = "Specifies if the RDS instance is multi-AZ."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "rds_replicate_source_db" {
   description = "Source postgres for secondary"
-  type        = string
-  default     = ""
-}
-
-variable "rds_replica_kms" {
-  description = "RDS KMS ARN"
   type        = string
   default     = ""
 }

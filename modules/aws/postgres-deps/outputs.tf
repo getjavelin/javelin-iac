@@ -1,3 +1,8 @@
+output "postgres_kms_key" {
+  description = "RDS KMS Key"
+  value       = aws_kms_key.rds_kms.arn
+}
+
 output "postgres_pramas_grp" {
   description = "RDS Parameter Group"
   value       = aws_db_parameter_group.rds_postgres.name

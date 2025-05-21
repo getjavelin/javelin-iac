@@ -35,10 +35,11 @@ module "postgres_deps" {
   sg_ipv6_egress_enable                   = var.sg_ipv6_egress_enable
   sg_ipv6_egress_cidr                     = var.sg_ipv6_egress_cidr
   vpc_id                                  = module.vpc[0].vpc_id
+  aws_account_id                          = local.aws_account_id
   private_subnet_ids                      = module.vpc[0].private_subnet_ids
 }
 
-module "postgres" {
+module "postgres_primary" {
   count                                   = var.enable_postgres_primary == true ? 1 : 0
   depends_on                              = [ module.vpc ]
   source                                  = "../../../../../modules/aws/postgres-primary"
@@ -48,6 +49,7 @@ module "postgres" {
   rds_instance_db_class                   = var.rds_instance_db_class
   rds_allocated_storage                   = var.rds_allocated_storage
   rds_max_allocated_storage               = var.rds_max_allocated_storage
+  kms_key_id                              = module.postgres_deps[0].postgres_kms_key
   secret_id                               = module.postgres_deps[0].postgres_secret_arn
   parameter_grp                           = module.postgres_deps[0].postgres_pramas_grp
   security_grp                            = module.postgres_deps[0].postgres_security_grp
@@ -61,8 +63,8 @@ module "postgres_secondary" {
   project_name                            = var.project_name
   project_env                             = var.project_env
   replicate_source_db                     = var.rds_replicate_source_db
-  rds_replica_kms                         = var.rds_replica_kms
   rds_instance_db_class                   = var.rds_instance_db_class
+  kms_key_id                              = module.postgres_deps[0].postgres_kms_key
   parameter_grp                           = module.postgres_deps[0].postgres_pramas_grp
   security_grp                            = module.postgres_deps[0].postgres_security_grp
   subnet_grp                              = module.postgres_deps[0].postgres_subnet_grp

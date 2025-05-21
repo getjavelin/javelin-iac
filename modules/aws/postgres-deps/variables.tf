@@ -64,3 +64,8 @@ variable "sg_ipv6_egress_cidr" {
   description = "Default Egress ipv6 cidr"
   type        = string
 }
+
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type        = string
+}
