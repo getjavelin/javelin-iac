@@ -86,6 +86,60 @@ resource "aws_vpc_security_group_ingress_rule" "rds_rule" {
                                           }
 }
 
+########## KMS ##########
+resource "aws_kms_key" "rds_kms" {
+  description                           = "KMS key for encrypt/decrypt operations"
+  deletion_window_in_days               = 10
+  enable_key_rotation                   = true
+}
+
+resource "aws_kms_alias" "rds_kms" {
+  name                                  = "alias/${local.rds_prefix}-rds"
+  target_key_id                         = aws_kms_key.rds_kms.key_id
+}
+
+data "aws_iam_policy_document" "rds_kms" {
+  statement {
+    effect                              = "Allow"
+    resources                           = [ aws_kms_key.rds_kms.arn ]
+    actions                             = [ "kms:*" ]
+
+    principals {
+      type                              = "AWS"
+      identifiers                       = [ "arn:aws:iam::${var.aws_account_id}:root" ]
+    }
+  }
+
+  statement {
+    effect                              = "Allow"
+    resources                           = [ aws_kms_key.rds_kms.arn ]
+    actions                             = [
+                                            "kms:Encrypt",
+                                            "kms:Decrypt",
+                                            "kms:ReEncrypt*",
+                                            "kms:GenerateDataKey*",
+                                            "kms:CreateGrant",
+                                            "kms:DescribeKey"
+                                          ]
+
+    principals {
+      type                              = "AWS"
+      identifiers                       = [ "*" ]
+    }
+
+    condition {
+      test                              = "StringEquals"
+      variable                          = "kms:CallerAccount"
+      values                            = [ "${var.aws_account_id}" ] 
+    }
+  }
+}
+
+resource "aws_kms_key_policy" "eks_kms" {
+  key_id                                = aws_kms_key.rds_kms.key_id
+  policy                                = data.aws_iam_policy_document.rds_kms.json
+}
+
 ########## Secret_Manager ##########
 resource "aws_secretsmanager_secret" "rds_password" {
   name                                  = "${local.rds_prefix}-postgres"

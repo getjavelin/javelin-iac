@@ -125,3 +125,8 @@ variable "security_grp" {
   description = "security group ID"
   type        = string
 }
+
+variable "kms_key_id" {
+  description = "RDS KMS ARN"
+  type        = string
+}
