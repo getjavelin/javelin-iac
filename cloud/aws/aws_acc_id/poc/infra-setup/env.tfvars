@@ -41,7 +41,6 @@ database_subnets                         = [
 redis_node_type                          = "cache.m5.large"
 rds_instance_db_class                    = "db.m5.large"
 rds_replicate_source_db                  = ""
-rds_replica_kms                          = ""
 eks_cloudwatch_retention                 = 30
 eks_cluster_version                      = "1.32"
 eks_custom_nodes_properties              = [

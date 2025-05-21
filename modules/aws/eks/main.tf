@@ -48,10 +48,21 @@ module "eks_cluster" {
 }
 
 ########## KMS ##########
+resource "aws_kms_key" "eks_kms" {
+  description                   = "KMS key for encrypt/decrypt operations"
+  deletion_window_in_days       = 10
+  enable_key_rotation           = true
+}
+
+resource "aws_kms_alias" "eks_kms" {
+  name                          = "alias/${local.cluster_name}"
+  target_key_id                 = aws_kms_key.eks_kms.key_id
+}
+
 data "aws_iam_policy_document" "eks_kms" {
   statement {
     effect                      = "Allow"
-    resources                   = [ "*" ]
+    resources                   = [ aws_kms_key.eks_kms.arn ]
     actions                     = [ "kms:*" ]
 
     principals {
@@ -62,7 +73,7 @@ data "aws_iam_policy_document" "eks_kms" {
 
   statement {
     effect                      = "Allow"
-    resources                   = [ "*" ]
+    resources                   = [ aws_kms_key.eks_kms.arn ]
     actions                     = [
                                     "kms:Encrypt",
                                     "kms:Decrypt",
@@ -85,7 +96,7 @@ data "aws_iam_policy_document" "eks_kms" {
 
   statement {
     effect                      = "Allow"
-    resources                   = [ "*" ]
+    resources                   = [ aws_kms_key.eks_kms.arn ]
     actions                     = [
                                     "kms:CreateGrant"
                                   ]
@@ -110,7 +121,7 @@ data "aws_iam_policy_document" "eks_kms" {
 
   statement {
     effect                      = "Allow"
-    resources                   = [ "*" ]
+    resources                   = [ aws_kms_key.eks_kms.arn ]
     actions                     = [
                                     "kms:Encrypt",
                                     "kms:Decrypt",
@@ -139,16 +150,9 @@ data "aws_iam_policy_document" "eks_kms" {
   }
 }
 
-resource "aws_kms_key" "eks_kms" {
-  description             = "KMS key for encrypt/decrypt operations"
-  deletion_window_in_days = 10
-  enable_key_rotation     = true
-  policy                  = data.aws_iam_policy_document.eks_kms.json
-}
-
-resource "aws_kms_alias" "eks_kms" {
-  name                    = "alias/${local.cluster_name}"
-  target_key_id           = aws_kms_key.eks_kms.key_id
+resource "aws_kms_key_policy" "eks_kms" {
+  key_id                        = aws_kms_key.eks_kms.key_id
+  policy                        = data.aws_iam_policy_document.eks_kms.json
 }
 
 ########## Launch_Template ##########
