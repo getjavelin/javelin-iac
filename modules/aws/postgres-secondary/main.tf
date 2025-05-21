@@ -13,10 +13,11 @@ resource "aws_db_instance" "rds_postgres" {
   deletion_protection                   = true
   apply_immediately                     = true
   publicly_accessible                   = false
-  performance_insights_enabled          = true
   storage_encrypted                     = true
-  kms_key_id                            = var.rds_replica_kms
+  performance_insights_enabled          = true
   performance_insights_retention_period = var.performance_insights_retention_period
+  performance_insights_kms_key_id       = var.kms_key_id
+  kms_key_id                            = var.kms_key_id
   db_subnet_group_name                  = var.subnet_grp
   vpc_security_group_ids                = [ var.security_grp ]
   parameter_group_name                  = var.parameter_grp
@@ -25,6 +26,7 @@ resource "aws_db_instance" "rds_postgres" {
   backup_window                         = var.backup_window
   backup_retention_period               = var.backup_retention_period
   skip_final_snapshot                   = var.skip_final_snapshot
+  final_snapshot_identifier             = "${local.rds_prefix}-postgres-final"
   copy_tags_to_snapshot                 = var.copy_tags_to_snapshot
   auto_minor_version_upgrade            = var.auto_minor_version_upgrade
   enabled_cloudwatch_logs_exports       = [ "postgresql", "upgrade" ]

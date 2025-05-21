@@ -13,7 +13,7 @@ variable "replicate_source_db" {
   type        = string
 }
 
-variable "rds_replica_kms" {
+variable "kms_key_id" {
   description = "RDS KMS ARN"
   type        = string
 }
