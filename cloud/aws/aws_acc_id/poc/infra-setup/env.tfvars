@@ -5,6 +5,7 @@ enable_vpc                               = false
 enable_postgres_deps                     = false
 enable_postgres_primary                  = false
 enable_postgres_secondary                = false
+enable_psql_seeding                      = false
 enable_redis                             = false
 enable_eks                               = false
 enable_alb_sg                            = false
@@ -40,6 +41,7 @@ database_subnets                         = [
                                             ]
 redis_node_type                          = "cache.m5.large"
 rds_instance_db_class                    = "db.m5.large"
+psql_seeding_file                        = "psql_seeding.sql" # file name under the directory (config/${var.project_env}/script/)
 rds_replicate_source_db                  = ""
 eks_cloudwatch_retention                 = 30
 eks_cluster_version                      = "1.32"
