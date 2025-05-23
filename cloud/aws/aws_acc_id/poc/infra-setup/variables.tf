@@ -38,6 +38,11 @@ variable "enable_postgres_secondary" {
   type        = bool
 }
 
+variable "enable_psql_seeding" {
+  description = "enable psql seeding"
+  type        = bool
+}
+
 variable "enable_redis" {
   description = "enable redis"
   type        = bool
@@ -107,6 +112,11 @@ variable "rds_replicate_source_db" {
 
 variable "rds_instance_db_class" {
   description = "Database instance class"
+  type        = string
+}
+
+variable "psql_seeding_file" {
+  description = "Postgres SQL Script name"
   type        = string
 }
 

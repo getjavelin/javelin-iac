@@ -70,6 +70,19 @@ module "postgres_secondary" {
   subnet_grp                              = module.postgres_deps[0].postgres_subnet_grp
 }
 
+module "psql_seeding" {
+  count                                   = var.enable_psql_seeding == true ? 1 : 0
+  source                                  = "../../../../../modules/aws/psql-seeding"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  psql_seeding_file                       = var.psql_seeding_file
+  psql_host                               = module.postgres_primary[0].postgres_host
+  psql_port                               = module.postgres_primary[0].postgres_port
+  psql_database                           = module.postgres_primary[0].db_name
+  psql_username                           = module.postgres_primary[0].db_user
+  psql_password                           = module.postgres_primary[0].db_pass
+}
+
 module "redis" {
   count                                   = var.enable_redis == true ? 1 : 0
   depends_on                              = [ module.vpc ]
