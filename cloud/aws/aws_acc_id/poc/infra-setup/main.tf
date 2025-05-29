@@ -72,15 +72,9 @@ module "postgres_secondary" {
 
 module "psql_seeding" {
   count                                   = var.enable_psql_seeding == true ? 1 : 0
-  source                                  = "../../../../../modules/aws/psql-seeding"
-  project_name                            = var.project_name
-  project_env                             = var.project_env
-  psql_seeding_file                       = var.psql_seeding_file
-  psql_host                               = module.postgres_primary[0].postgres_host
-  psql_port                               = module.postgres_primary[0].postgres_port
-  psql_database                           = module.postgres_primary[0].db_name
-  psql_username                           = module.postgres_primary[0].db_user
-  psql_password                           = module.postgres_primary[0].db_pass
+  source                                  = "../../../../../modules/javelin/psql-seeding"
+  pg_db_list                              = var.pg_db_list
+  pg_extentions                           = var.pg_extentions
 }
 
 module "redis" {
@@ -184,4 +178,21 @@ module "svc_kms" {
   project_env                             = var.project_env
   aws_account_id                          = local.aws_account_id
   svc_iam_role_arn                        = module.svc_iam[0].iam_role_arn
+}
+
+module "global_accelerator" {
+  count                                   = var.enable_global_accelerator == true ? 1 : 0
+  source                                  = "../../../../../modules/aws/global-accelerator"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+}
+
+module "global_accelerator_endpoint" {
+  count                                   = var.enable_global_accelerator_endpoint == true ? 1 : 0
+  source                                  = "../../../../../modules/aws/global-accelerator-endpoint"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  global_accelerator_listener_arn         = var.global_accelerator_listener_arn
+  global_accelerator_traffic_percentage   = var.global_accelerator_traffic_percentage
+  alb_arn                                 = var.alb_arn
 }
