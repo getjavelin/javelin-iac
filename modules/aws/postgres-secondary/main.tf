@@ -26,7 +26,6 @@ resource "aws_db_instance" "rds_postgres" {
   backup_window                         = var.backup_window
   backup_retention_period               = var.backup_retention_period
   skip_final_snapshot                   = var.skip_final_snapshot
-  final_snapshot_identifier             = "${local.rds_prefix}-postgres-final"
   copy_tags_to_snapshot                 = var.copy_tags_to_snapshot
   auto_minor_version_upgrade            = var.auto_minor_version_upgrade
   enabled_cloudwatch_logs_exports       = [ "postgresql", "upgrade" ]

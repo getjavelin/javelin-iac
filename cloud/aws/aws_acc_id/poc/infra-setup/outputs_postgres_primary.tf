@@ -6,12 +6,12 @@ output "postgres_primary_arn" {
 
 output "postgres_primary_host" {
   description = "RDS Host"
-  value       = var.enable_postgres_primary ? module.postgres_primary[0].postgres_host : null
+  value       = var.enable_postgres_primary ? module.postgres_primary[0].db_host : null
 }
 
 output "postgres_primary_port" {
   description = "RDS Port"
-  value       = var.enable_postgres_primary ? module.postgres_primary[0].postgres_port : null
+  value       = var.enable_postgres_primary ? module.postgres_primary[0].db_port : null
 }
 
 output "postgres_primary_db_name" {
