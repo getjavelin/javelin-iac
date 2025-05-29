@@ -55,7 +55,7 @@ variable "backup_retention_period" {
 variable "skip_final_snapshot" {
   description = "Skip final snapshot"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "copy_tags_to_snapshot" {

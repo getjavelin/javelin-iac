@@ -29,6 +29,10 @@ terraform {
       source  = "terraform-aws-modules/http"
       version = "2.4.1"
     }
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = "1.25.0"
+    }
   }
 
 # Comment this out when initialising the backend_resources first time.
@@ -48,4 +52,13 @@ provider "aws" {
   default_tags {
     tags = local.tags
   }
+}
+
+provider "postgresql" {
+  host            = module.postgres_primary[0].db_host
+  port            = module.postgres_primary[0].db_port
+  database        = module.postgres_primary[0].db_name
+  username        = module.postgres_primary[0].db_user
+  password        = module.postgres_primary[0].db_pass
+  sslmode         = "disable"
 }

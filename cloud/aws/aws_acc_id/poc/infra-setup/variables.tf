@@ -68,6 +68,16 @@ variable "enable_svc_kms" {
   type        = bool
 }
 
+variable "enable_global_accelerator" {
+  description = "enable global accelerator"
+  type        = bool
+}
+
+variable "enable_global_accelerator_endpoint" {
+  description = "enable global accelerator endpoint"
+  type        = bool
+}
+
 variable "azs" {
   description = "A list of availability zones names or ids in the region"
   type        = list(string)
@@ -112,11 +122,6 @@ variable "rds_replicate_source_db" {
 
 variable "rds_instance_db_class" {
   description = "Database instance class"
-  type        = string
-}
-
-variable "psql_seeding_file" {
-  description = "Postgres SQL Script name"
   type        = string
 }
 
@@ -216,4 +221,34 @@ variable "custom_egress_port_list" {
   description = "Custom Egress port list for enabling outbound connectivity"
   type        = list(string)
   default     = []
+}
+
+variable "pg_db_list" {
+  description = "List of Database names"
+  type        = list(string)
+  default     = []
+}
+
+variable "pg_extentions" {
+  description = "List of extentions and its databases"
+  type        = list(object({
+    name         = string
+    database     = string
+  }))
+  default     = []
+}
+
+variable "global_accelerator_listener_arn" {
+  description = "Global accelerator listener arn"
+  type        = string
+}
+
+variable "global_accelerator_traffic_percentage" {
+  description = "Traffic percentage to the the ALB"
+  type        = number
+}
+
+variable "alb_arn" {
+  description = "ALB arn"
+  type        = string
 }
