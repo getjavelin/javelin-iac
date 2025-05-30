@@ -24,7 +24,7 @@ source venv/bin/activate
 
 With your virtual environment activated, run:
 ```sh
-pip install -r requirements.txt
+pip install javelin-sdk rich
 ```
 
 ## 3. Configure API Keys and Backend Settings
