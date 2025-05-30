@@ -11,6 +11,8 @@ enable_eks                               = false
 enable_alb_sg                            = false
 enable_svc_iam                           = false
 enable_svc_kms                           = false
+enable_global_accelerator                = false
+enable_global_accelerator_endpoint       = false
 ## Resource Variables
 common_tags                              = {
                                                ManagedBy   = "Terraform"
@@ -41,7 +43,8 @@ database_subnets                         = [
                                             ]
 redis_node_type                          = "cache.m5.large"
 rds_instance_db_class                    = "db.m5.large"
-psql_seeding_file                        = "psql_seeding.sql" # file name under the directory (config/${var.project_env}/script/)
+pg_db_list                               = []
+pg_extentions                            = []
 rds_replicate_source_db                  = ""
 eks_cloudwatch_retention                 = 30
 eks_cluster_version                      = "1.32"
@@ -53,13 +56,16 @@ eks_custom_nodes_properties              = [
                                                     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
                                                     eks_node_min_size              = 3
                                                     eks_node_max_size              = 6
+                                                },
+                                                {
+                                                    name                           = "gpu"
+                                                    eks_node_ami_type              = "AL2023_x86_64_NVIDIA"
+                                                    eks_node_instance_type         = "g4dn.2xlarge"
+                                                    eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
+                                                    eks_node_min_size              = 1
+                                                    eks_node_max_size              = 1
                                                 }
-                                                # {
-                                                #     name                           = "gpu"
-                                                #     eks_node_ami_type              = "AL2023_x86_64_NVIDIA"
-                                                #     eks_node_instance_type         = "g4dn.2xlarge"
-                                                #     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
-                                                #     eks_node_min_size              = 1
-                                                #     eks_node_max_size              = 1
-                                                # }
                                             ]
+global_accelerator_listener_arn          = ""
+global_accelerator_traffic_percentage    = 100
+alb_arn                                  = ""
