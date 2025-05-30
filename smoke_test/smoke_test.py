@@ -24,7 +24,7 @@ else:
     config_json = {}
 
 required_keys = {
-    "x-api-key": "Javelin API Key",
+    "x-javelin-apikey": "Javelin API Key",
     "llm_api_key": "OpenAI API Key",
     "secrets_provider": "Secrets Provider (must be either 'aws' or 'kubernetes')",
     "base_url": "API Backend URL"
@@ -41,7 +41,7 @@ for key, desc in required_keys.items():
 with open(config_path, "w") as f:
     json.dump(config_json, f, indent=2)
 
-JAVELIN_API_KEY = config_json["x-api-key"]
+JAVELIN_API_KEY = config_json["x-javelin-apikey"]
 LLM_API_KEY = config_json["llm_api_key"]
 SECRETS_PROVIDER = config_json["secrets_provider"]
 BASE_URL = config_json["base_url"]
@@ -49,7 +49,7 @@ BASE_URL = config_json["base_url"]
 
 # Bail out early if config has dummy values
 DUMMY_VALUES = {
-    "x-api-key": "javelin-api-key",
+    "x-javelin-apikey": "javelin-api-key",
     "llm_api_key": "openai-api-key",
     "base_url": "http://your-backend-url.com"
 }
@@ -67,7 +67,7 @@ if dummy_found:
 # Validate required configuration
 missing_configs = []
 if not JAVELIN_API_KEY:
-    missing_configs.append("x-api-key (Javelin API Key)")
+    missing_configs.append("x-javelin-apikey (Javelin API Key)")
 if not LLM_API_KEY:
     missing_configs.append("llm_api_key (OpenAI API Key)") 
 if not SECRETS_PROVIDER:
@@ -206,6 +206,51 @@ else:
     test_results["SDK - Setting Up Secrets"] = "FAIL"
     console.log(f":x: [bold red]Secret not found in vault:[/] {secret_name}")
 
+request_chain = {
+    "name": "sys-preprod-reqchain",
+    "path": "request_chain",
+    "version": "1.1.2",
+    "workflow": {
+        "exec_mode": "sequential",
+        "processors": [
+            {
+                "exec_mode": "parallel",
+                "processors": [
+                    {"name": "Rate Limiter", "reference": "ratelimit", "will_block": True},
+                    {"name": "Sensitive Data Protection", "reference": "dlp_gcp", "will_block": True},
+                    {"name": "Prompt Injection Detection", "inputs": {"engine": "javelin"}, "reference": "promptinjectiondetection", "will_block": True},
+                    {"name": "Trust & Safety", "scope": "system", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True}
+                ]
+            },
+            {
+                "exec_mode": "parallel",
+                "processors": [
+                    {"name": "Archive", "reference": "archive", "will_block": False},
+                    {"name": "Secrets", "reference": "secrets", "will_block": True}
+                ]
+            }
+        ]
+    },
+    "description": "Pre-production request processor chain"
+}
+
+response_chain = {
+    "name": "sys-preprod-respchain",
+    "path": "response_chain",
+    "version": "1.1.2",
+    "workflow": {
+        "exec_mode": "sequential",
+        "processors": [
+            {"name": "Trust & Safety", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True},
+            {"name": "Security Filters Code Detection", "reference": "securityfilters", "will_block": True},
+            {"name": "Response Telemetry", "reference": "response", "will_block": True},
+            {"name": "Archive", "reference": "archive", "will_block": False}
+        ]
+    },
+    "description": "Pre-production response processor chain"
+}
+
+
 # --- Route Creation and Query Test ---
 route_names = [f"test_route_{i}_{RANDOM_SUFFIX}" for i in range(1, 5)]
 route_configs = [
@@ -258,48 +303,8 @@ route_configs = [
             "retries": 1,
             "rate_limit": 0,
             "unified_endpoint": False,
-            "request_chain": {
-                "name": "sys-preprod-reqchain",
-                "path": "request_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Rate Limiter", "reference": "ratelimit", "will_block": True},
-                                {"name": "Sensitive Data Protection", "reference": "dlp_gcp", "will_block": True},
-                                {"name": "Prompt Injection Detection", "inputs": {"engine": "javelin"}, "reference": "promptinjectiondetection", "will_block": True},
-                                {"name": "Trust & Safety", "scope": "system", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True}
-                            ]
-                        },
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Archive", "reference": "archive", "will_block": False},
-                                {"name": "Secrets", "reference": "secrets", "will_block": True}
-                            ]
-                        }
-                    ]
-                },
-                "description": "Pre-production request processor chain"
-            },
-            "response_chain": {
-                "name": "sys-preprod-respchain",
-                "path": "response_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {"name": "Trust & Safety", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True},
-                        {"name": "Security Filters Code Detection", "reference": "securityfilters", "will_block": True},
-                        {"name": "Response Telemetry", "reference": "response", "will_block": True},
-                        {"name": "Archive", "reference": "archive", "will_block": False}
-                    ]
-                },
-                "description": "Pre-production response processor chain"
-            }
+            "request_chain": request_chain,
+            "response_chain": response_chain
         }
     },
     {
@@ -351,48 +356,8 @@ route_configs = [
             "retries": 1,
             "rate_limit": 0,
             "unified_endpoint": False,
-            "request_chain": {
-                "name": "sys-preprod-reqchain",
-                "path": "request_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Rate Limiter", "reference": "ratelimit", "will_block": True},
-                                {"name": "Sensitive Data Protection", "reference": "dlp_gcp", "will_block": True},
-                                {"name": "Prompt Injection Detection", "inputs": {"engine": "javelin"}, "reference": "promptinjectiondetection", "will_block": True},
-                                {"name": "Trust & Safety", "scope": "system", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True}
-                            ]
-                        },
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Archive", "reference": "archive", "will_block": False},
-                                {"name": "Secrets", "reference": "secrets", "will_block": True}
-                            ]
-                        }
-                    ]
-                },
-                "description": "Pre-production request processor chain"
-            },
-            "response_chain": {
-                "name": "sys-preprod-respchain",
-                "path": "response_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {"name": "Trust & Safety", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True},
-                        {"name": "Security Filters Code Detection", "reference": "securityfilters", "will_block": True},
-                        {"name": "Response Telemetry", "reference": "response", "will_block": True},
-                        {"name": "Archive", "reference": "archive", "will_block": False}
-                    ]
-                },
-                "description": "Pre-production response processor chain"
-            }
+            "request_chain": request_chain,
+            "response_chain": response_chain
         }
     },
     {
@@ -444,48 +409,8 @@ route_configs = [
             "retries": 1,
             "rate_limit": 0,
             "unified_endpoint": False,
-            "request_chain": {
-                "name": "sys-preprod-reqchain",
-                "path": "request_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Rate Limiter", "reference": "ratelimit", "will_block": True},
-                                {"name": "Sensitive Data Protection", "reference": "dlp_gcp", "will_block": True},
-                                {"name": "Prompt Injection Detection", "inputs": {"engine": "javelin"}, "reference": "promptinjectiondetection", "will_block": True},
-                                {"name": "Trust & Safety", "scope": "system", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True}
-                            ]
-                        },
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Archive", "reference": "archive", "will_block": False},
-                                {"name": "Secrets", "reference": "secrets", "will_block": True}
-                            ]
-                        }
-                    ]
-                },
-                "description": "Pre-production request processor chain"
-            },
-            "response_chain": {
-                "name": "sys-preprod-respchain",
-                "path": "response_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {"name": "Trust & Safety", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True},
-                        {"name": "Security Filters Code Detection", "reference": "securityfilters", "will_block": True},
-                        {"name": "Response Telemetry", "reference": "response", "will_block": True},
-                        {"name": "Archive", "reference": "archive", "will_block": False}
-                    ]
-                },
-                "description": "Pre-production response processor chain"
-            }
+            "request_chain": request_chain,
+            "response_chain": response_chain
         }
     },
     {
@@ -530,48 +455,8 @@ route_configs = [
             "retries": 1,
             "rate_limit": 0,
             "unified_endpoint": False,
-            "request_chain": {
-                "name": "sys-preprod-reqchain",
-                "path": "request_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Rate Limiter", "reference": "ratelimit", "will_block": True},
-                                {"name": "Sensitive Data Protection", "reference": "dlp_gcp", "will_block": True},
-                                {"name": "Prompt Injection Detection", "inputs": {"engine": "javelin"}, "reference": "promptinjectiondetection", "will_block": True},
-                                {"name": "Trust & Safety", "scope": "system", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True}
-                            ]
-                        },
-                        {
-                            "exec_mode": "parallel",
-                            "processors": [
-                                {"name": "Archive", "reference": "archive", "will_block": False},
-                                {"name": "Secrets", "reference": "secrets", "will_block": True}
-                            ]
-                        }
-                    ]
-                },
-                "description": "Pre-production request processor chain"
-            },
-            "response_chain": {
-                "name": "sys-preprod-respchain",
-                "path": "response_chain",
-                "version": "1.1.2",
-                "workflow": {
-                    "exec_mode": "sequential",
-                    "processors": [
-                        {"name": "Trust & Safety", "inputs": {"engine": "javelin"}, "reference": "trustsafety", "will_block": True},
-                        {"name": "Security Filters Code Detection", "reference": "securityfilters", "will_block": True},
-                        {"name": "Response Telemetry", "reference": "response", "will_block": True},
-                        {"name": "Archive", "reference": "archive", "will_block": False}
-                    ]
-                },
-                "description": "Pre-production response processor chain"
-            }
+            "request_chain": request_chain,
+            "response_chain": response_chain
         }
     }
 ]
