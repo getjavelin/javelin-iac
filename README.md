@@ -70,17 +70,17 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
     * `infra-setup` Terraform Code
 
-        * Update the infra env file `cloud/aws/aws_acc_id/test/infra-setup/env.tfvars`
+        * Update the infra env file `cloud/aws/aws_acc_id/test/infra-setup/env.auto.tfvars`
 
         * Make sure these two files haveing the same values for `region` and `bucket`
 
-            * `cloud/aws/aws_acc_id/test/infra-setup/env.tfvars`
+            * `cloud/aws/aws_acc_id/test/infra-setup/env.auto.tfvars`
 
             * `cloud/aws/aws_acc_id/test/infra-setup/backend.tfvars`
 
         * One time setup - in the first run, the backend S3 bucket not available and so need to create it first
 
-            * Disable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/poc/infra-setup/env.tfvars`
+            * Disable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/poc/infra-setup/env.auto.tfvars`
 
                 ```bash
                 enable_vpc                               = false
@@ -103,7 +103,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             * Initialize terraform by running this command `terraform init -backend-config="backend.tfvars"`
 
-            * Apply the changes by running `terraform apply -var-file="env.tfvars"`, This will create the S3 bucket for TF backend
+            * Apply the changes by running `terraform apply"`, This will create the S3 bucket for TF backend
 
             * Uncomment these lines from the file `cloud/aws/aws_acc_id/poc/infra-setup/provider.tf`
 
@@ -117,7 +117,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             * Run terraform initialization command again and this will migrate the local state file into S3 bucket. `terraform init -backend-config="backend.tfvars"`
 
-        * Enable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/poc/infra-setup/env.tfvars`
+        * Enable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/poc/infra-setup/env.auto.tfvars`
 
             ```bash
             enable_vpc                               = true
@@ -132,29 +132,29 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             ```bash
             terraform init -backend-config="backend.tfvars"
-            terraform plan -var-file="env.tfvars" # Optional for listing the resources that is going to create
-            terraform apply -var-file="env.tfvars"
+            terraform plan # Optional for listing the resources that is going to create
+            terraform apply
             ```
 
     * `k8s-addons` Terraform Code
 
         * Run this command to download the kubconfig file for communicating with EKS from local for deploying the dependencies
 
-            * Here for kube config file, I gave the name `~/.kube/javelin-poc-eks.json`, it should match with the variable `local_kube_config` in the file `cloud/aws/aws_acc_id/test/k8s-addons/env.tfvars`
+            * Here for kube config file, I gave the name `~/.kube/javelin-poc-eks.json`, it should match with the variable `local_kube_config` in the file `cloud/aws/aws_acc_id/test/k8s-addons/env.auto.tfvars`
 
             ```bash
             export KUBECONFIG=~/.kube/javelin-poc-eks.json ; aws eks update-kubeconfig --name javelin-poc-eks
             ```
 
-        * Update the kubernetes addons env file `cloud/aws/aws_acc_id/poc/k8s-addons/env.tfvars`
+        * Update the kubernetes addons env file `cloud/aws/aws_acc_id/poc/k8s-addons/env.auto.tfvars`
 
         * Make sure these two files haveing the same values for `region` and `bucket`
 
-            * `cloud/aws/aws_acc_id/test/k8s-addons/env.tfvars`
+            * `cloud/aws/aws_acc_id/test/k8s-addons/env.auto.tfvars`
 
             * `cloud/aws/aws_acc_id/test/k8s-addons/backend.tfvars`
 
-        * Enable required components to be deployed in the kubernetes by updating the file `cloud/aws/aws_acc_id/poc/k8s-addons/env.tfvars`
+        * Enable required components to be deployed in the kubernetes by updating the file `cloud/aws/aws_acc_id/poc/k8s-addons/env.auto.tfvars`
 
             ```bash
             enable_namespace                = true
@@ -173,8 +173,8 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             ```bash
             terraform init -backend-config="backend.tfvars"
-            terraform plan -var-file="env.tfvars" # Optional for listing the resources that is going to create
-            terraform apply -var-file="env.tfvars"
+            terraform plan # Optional for listing the resources that is going to create
+            terraform apply
             ```
 
 * Create `CNAME` records for those 3 domain name with the ALB domain
