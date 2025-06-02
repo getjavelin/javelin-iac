@@ -12,7 +12,6 @@ resource "aws_globalaccelerator_endpoint_group" "global_accelerator" {
   threshold_count                   = 3
   traffic_dial_percentage           = var.global_accelerator_traffic_percentage
 
-
   endpoint_configuration {
     client_ip_preservation_enabled  = false
 
