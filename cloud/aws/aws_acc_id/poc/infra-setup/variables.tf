@@ -38,6 +38,21 @@ variable "enable_postgres_secondary" {
   type        = bool
 }
 
+variable "enable_aurora_postgres_deps" {
+  description = "enable aurora postgres deps"
+  type        = bool
+}
+
+variable "enable_aurora_postgres_primary" {
+  description = "enable aurora postgres primary"
+  type        = bool
+}
+
+variable "enable_aurora_postgres_secondary" {
+  description = "enable aurora postgres secondary"
+  type        = bool
+}
+
 variable "enable_psql_seeding" {
   description = "enable psql seeding"
   type        = bool
@@ -250,5 +265,22 @@ variable "global_accelerator_traffic_percentage" {
 
 variable "alb_arn" {
   description = "ALB arn"
+  type        = string
+}
+
+variable "aurora_master_cluster_region" {
+  description = "aurora Global master region"
+  type        = string
+  default     = ""
+}
+
+variable "aurora_global_cluster_identifier" {
+  description = "aurora global cluster identifier"
+  type        = string
+  default     = ""
+}
+
+variable "aurora_instance_db_class" {
+  description = "Aurora instance class"
   type        = string
 }

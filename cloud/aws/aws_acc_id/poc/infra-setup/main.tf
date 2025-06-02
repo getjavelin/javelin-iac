@@ -70,6 +70,56 @@ module "postgres_secondary" {
   subnet_grp                              = module.postgres_deps[0].postgres_subnet_grp
 }
 
+module "aurora_postgres_deps" {
+  count                                   = var.enable_aurora_postgres_deps == true ? 1 : 0
+  depends_on                              = [ module.vpc ]
+  source                                  = "../../../../../modules/aws/aurora-postgres-deps"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  vpc_cidr                                = var.vpc_cidr
+  sg_egress_from_port                     = var.sg_egress_from_port
+  sg_egress_to_port                       = var.sg_egress_to_port
+  sg_egress_protocol                      = var.sg_egress_protocol
+  sg_egress_cidr                          = var.sg_egress_cidr
+  sg_ipv6_egress_enable                   = var.sg_ipv6_egress_enable
+  sg_ipv6_egress_cidr                     = var.sg_ipv6_egress_cidr
+  vpc_id                                  = module.vpc[0].vpc_id
+  private_subnet_ids                      = module.vpc[0].private_subnet_ids
+  aws_account_id                          = local.aws_account_id
+}
+
+module "aurora_postgres_primary" {
+  count                                   = var.enable_aurora_postgres_primary == true ? 1 : 0
+  depends_on                              = [ module.vpc ]
+  source                                  = "../../../../../modules/aws/aurora-postgres-primary"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  instance_db_class                       = var.aurora_instance_db_class
+  kms_key_id                              = module.aurora_postgres_deps[0].aurora_kms_key_arn
+  secret_id                               = module.aurora_postgres_deps[0].aurora_secret_arn
+  cluster_parameter_grp                   = module.aurora_postgres_deps[0].aurora_cluster_pramas_grp
+  db_parameter_grp                        = module.aurora_postgres_deps[0].aurora_db_pramas_grp
+  security_grp                            = module.aurora_postgres_deps[0].aurora_security_grp
+  subnet_grp                              = module.aurora_postgres_deps[0].aurora_subnet_grp
+}
+
+module "aurora_postgres_secondary" {
+  count                                   = var.enable_aurora_postgres_secondary == true ? 1 : 0
+  depends_on                              = [ module.vpc ]
+  source                                  = "../../../../../modules/aws/aurora-postgres-secondary"
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  instance_db_class                       = var.aurora_instance_db_class
+  aurora_master_cluster_region            = var.aurora_master_cluster_region
+  aurora_global_cluster_identifier        = var.aurora_global_cluster_identifier
+  kms_key_id                              = module.aurora_postgres_deps[0].aurora_kms_key_arn
+  secret_id                               = module.aurora_postgres_deps[0].aurora_secret_arn
+  cluster_parameter_grp                   = module.aurora_postgres_deps[0].aurora_cluster_pramas_grp
+  db_parameter_grp                        = module.aurora_postgres_deps[0].aurora_db_pramas_grp
+  security_grp                            = module.aurora_postgres_deps[0].aurora_security_grp
+  subnet_grp                              = module.aurora_postgres_deps[0].aurora_subnet_grp
+}
+
 module "psql_seeding" {
   count                                   = var.enable_psql_seeding == true ? 1 : 0
   source                                  = "../../../../../modules/javelin/psql-seeding"

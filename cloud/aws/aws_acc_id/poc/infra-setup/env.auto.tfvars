@@ -13,6 +13,9 @@ enable_svc_iam                           = false
 enable_svc_kms                           = false
 enable_global_accelerator                = false
 enable_global_accelerator_endpoint       = false
+enable_aurora_postgres_deps              = false
+enable_aurora_postgres_primary           = false
+enable_aurora_postgres_secondary         = false
 ## Resource Variables
 common_tags                              = {
                                                ManagedBy   = "Terraform"
@@ -43,6 +46,9 @@ database_subnets                         = [
                                             ]
 redis_node_type                          = "cache.m5.large"
 rds_instance_db_class                    = "db.m5.large"
+aurora_instance_db_class                 = "db.r6g.large"
+aurora_master_cluster_region             = "us-east-1"
+aurora_global_cluster_identifier         = ""
 pg_db_list                               = []
 pg_extentions                            = []
 rds_replicate_source_db                  = ""
