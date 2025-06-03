@@ -68,7 +68,7 @@ The following diagram illustrates the key networking components, including VPCs,
 
 ## AWS Disaster Recovery (DR) Runbook
 
-The DR setup in AWS cloud is an `active - passive cluster` in 2 different region, where one region will be always serve read and write traffic and another one read traffic until the switchover happen either via automatically or manually.
+The DR setup in AWS cloud is an `active - passive cluster` in 2 different regions, where active region will be always serves READ/WRITE traffic and passive region serves READ traffic. The switchover of passive to active can be setup Auto or Manual.
 
 These are the steps we have to follow in manual DR process
 
