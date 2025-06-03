@@ -66,9 +66,9 @@ The following diagram illustrates the key networking components, including VPCs,
 - Firewall open only required ports for traffic
 
 
-## AWS Disaster Recovery (DR) Runbook
+## Disaster Recovery (DR) Runbook
 
-The DR setup in AWS cloud is an `active - passive cluster` in 2 different regions, where active region will be always serves READ/WRITE traffic and passive region serves READ traffic. The switchover of passive to active can be setup Auto or Manual.
+The DR setup in is an `active - passive cluster` in 2 different regions, where active region serves READ/WRITE traffic and passive region can serve READ traffic. The switchover of passive to active can be setup Auto or Manual.
 
 These are the steps we have to follow in manual DR process
 
