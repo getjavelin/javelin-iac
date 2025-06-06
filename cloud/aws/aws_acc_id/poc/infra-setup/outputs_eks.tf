@@ -1,9 +1,4 @@
 # ################################################## EKS
-output "eks_workernode_template_id" {
-  description = "EKS workernode template id"
-  value       = var.enable_eks ? module.eks[0].eks_workernode_template_id : null
-}
-
 output "eks_kms_key_arn" {
   description = "EKS KMS Key ARN"
   value       = var.enable_eks ? module.eks[0].eks_kms_key_arn : null
@@ -37,16 +32,6 @@ output "eks_cluster_oidc_provider" {
 output "eks_cluster_oidc_provider_arn" {
   description = "EKS cluster oidc provider arn"
   value       = var.enable_eks ? module.eks[0].eks_cluster_oidc_provider_arn : null
-}
-
-output "eks_managed_demand_node_group" {
-  description = "EKS managed ondemand node groups"
-  value       = var.enable_eks ? module.eks[0].eks_managed_demand_node_group : null
-}
-
-output "eks_managed_spot_node_group" {
-  description = "EKS managed spot node groups"
-  value       = var.enable_eks ? module.eks[0].eks_managed_spot_node_group : null
 }
 
 output "eks_primary_security_group_id" {

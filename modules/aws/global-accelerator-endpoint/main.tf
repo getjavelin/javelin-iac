@@ -6,7 +6,7 @@ locals {
 ########## Global_Accelerator_Endpoint ##########
 resource "aws_globalaccelerator_endpoint_group" "global_accelerator" {
   listener_arn                      = var.global_accelerator_listener_arn
-  health_check_interval_seconds     = 30
+  health_check_interval_seconds     = 10
   health_check_port                 = 443
   health_check_protocol             = "TCP"
   threshold_count                   = 3

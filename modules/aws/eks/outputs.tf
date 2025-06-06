@@ -1,8 +1,3 @@
-output "eks_workernode_template_id" {
-  description = "EKS workernode template id"
-  value       = aws_launch_template.eks_cluster.id
-}
-
 output "eks_kms_key_arn" {
   description = "EKS KMS Key ARN"
   value       = aws_kms_key.eks_kms.arn
@@ -48,16 +43,6 @@ output "eks_cluster_oidc_provider_arn" {
   value       = module.eks_cluster.oidc_provider_arn
 }
 
-output "eks_managed_demand_node_group" {
-  description = "EKS managed ondemand node groups"
-  value       = module.eks_managed_demand_node_group
-}
-
-output "eks_managed_spot_node_group" {
-  description = "EKS managed spot node groups"
-  value       = module.eks_managed_spot_node_group
-}
-
 output "eks_primary_security_group_id" {
   description = "EKS cluster security group id"
   value       =  module.eks_cluster.cluster_primary_security_group_id
@@ -66,16 +51,6 @@ output "eks_primary_security_group_id" {
 output "eks_node_security_group_id" {
   description = "EKS node security group id"
   value       = module.eks_cluster.node_security_group_id
-}
-
-output "eks_node_launch_template_id" {
-  description = "EKS launch template id"
-  value       = aws_launch_template.eks_cluster.id
-}
-
-output "eks_node_launch_template_version" {
-  description = "EKS launch template version"
-  value       = aws_launch_template.eks_cluster.latest_version
 }
 
 output "eks_cluster_service_cidr" {

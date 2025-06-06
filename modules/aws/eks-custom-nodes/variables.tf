@@ -8,16 +8,6 @@ variable "project_env" {
   type        = string
 }
 
-variable "launch_template_id" {
-  description = "Launch Template ID"
-  type        = string
-}
-
-variable "launch_template_version" {
-  description = "Launch Template Version"
-  type        = string
-}
-
 variable "eks_cluster_service_cidr" {
   description = "EKS Service CIDR"
   type        = string
@@ -43,20 +33,18 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "cluster_version" {
-  description = "Cluster version"
-  type        = string
-}
-
 variable "custom_nodes_properties" {
   description = "EKS custom nodes properties"
   type = list(object({
-    name                     = string
-    eks_node_ami_type        = string
-    eks_node_instance_type   = string
-    eks_node_capacity_type   = string
-    eks_node_min_size        = number
-    eks_node_max_size        = number
+    name                        = string
+    eks_cluster_version         = string
+    eks_node_ami_type           = string
+    eks_node_instance_type      = string
+    eks_node_capacity_type      = string
+    eks_launch_template_id      = string
+    eks_launch_template_version = number
+    eks_node_min_size           = number
+    eks_node_max_size           = number
   }))
 }
 
