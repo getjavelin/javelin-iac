@@ -68,6 +68,11 @@ variable "enable_eks" {
   type        = bool
 }
 
+variable "enable_eks_custom_nodes" {
+  description = "enable eks custom nodes"
+  type        = bool
+}
+
 variable "enable_alb_sg" {
   description = "enable alb sg"
   type        = bool
@@ -173,15 +178,28 @@ variable "eks_cluster_version" {
   type        = string
 }
 
+variable "eks_custom_template_properties" {
+  description = "Custom launch template properties"
+  type = list(object({
+    name                         = string
+    image_id                     = string
+    block_device_name            = string
+    block_device_size            = number
+  }))
+}
+
 variable "eks_custom_nodes_properties" {
   description = "EKS custom nodes properties"
   type = list(object({
-    name                     = string
-    eks_node_ami_type        = string
-    eks_node_instance_type   = string
-    eks_node_capacity_type   = string
-    eks_node_min_size        = number
-    eks_node_max_size        = number
+    name                        = string
+    eks_cluster_version         = string
+    eks_node_ami_type           = string
+    eks_node_instance_type      = string
+    eks_node_capacity_type      = string
+    eks_launch_template_id      = string
+    eks_launch_template_version = number
+    eks_node_min_size           = number
+    eks_node_max_size           = number
   }))
 }
 

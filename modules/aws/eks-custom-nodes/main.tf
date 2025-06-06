@@ -15,12 +15,12 @@ module "eks_managed_custom_node_group" {
 
   create_launch_template            = false
   use_custom_launch_template        = true
-  launch_template_id                = var.launch_template_id
-  launch_template_version           = var.launch_template_version
+  launch_template_id                = each.value.eks_launch_template_id
+  launch_template_version           = each.value.eks_launch_template_version
 
   name                              = "${each.value.name}-${replace(lower(each.value.eks_node_capacity_type), "_", "-")}"
   cluster_name                      = var.cluster_name
-  cluster_version                   = var.cluster_version
+  cluster_version                   = each.value.eks_cluster_version
   subnet_ids                        = var.private_subnet_ids
   min_size                          = each.value.eks_node_min_size
   desired_size                      = each.value.eks_node_min_size

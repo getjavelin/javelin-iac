@@ -177,16 +177,29 @@ module "eks" {
   eks_nodegroup_sg_id                     = module.eks_sg[0].eks_nodegroup_sg_id
 }
 
-module "eks_custom_nodes" {
+module "eks_node_template" {
   count                                   = var.enable_eks == true ? 1 : 0
+  source                                  = "../../../../../modules/aws/eks-node-template"
+  aws_account_id                          = local.aws_account_id
+  project_name                            = var.project_name
+  project_env                             = var.project_env
+  region                                  = var.region
+  custom_template_properties              = var.eks_custom_template_properties
+  common_tags                             = local.tags
+  eks_nodegroup_sg_id                     = module.eks_sg[0].eks_nodegroup_sg_id
+  eks_cluster_ca_data                     = module.eks[0].eks_cluster_certificate_authority_data
+  eks_cluster_endpoint                    = module.eks[0].eks_cluster_endpoint
+  k8s_cluster_name                        = module.eks[0].k8s_cluster_name
+  eks_cluster_service_cidr                = module.eks[0].eks_cluster_service_cidr
+}
+
+module "eks_custom_nodes" {
+  count                                   = var.enable_eks_custom_nodes == true ? 1 : 0
   source                                  = "../../../../../modules/aws/eks-custom-nodes"
   project_name                            = var.project_name
   project_env                             = var.project_env
-  cluster_version                         = var.eks_cluster_version
   custom_nodes_properties                 = var.eks_custom_nodes_properties
   common_tags                             = local.tags
-  launch_template_id                      = module.eks[0].eks_node_launch_template_id
-  launch_template_version                 = module.eks[0].eks_node_launch_template_version
   eks_cluster_service_cidr                = module.eks[0].eks_cluster_service_cidr
   eks_cluster_primary_sg_id               = module.eks[0].eks_cluster_primary_sg_id
   cluster_name                            = module.eks[0].k8s_cluster_name
