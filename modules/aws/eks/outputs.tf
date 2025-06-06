@@ -30,7 +30,7 @@ output "eks_cluster_token" {
 
 output "eks_cluster_certificate_authority_data" {
   description = "EKS cluster certificate authority data"
-  value       = base64decode(module.eks_cluster.cluster_certificate_authority_data)
+  value       = module.eks_cluster.cluster_certificate_authority_data
 }
 
 output "eks_cluster_oidc_provider" {

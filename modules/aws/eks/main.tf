@@ -44,7 +44,7 @@ module "eks_cluster" {
     delete = "15m"
   }
 
-  tags = merge(var.tags.eks, local.tags)
+  tags = merge(local.tags)
 }
 
 ########## KMS ##########
@@ -171,7 +171,7 @@ resource "aws_eks_addon" "eks_cluster_addons" {
   addon_version               = data.aws_eks_addon_version.default_version[each.key].version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  tags                        = merge(var.tags.eks_addon, local.tags)
+  tags                        = merge(local.tags)
 }
 
 data "aws_eks_cluster_auth" "eks_cluster" {
