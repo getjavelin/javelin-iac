@@ -20,7 +20,7 @@ module "namespace" {
 
 module "docker_secret" {
   count                              = var.enable_docker_secret == true ? 1 : 0
-  source                             = "../../../../../modules/k8s/docker-secret"
+  source                             = "../../../../../modules/javelin/docker-secret"
   project_name                       = var.project_name
   registry_server                    = var.registry_server
   registry_username                  = var.registry_username
