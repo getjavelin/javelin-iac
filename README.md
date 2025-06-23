@@ -2,6 +2,8 @@
 
 [Javelin Architecture Details](./docs/Architecture.md)
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/getjavelin/javelin-iac)
+
 **ℹ️ IMPORTANT NOTICE**
 
 This Terraform configuration is designed for general cloud provider environments without any custom networking or VPC-level policies and single region deployment. 
