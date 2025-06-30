@@ -1,3 +1,5 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/getjavelin/javelin-iac)
+
 # javelin-iac
 
 [Javelin Architecture Details](./docs/Architecture.md)
