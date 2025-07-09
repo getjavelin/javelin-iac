@@ -32,16 +32,16 @@ resource "azurerm_redis_cache" "redis" {
   redis_version                                 = 6
   subnet_id                                     = var.private_subnet_id
 
-  # redis_configuration {
-  #   authentication_enabled                      = false
-  #   active_directory_authentication_enabled     = false
-  #   rdb_backup_enabled                          = false
-  #   aof_backup_enabled                          = false
-  #   maxmemory_reserved                          = 200
-  #   maxfragmentationmemory_reserved             = 200
-  #   maxmemory_delta                             = 200
-  #   maxmemory_policy                            = "allkeys-lru"
-  # }
+  redis_configuration {
+    authentication_enabled                      = false
+    active_directory_authentication_enabled     = false
+    maxmemory_policy                            = "volatile-lru"
+    rdb_backup_enabled                          = false
+    aof_backup_enabled                          = false
+    # maxmemory_reserved                          = 200
+    # maxfragmentationmemory_reserved             = 200
+    # maxmemory_delta                             = 200
+  }
 
   patch_schedule {
     day_of_week                                 = "Monday"
