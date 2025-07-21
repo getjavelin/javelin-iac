@@ -1,13 +1,9 @@
-## Update v0.0.3-weekly - July 9, 2025
+## Update v0.0.5-weekly - July 21, 2025
 
-### Fixes
-- Redis authentication has been removed, resolving previous access issues.
+### Improvements
+- We've successfully merged a pull request that includes updates to our continuous integration and continuous deployment (CI/CD) pipeline. You can view the details of this update [here](https://github.com/getjavelin/javelin-iac/issues/39).
 
-### Updates
-- Integrated changes from pull request #37 to improve continuous integration and deployment.
-- Integrated changes from pull request #36 to enhance the CI/CD process further.
-
-For more details, you can follow the changes from [v0.0.2-weekly to v0.0.3-weekly](https://github.com/getjavelin/javelin-iac/compare/v0.0.2-weekly...v0.0.3-weekly).
+For a broader view of our work in progress or upcoming updates, check out the latest changes on [GitHub](https://github.com/getjavelin/javelin-iac/compare/v0.0.5-weekly...HEAD). If you're interested in comparing this update with the previous version, please visit [this link](https://github.com/getjavelin/javelin-iac/compare/v0.0.4-weekly...v0.0.5-weekly).
 
 ---
 
