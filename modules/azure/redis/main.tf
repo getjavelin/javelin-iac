@@ -23,24 +23,21 @@ resource "azurerm_redis_cache" "redis" {
   name                                          = "${local.redis_prefix}-redis"
   location                                      = var.location
   resource_group_name                           = var.resource_group_name
-  sku_name                                      = "Premium"
-  family                                        = "P"
+  sku_name                                      = var.redis_sku
+  family                                        = "C"
   capacity                                      = var.redis_capacity
   minimum_tls_version                           = "1.2"
   non_ssl_port_enabled                          = true
   public_network_access_enabled                 = false
+  access_keys_authentication_enabled            = true
   redis_version                                 = 6
-  subnet_id                                     = var.private_subnet_id
 
   redis_configuration {
-    authentication_enabled                      = false
+    authentication_enabled                      = true
     active_directory_authentication_enabled     = false
     maxmemory_policy                            = "volatile-lru"
     rdb_backup_enabled                          = false
     aof_backup_enabled                          = false
-    # maxmemory_reserved                          = 200
-    # maxfragmentationmemory_reserved             = 200
-    # maxmemory_delta                             = 200
   }
 
   patch_schedule {
@@ -49,4 +46,38 @@ resource "azurerm_redis_cache" "redis" {
     maintenance_window                          = "PT5H"
   }
   tags                                          = var.tags
+}
+
+########## Private_Endpoint ##########
+resource "azurerm_private_dns_zone" "redis" {
+  name                                          = "privatelink.redis.cache.windows.net"
+  resource_group_name                           = var.resource_group_name
+  tags                                          = var.tags
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "redis" {
+  name                                          = "${local.redis_prefix}-redis-vnet-link"
+  resource_group_name                           = var.resource_group_name
+  private_dns_zone_name                         = azurerm_private_dns_zone.redis.name
+  virtual_network_id                            = var.vnet_id
+  tags                                          = var.tags
+}
+
+resource "azurerm_private_endpoint" "redis" {
+  name                                          = "${local.redis_prefix}-redis-pe"
+  location                                      = var.location
+  resource_group_name                           = var.resource_group_name
+  subnet_id                                     = var.private_subnet_id
+
+  private_service_connection {
+    name                                        = "${local.redis_prefix}-redis-pe"
+    private_connection_resource_id              = azurerm_redis_cache.redis.id
+    subresource_names                           = [ "redisCache" ]
+    is_manual_connection                        = false
+  }
+
+  private_dns_zone_group {
+    name                                        = "${local.redis_prefix}-redis-pe-grp"
+    private_dns_zone_ids                        = [ azurerm_private_dns_zone.redis.id ]
+  }
 }

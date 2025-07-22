@@ -22,7 +22,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "aks_nodepool" {
   node_taints                                   = []
   node_labels                                   = {
                                                     "kube/nodegroup"        = "${each.value.name}"
-                                                    "kube/nodetype"         = "${each.value.name}-${each.value.aks_node_priority}"
+                                                    "kube/nodetype"         = "${each.value.name}-${lower(each.value.aks_node_priority)}"
                                                     "kube/project_env"      = "${var.project_env}"
                                                     "kube/project_name"     = "${var.project_name}"
                                                   }

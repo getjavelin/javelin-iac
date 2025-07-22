@@ -8,9 +8,20 @@ output "redis_host" {
   value       = var.enable_redis ? module.redis[0].redis_host : null
 }
 
+output "redis_private_ip" {
+  description = "redis private ip"
+  value       = var.enable_redis ? module.redis[0].redis_private_ip : null
+}
+
 output "redis_port" {
   description = "redis port"
   value       = var.enable_redis ? module.redis[0].redis_port : null
+}
+
+output "redis_primary_access_key" {
+  description = "redis primary access key"
+  sensitive   = true
+  value       = var.enable_redis ? module.redis[0].redis_primary_access_key : null
 }
 
 output "redis_zzzzzz" {

@@ -93,6 +93,11 @@ variable "enable_aks_custom_nodepool" {
   type        = bool
 }
 
+variable "enable_svc_iam" {
+  description = "enable svc iam for ksa"
+  type        = bool
+}
+
 variable "vnet_cidr" {
   description = "vnet cidr"
   type        = string
@@ -126,6 +131,11 @@ variable "appgw_subnet_cidr" {
 variable "nat_ip_count" {
   description = "NAT IP Count"
   type        = number
+}
+
+variable "redis_sku" {
+  description = "redis sku"
+  type        = string
 }
 
 variable "redis_capacity" {
@@ -182,6 +192,16 @@ variable "pg_extentions" {
   type        = list(object({
     name         = string
     database     = string
+  }))
+  default     = []
+}
+
+variable "workload_identity" {
+  description = "workload identity map of namespace and ksa"
+  type = list(object({
+    id             = number
+    namespace      = string
+    serviceaccount = string
   }))
   default     = []
 }
@@ -244,4 +264,9 @@ variable "aks_nodes_properties" {
     aks_node_min_count       = number
     aks_node_max_count       = number
   }))
+}
+
+variable "appgw_zones" {
+  description = "appgw zones"
+  type        = list(string)
 }

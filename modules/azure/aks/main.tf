@@ -10,6 +10,7 @@ resource "azurerm_log_analytics_workspace" "log" {
   resource_group_name                         = var.resource_group_name
   sku                                         = "PerGB2018"
   retention_in_days                           = var.aks_log_retention_in_days
+  tags                                        = var.tags
 }
 
 ########## AKS ##########
@@ -31,16 +32,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
   sku_tier                                    = "Free"
 
   storage_profile {
-    blob_driver_enabled                       = true
+    blob_driver_enabled                       = false
     disk_driver_enabled                       = true
-    file_driver_enabled                       = true
-    snapshot_controller_enabled               = true
+    file_driver_enabled                       = false
+    snapshot_controller_enabled               = false
   }
 
-  monitor_metrics {
-    annotations_allowed                       = null
-    labels_allowed                            = null
-  }
+  # monitor_metrics {
+  #   annotations_allowed                       = null
+  #   labels_allowed                            = null
+  # }
 
   oms_agent {
     log_analytics_workspace_id                = azurerm_log_analytics_workspace.log.id
@@ -79,7 +80,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     scale_down_mode                           = "Delete"
     node_count                                = 1
     min_count                                 = 1
-    max_count                                 = 2
+    max_count                                 = 3
     vm_size                                   = var.aks_default_node_vm_size
     host_encryption_enabled                   = true
     node_public_ip_enabled                    = false
@@ -143,10 +144,90 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 }
 
+resource "azurerm_monitor_diagnostic_setting" "aks" {
+  name                                        = "${local.aks_prefix}-aks-audit"
+  target_resource_id                          = azurerm_kubernetes_cluster.aks.id
+  log_analytics_workspace_id                  = azurerm_log_analytics_workspace.log.id
+
+  enabled_log {
+    category                                  = "kube-apiserver"
+  }
+
+  enabled_log {
+    category                                  = "kube-controller-manager"
+  }
+
+  enabled_log {
+    category                                  = "cluster-autoscaler"
+  }
+
+  enabled_log {
+    category                                  = "kube-scheduler"
+  }
+
+  enabled_log {
+    category                                  = "kube-audit"
+  }
+
+  enabled_metric {
+    category                                  = "AllMetrics"
+  }
+}
+
+resource "azurerm_monitor_data_collection_rule" "log" {
+  name                                        = "${local.aks_prefix}-aks-dcr"
+  location                                    = var.location
+  resource_group_name                         = var.resource_group_name
+  kind                                        = "Linux"
+
+  destinations {
+    log_analytics {
+      name                                    = "${local.aks_prefix}-aks-logs"
+      workspace_resource_id                   = azurerm_log_analytics_workspace.log.id
+    }
+  }
+
+  data_flow {
+    streams                                   = var.log_stream_list
+    destinations                              = [ "${local.aks_prefix}-aks-logs" ]
+  }
+
+  data_sources {
+    extension {
+      streams                                 = var.log_stream_list
+      extension_name                          = "ContainerInsights"
+      extension_json                          = jsonencode({
+                                                            "dataCollectionSettings" : {
+                                                                "interval" : "1m",
+                                                                "namespaceFilteringMode" : "Include",
+                                                                "namespaces" : [ "${local.aks_prefix}" ]
+                                                                "enableContainerLogV2" : true
+                                                            }
+                                                          })
+      name                                    = "ContainerInsightsExtension"
+      
+    }
+  }
+
+  tags                                        = var.tags
+}
+
+resource "azurerm_monitor_data_collection_rule_association" "log" {
+  name                                        = "${local.aks_prefix}-aks-dcr-association"
+  target_resource_id                          = azurerm_kubernetes_cluster.aks.id
+  data_collection_rule_id                     = azurerm_monitor_data_collection_rule.log.id
+}
+
 ########## Identity_Permission ##########
 resource "azurerm_role_assignment" "aks_des_reader" {
   scope                                       = var.des_id
   role_definition_name                        = "Reader"
+  principal_id                                = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "aks_log" {
+  scope                                       = azurerm_log_analytics_workspace.log.id
+  role_definition_name                        = "Log Analytics Contributor"
   principal_id                                = azurerm_kubernetes_cluster.aks.identity[0].principal_id
 }
 

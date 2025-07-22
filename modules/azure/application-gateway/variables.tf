@@ -49,7 +49,6 @@ variable "appgw_subnet_id" {
 variable "appgw_zones" {
   description = "appgw zones"
   type        = list(string)
-  default     = [ "1", "2", "3" ]
 }
 
 variable "tags" {
