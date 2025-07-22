@@ -1,16 +1,10 @@
-variable "name" {
-  description = "name for cluster issuer"
-  type        = string
-  default     = "javelin-ssl-cert"
-}
-
 variable "project_name" {
   description = "Project name"
   type        = string
 }
 
 variable "project_env" {
-  description = "Environment Name"
+  description = "Environment stage"
   type        = string
 }
 

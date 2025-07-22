@@ -7,7 +7,6 @@ common_tags                                 = {
                                               }
 az_subscription_id                          = ""
 ad_object_id                                = ""
-enable_delete_lock                          = true
 project_name                                = "javelin"
 project_env                                 = "poc"
 location                                    = "East US"

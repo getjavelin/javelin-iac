@@ -10,7 +10,7 @@ locals {
 
 module "namespace" {
   count                              = var.enable_namespace == true ? 1 : 0
-  source                             = "../../../../../../modules/javelin/namespace"
+  source                             = "../../../../../modules/javelin/namespace"
   project_name                       = var.project_name
   project_env                        = var.project_env
   service_namespace                  = var.service_namespace
@@ -18,7 +18,7 @@ module "namespace" {
 
 module "docker_secret" {
   count                              = var.enable_docker_secret == true ? 1 : 0
-  source                             = "../../../../../../modules/javelin/docker-secret"
+  source                             = "../../../../../modules/javelin/docker-secret"
   project_name                       = var.project_name
   registry_server                    = var.registry_server
   registry_username                  = var.registry_username
@@ -29,7 +29,7 @@ module "docker_secret" {
 
 module "storageclass" {
   count                              = var.enable_storageclass == true ? 1 : 0
-  source                             = "../../../../../../modules/azure/aks-addons/storageclass"
+  source                             = "../../../../../modules/azure/aks-addons/storageclass"
   project_name                       = var.project_name
   project_env                        = var.project_env
   storage_classname                  = var.storage_classname
@@ -39,7 +39,7 @@ module "storageclass" {
 
 module "cert_manager" {
   count                              = var.enable_cert_manager == true ? 1 : 0
-  source                             = "../../../../../../modules/azure/aks-addons/cert-manager"
+  source                             = "../../../../../modules/azure/aks-addons/cert-manager"
   project_name                       = var.project_name
   project_env                        = var.project_env
   cert_acme_email                    = var.cert_acme_email
@@ -48,7 +48,7 @@ module "cert_manager" {
 module "prometheus" {
   depends_on                         = [ module.namespace, module.storageclass ]
   count                              = var.enable_prometheus == true ? 1 : 0
-  source                             = "../../../../../../modules/azure/aks-addons/prometheus"
+  source                             = "../../../../../modules/azure/aks-addons/prometheus"
   project_name                       = var.project_name
   project_env                        = var.project_env
   namespace                          = var.service_namespace
@@ -60,7 +60,7 @@ module "prometheus" {
 module "grafana" {
   depends_on                         = [ module.namespace, module.storageclass ]
   count                              = var.enable_grafana == true ? 1 : 0
-  source                             = "../../../../../../modules/azure/aks-addons/grafana"
+  source                             = "../../../../../modules/azure/aks-addons/grafana"
   project_name                       = var.project_name
   project_env                        = var.project_env
   namespace                          = var.service_namespace
@@ -72,7 +72,7 @@ module "grafana" {
 
 module "aks_addons_secret" {
   count                              = var.enable_aks_addons_secret == true ? 1 : 0
-  source                             = "../../../../../../modules/azure/aks-addons-secret"
+  source                             = "../../../../../modules/azure/aks-addons-secret"
   project_name                       = var.project_name
   project_env                        = var.project_env
   resource_group_name                = var.resource_group_name

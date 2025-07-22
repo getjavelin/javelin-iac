@@ -48,9 +48,9 @@ resource "azurerm_disk_encryption_set" "des" {
 }
 
 resource "azurerm_role_assignment" "des" {
-  count                                         = length(var.des_keyvault_role_list)
+  count                               = length(var.des_keyvault_role_list)
 
-  scope                                         = azurerm_key_vault.des.id
-  role_definition_name                          = var.des_keyvault_role_list[count.index]
-  principal_id                                  = azurerm_disk_encryption_set.des.identity[0].principal_id
+  scope                               = azurerm_key_vault.des.id
+  role_definition_name                = var.des_keyvault_role_list[count.index]
+  principal_id                        = azurerm_disk_encryption_set.des.identity[0].principal_id
 }

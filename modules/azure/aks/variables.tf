@@ -83,6 +83,24 @@ variable "aks_log_retention_in_days" {
   type        = number
 }
 
+variable "log_stream_list" {
+  type    = list(string)
+  default = [
+    "Microsoft-ContainerLog",
+    "Microsoft-ContainerLogV2",
+    "Microsoft-KubeEvents",
+    "Microsoft-KubePodInventory",
+    "Microsoft-KubeNodeInventory",
+    "Microsoft-KubePVInventory",
+    "Microsoft-KubeServices",
+    "Microsoft-KubeMonAgentEvents",
+    "Microsoft-InsightsMetrics",
+    "Microsoft-ContainerInventory",
+    "Microsoft-ContainerNodeInventory",
+    "Microsoft-Perf"
+  ]
+}
+
 variable "tags" {
   description = "tags"
   type        = map(string)

@@ -40,7 +40,7 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   }
 
   lifecycle {
-    ignore_changes                              = [ zone ]
+    ignore_changes                              = [ zone, high_availability, source_server_id ]
   }
 
   tags                                          = var.tags
@@ -96,7 +96,7 @@ locals {
     "username"    = ""
     "password"    = ""
     "privateip"   = ""
-    "host"        = "${azurerm_postgresql_flexible_server.postgres.name}.private.postgres.database.azure.com"
+    "host"        = "${azurerm_postgresql_flexible_server.postgres.name}.privatelink.postgres.database.azure.com"
     "port"        = "${var.db_port}"
     "id"          = "${azurerm_postgresql_flexible_server.postgres.id}"
   }

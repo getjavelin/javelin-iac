@@ -18,3 +18,8 @@ output "aks_cluster_kubeconfig" {
   value       = azurerm_kubernetes_cluster.aks.kube_admin_config[0]
   sensitive   = true
 }
+
+output "aks_oidc_issuer_url" {
+  description = "AKS oidc issuer url"
+  value       = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+}

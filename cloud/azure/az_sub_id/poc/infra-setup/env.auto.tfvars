@@ -14,6 +14,7 @@ enable_ssl_keyvault                         = false
 enable_application_gw                       = false
 enable_aks                                  = false
 enable_aks_custom_nodepool                  = false
+enable_svc_iam                              = false
 ## Resource Variables
 common_tags                                 = {
                                                 ManagedBy   = "Terraform"
@@ -30,14 +31,28 @@ public_subnet_cidr                          = "10.51.0.0/19"
 private_subnet_cidr                         = "10.51.32.0/19"
 appgw_subnet_cidr                           = "10.51.64.0/19"
 nat_ip_count                                = 2
-redis_capacity                              = 1
+redis_sku                                   = "Standard" # Basic
+redis_capacity                              = 3
 postgres_storage_mb                         = 65536
 postgres_storage_tier                       = "P30"
 postgres_sku_name                           = "GP_Standard_D4ads_v5"
 postgres_source_server_id                   = ""
 pg_db_list                                  = []
 pg_extentions                               = []
+workload_identity                           = [
+                                                {
+                                                  id             = 1
+                                                  namespace      = "javelin-poc"
+                                                  serviceaccount = "javelin-core"
+                                                },
+                                                {
+                                                  id             = 2
+                                                  namespace      = "javelin-poc"
+                                                  serviceaccount = "javelin-admin"
+                                                }
+                                              ]
 enable_self_signed_cert                     = true
+appgw_zones                                 = [ "1", "2", "3" ]
 ssl_keyvault_secret_ids                     = []
 aks_version                                 = 1.32
 aks_default_node_vm_size                    = "Standard_D4as_v6"
@@ -55,7 +70,7 @@ aks_nodes_properties                        = [
                                                 # {
                                                 #   name                    = "gpu"
                                                 #   aks_node_vm_size        = "Standard_NC4as_T4_v3"
-                                                #   aks_node_priority       = "Spot" # "Spot" or "Regular"
+                                                #   aks_node_priority       = "Regular" # "Spot" or "Regular"
                                                 #   aks_node_min_count      = 1
                                                 #   aks_node_max_count      = 1
                                                 # }
