@@ -12,7 +12,7 @@ spec:
     email: ${var.cert_acme_email} # Update to yours
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: ${var.name}
+      name: "${var.project_name}-${var.project_env}-ssl-privatekey"
     # Enable the HTTP-01 challenge provider
     solvers:
       - http01:
@@ -54,7 +54,7 @@ resource "helm_release" "cert_manager" {
   force_update     = false
   namespace        = var.namespace
   create_namespace = false
-  values = [templatefile("../../../../../../config/azure/${var.project_env}/helm/cert-manager-values.yml", {
+  values = [templatefile("../../../../../config/azure/${var.project_env}/helm/cert-manager-values.yml", {
     namespace = var.namespace
   })]
 }

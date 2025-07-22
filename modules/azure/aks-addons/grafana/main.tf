@@ -6,7 +6,7 @@ resource "random_password" "grafana_secret" {
 
 ########## Grafana_Dashboards ##########
 locals {
-  config_files = fileset("../../../../../../config/common/template/grafana-dashboard/", "*.json")
+  config_files = fileset("../../../../../config/common/template/grafana-dashboard/", "*.json")
 }
 
 resource "kubernetes_config_map" "grafana_dashboards" {
@@ -16,7 +16,7 @@ resource "kubernetes_config_map" "grafana_dashboards" {
   }
 
   data = {
-    for file in local.config_files : file => file("../../../../../../config/common/template/grafana-dashboard/${file}")
+    for file in local.config_files : file => file("../../../../../config/common/template/grafana-dashboard/${file}")
   }
 }
 
@@ -30,11 +30,11 @@ resource "helm_release" "grafana" {
   namespace        = var.namespace
   create_namespace = false
   values = [
-    templatefile("../../../../../../config/azure/${var.project_env}/ingress/${var.ingress_type}/grafana-values.yml", {
+    templatefile("../../../../../config/azure/${var.project_env}/ingress/${var.ingress_type}/grafana-values.yml", {
       grafana_domain          = var.grafana_domain
       grafana_subpath         = var.grafana_subpath
     }),
-    templatefile("../../../../../../config/azure/${var.project_env}/helm/grafana-values.yml", {
+    templatefile("../../../../../config/azure/${var.project_env}/helm/grafana-values.yml", {
       project_name            = var.project_name
       grafana_disk_size       = var.grafana_disk_size
       storage_classname       = var.storage_classname

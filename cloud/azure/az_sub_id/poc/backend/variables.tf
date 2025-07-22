@@ -38,8 +38,3 @@ variable "ad_object_id" {
   type        = string
   default     = ""
 }
-
-variable "enable_delete_lock" {
-  description = "enable delete lock"
-  type        = bool
-}

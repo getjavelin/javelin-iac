@@ -19,7 +19,7 @@ locals {
 
 module "self_keyvault_access" {
   count                                         = var.enable_self_keyvault_access == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/self-keyvault-access"
+  source                                        = "../../../../../modules/azure/self-keyvault-access"
   ad_object_id                                  = var.ad_object_id
   # ad_object_id                                  = data.azurerm_client_config.current.object_id
   resource_group_name                           = var.resource_group_name
@@ -27,7 +27,7 @@ module "self_keyvault_access" {
 
 module "vnet" {
   count                                         = var.enable_vnet == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/vnet"
+  source                                        = "../../../../../modules/azure/vnet"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -43,7 +43,7 @@ module "vnet" {
 
 module "des" {
   count                                         = var.enable_des == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/des"
+  source                                        = "../../../../../modules/azure/des"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -54,21 +54,23 @@ module "des" {
 
 module "redis" {
   count                                         = var.enable_redis == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/redis"
+  source                                        = "../../../../../modules/azure/redis"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
   resource_group_name                           = var.resource_group_name
   vnet_cidr                                     = var.vnet_cidr
+  redis_sku                                     = var.redis_sku
   redis_capacity                                = var.redis_capacity
   vnet_nsg_name                                 = module.vnet[0].vnet_nsg_name
   private_subnet_id                             = module.vnet[0].private_subnet_id
+  vnet_id                                       = module.vnet[0].vnet_id
   tags                                          = local.tags
 }
 
 module "postgres_deps" {
   count                                         = var.enable_postgres_deps == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/postgres-deps"
+  source                                        = "../../../../../modules/azure/postgres-deps"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -82,7 +84,7 @@ module "postgres_deps" {
 
 module "postgres_primary" {
   count                                         = var.enable_postgres_primary == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/postgres-primary"
+  source                                        = "../../../../../modules/azure/postgres-primary"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -102,7 +104,7 @@ module "postgres_primary" {
 
 module "postgres_secondary" {
   count                                         = var.enable_postgres_secondary == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/postgres-secondary"
+  source                                        = "../../../../../modules/azure/postgres-secondary"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -123,14 +125,14 @@ module "postgres_secondary" {
 
 module "psql_seeding" {
   count                                         = var.enable_psql_seeding == true ? 1 : 0
-  source                                        = "../../../../../../modules/javelin/psql-seeding"
+  source                                        = "../../../../../modules/javelin/psql-seeding"
   pg_db_list                                    = var.pg_db_list
   pg_extentions                                 = var.pg_extentions
 }
 
 module "ssl_keyvault" {
   count                                         = var.enable_ssl_keyvault == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/ssl-key-vault"
+  source                                        = "../../../../../modules/azure/ssl-key-vault"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -142,12 +144,13 @@ module "ssl_keyvault" {
 
 module "application_gw" {
   count                                         = var.enable_application_gw == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/application-gateway"
+  source                                        = "../../../../../modules/azure/application-gateway"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
   resource_group_name                           = var.resource_group_name
   ssl_keyvault_secret_ids                       = var.ssl_keyvault_secret_ids
+  appgw_zones                                   = var.appgw_zones
   ssl_keyvault_id                               = module.ssl_keyvault[0].ssl_keyvault_id
   appgw_subnet_id                               = module.vnet[0].appgw_subnet_id
   tags                                          = local.tags
@@ -155,7 +158,7 @@ module "application_gw" {
 
 module "aks" {
   count                                         = var.enable_aks == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/aks"
+  source                                        = "../../../../../modules/azure/aks"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -178,7 +181,7 @@ module "aks" {
 
 module "aks_custom_nodepool" {
   count                                         = var.enable_aks_custom_nodepool == true ? 1 : 0
-  source                                        = "../../../../../../modules/azure/aks-custom-nodes"
+  source                                        = "../../../../../modules/azure/aks-custom-nodes"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location
@@ -186,5 +189,17 @@ module "aks_custom_nodepool" {
   aks_nodes_properties                          = var.aks_nodes_properties
   aks_cluster_id                                = module.aks[0].aks_cluster_id
   private_subnet_id                             = module.vnet[0].private_subnet_id
+  tags                                          = local.tags
+}
+
+module "svc_iam" {
+  count                                         = var.enable_svc_iam == true ? 1 : 0
+  source                                        = "../../../../../modules/azure/svc-iam"
+  project_name                                  = var.project_name
+  project_env                                   = var.project_env
+  location                                      = var.location
+  resource_group_name                           = var.resource_group_name
+  workload_identity                             = var.workload_identity
+  aks_oidc_issuer_url                           = module.aks[0].aks_oidc_issuer_url
   tags                                          = local.tags
 }

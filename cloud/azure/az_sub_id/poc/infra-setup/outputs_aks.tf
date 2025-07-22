@@ -19,6 +19,11 @@ output "aks_cluster_kubeconfig" {
   sensitive   = true
 }
 
+output "aks_oidc_issuer_url" {
+  description = "AKS oidc issuer url"
+  value       = var.enable_aks ? module.aks[0].aks_oidc_issuer_url : null
+}
+
 output "aks_cluster_zzzzzz" {
   description = "Separation in the output"
   value       = var.enable_aks ? ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> aks_cluster" : null

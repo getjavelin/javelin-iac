@@ -28,9 +28,19 @@ variable "private_subnet_id" {
   type        = string
 }
 
+variable "redis_sku" {
+  description = "redis sku"
+  type        = string
+}
+
 variable "redis_capacity" {
   description = "redis capacity"
   type        = number
+}
+
+variable "vnet_id" {
+  description = "vnet id"
+  type        = string
 }
 
 variable "vnet_nsg_name" {

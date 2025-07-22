@@ -53,7 +53,7 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   }
 
   lifecycle {
-    ignore_changes                              = [ administrator_password, zone ]
+    ignore_changes                              = [ administrator_password, zone, high_availability ]
   }
 
   tags                                          = var.tags
