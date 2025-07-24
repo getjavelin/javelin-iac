@@ -203,3 +203,13 @@ module "svc_iam" {
   aks_oidc_issuer_url                           = module.aks[0].aks_oidc_issuer_url
   tags                                          = local.tags
 }
+
+module "traffic_manager" {
+  count                                         = var.enable_traffic_manager == true ? 1 : 0
+  source                                        = "../../../../../modules/azure/traffic-manager"
+  project_name                                  = var.project_name
+  project_env                                   = var.project_env
+  resource_group_name                           = var.resource_group_name
+  appgw_ip                                      = module.application_gw[0].appgw_ip_address
+  tags                                          = local.tags
+}
