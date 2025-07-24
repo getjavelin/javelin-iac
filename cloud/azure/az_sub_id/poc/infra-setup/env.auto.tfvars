@@ -15,6 +15,7 @@ enable_application_gw                       = false
 enable_aks                                  = false
 enable_aks_custom_nodepool                  = false
 enable_svc_iam                              = false
+enable_traffic_manager                      = false
 ## Resource Variables
 common_tags                                 = {
                                                 ManagedBy   = "Terraform"

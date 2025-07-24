@@ -98,6 +98,11 @@ variable "enable_svc_iam" {
   type        = bool
 }
 
+variable "enable_traffic_manager" {
+  description = "enable traffic manager"
+  type        = bool
+}
+
 variable "vnet_cidr" {
   description = "vnet cidr"
   type        = string

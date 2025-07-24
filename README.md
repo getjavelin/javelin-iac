@@ -268,6 +268,8 @@ To add a new `azure environment` for Javelin. consider the environment name is `
             enable_application_gw                       = true
             enable_aks                                  = true
             enable_aks_custom_nodepool                  = true
+            enable_svc_iam                              = true
+            enable_traffic_manager                      = true
             ```
 
         * Run these commands to create all resources specified in the code

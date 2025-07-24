@@ -20,7 +20,7 @@ This Javelin Gateway application deployment, including considerations and implic
 
 * Suitable for production
 
-The HA deployment setup is strongly depend on the cloud we are chooing as the services provided by the cloud may different from one to another.
+The HA deployment setup is strongly depend on the cloud we are choosing as the services provided by the cloud may different from one to another.
 
 ## 🌍 Multi-Region HA Deployment
 
@@ -54,7 +54,7 @@ Both regions must support:
 
 * The backend for the Global accelerator, which is an ALB ingress controller, must be a public ALB, not a private ALB
 
-* Periodically simulate region failures, and validation of the DR setup can be done without destroying the resources
+* Periodically simulate region failures, and validation of the DR setup can be done without deleting the resources
 
 ### Azure Cloud
 
@@ -62,13 +62,13 @@ Both regions must support:
 
 * Exploring a good solution for global load balancing...
 
-* The simulation of the periodic DR recovery requires more work. It needs to recreate some resources, such as the  Database server, and track it under the Iac by importing its statefile into the Terraform code (Only if we need ot manage it from the IaC). 
+* The simulation of the periodic DR recovery requires more work. It needs to recreate some resources, such as the Database server, and track it under the Iac by importing its statefile into the Terraform code (Only if we need ot manage it from the IaC).
 
 # DR RunBook
 
 ## AWS Disaster Recovery (DR) Runbook
 
-The DR setup is an `active-passive cluster` in 2 different regions, where the active region serves READ/WRITE traffic and the passive region can serve READ traffic. The switchover of passive to active can be set up as Auto or Manual.
+The DR setup is an `active-passive cluster` in 2 different regions, where the active region serves READ/WRITE traffic and the passive region can serve READ traffic. The switchover of passive to active can be set up as Auto or Manual. The swtichover may take 10 - 30 secs.
 
 These are the steps we have to follow in the manual DR process
 
@@ -83,7 +83,7 @@ These are the steps we have to follow in the manual DR process
 
 ## Azure Disaster Recovery (DR) Runbook
 
-The DR setup is an `active-passive cluster` in 2 different regions, where the active region serves READ/WRITE traffic and the passive region can serve READ traffic. The switchover of passive to active can be set up as Auto or Manual.
+The DR setup is an `active-passive cluster` in 2 different regions, where the active region serves READ/WRITE traffic and the passive region can serve READ traffic. The switchover of passive to active can be set up as Auto or Manual. The swtichover may take 10 - 60 secs.
 
 The following steps are mandatory for the manual DR process
 
