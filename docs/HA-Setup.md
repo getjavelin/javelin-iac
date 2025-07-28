@@ -90,3 +90,5 @@ The following steps are mandatory for the manual DR process
 * Do manual failover in the Azure postgres DB - This will promote the reader postgres in the second region as a standalone primary node, and it will detach from the primary region 
 
 * The region 1 database will no longer be useful as it can not be attached back to the existing primary node. to create anotehr reader in region 1, you have to manually setup the reader from the region 2 node to region 1. so the primary will be in region 2, and the reader will be in region 1.
+
+* Update the application gateway ip / privatelink (`Fully-qualified domain name (FQDN) or IP address`) in the `Traffic Manager` > `Endpoints`. After a manual failover, noting that these changes typically reflect within 10-30 seconds
