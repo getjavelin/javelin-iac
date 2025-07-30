@@ -1,3 +1,5 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/getjavelin/javelin-iac)
+
 # javelin-iac
 
 [Javelin Architecture Details](./docs/Architecture.md)
@@ -80,7 +82,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
         * One time setup - in the first run, the backend S3 bucket not available and so need to create it first
 
-            * Disable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/poc/infra-setup/env.auto.tfvars`
+            * Disable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/test/infra-setup/env.auto.tfvars`
 
                 ```bash
                 enable_vpc                               = false
@@ -91,7 +93,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
                 enable_svc_iam                           = false
                 ```
 
-            * Comment out these lines from the file `cloud/aws/aws_acc_id/poc/infra-setup/provider.tf`
+            * Comment out these lines from the file `cloud/aws/aws_acc_id/test/infra-setup/provider.tf`
 
                 ```bash
                 # backend "s3" {
@@ -105,7 +107,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             * Apply the changes by running `terraform apply"`, This will create the S3 bucket for TF backend
 
-            * Uncomment these lines from the file `cloud/aws/aws_acc_id/poc/infra-setup/provider.tf`
+            * Uncomment these lines from the file `cloud/aws/aws_acc_id/test/infra-setup/provider.tf`
 
                 ```bash
                 backend "s3" {
@@ -117,7 +119,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             * Run terraform initialization command again and this will migrate the local state file into S3 bucket. `terraform init -backend-config="backend.tfvars"`
 
-        * Enable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/poc/infra-setup/env.auto.tfvars`
+        * Enable all the infrastructure creation by updating the file `cloud/aws/aws_acc_id/test/infra-setup/env.auto.tfvars`
 
             ```bash
             enable_vpc                               = true
@@ -140,13 +142,13 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
         * Run this command to download the kubconfig file for communicating with EKS from local for deploying the dependencies
 
-            * Here for kube config file, I gave the name `~/.kube/javelin-poc-eks.json`, it should match with the variable `local_kube_config` in the file `cloud/aws/aws_acc_id/test/k8s-addons/env.auto.tfvars`
+            * Here for kube config file, I gave the name `~/.kube/javelin-test-eks.json`, it should match with the variable `local_kube_config` in the file `cloud/aws/aws_acc_id/test/k8s-addons/env.auto.tfvars`
 
             ```bash
-            export KUBECONFIG=~/.kube/javelin-poc-eks.json ; aws eks update-kubeconfig --name javelin-poc-eks
+            export KUBECONFIG=~/.kube/javelin-test-eks.json ; aws eks update-kubeconfig --name javelin-test-eks
             ```
 
-        * Update the kubernetes addons env file `cloud/aws/aws_acc_id/poc/k8s-addons/env.auto.tfvars`
+        * Update the kubernetes addons env file `cloud/aws/aws_acc_id/test/k8s-addons/env.auto.tfvars`
 
         * Make sure these two files haveing the same values for `region` and `bucket`
 
@@ -154,7 +156,7 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
             * `cloud/aws/aws_acc_id/test/k8s-addons/backend.tfvars`
 
-        * Enable required components to be deployed in the kubernetes by updating the file `cloud/aws/aws_acc_id/poc/k8s-addons/env.auto.tfvars`
+        * Enable required components to be deployed in the kubernetes by updating the file `cloud/aws/aws_acc_id/test/k8s-addons/env.auto.tfvars`
 
             ```bash
             enable_namespace                = true
@@ -178,3 +180,143 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
             ```
 
 * Create `CNAME` records for those 3 domain name with the ALB domain
+
+### Azure Environment
+
+To add a new `azure environment` for Javelin. consider the environment name is `test`, follow these steps
+
+#### Prerequisites
+
+* An Azure Subscription
+
+* Linux terminal in local for running Terraform Code
+
+* Admin permission / Permission to all of the resources mentioned in the terraform from local
+
+* pk12 certificates for the following items which will added in the azure key vault certificates (optional : if we are not using certbot ssl from AKS)
+
+    * `backend domain certificate` (javelin-test-api.example.com)
+
+    * `eval domain certificate` (javelin-test-eval.example.com)
+
+    * `frontend domain certificate` (javelin-test.example.com)
+
+#### Steps
+
+* Create a new Azure environment config folder called `test` by copying `config/azure/poc` into `config/azure/test`
+
+    * Customize the config files accourding to your environment if required under `config/azure/test` folder
+
+* Create a new Azure environment terraform code folder called `test` by copying `cloud/azure/az_sub_id/poc` into `cloud/azure/az_sub_id/test`
+
+    * `backend` Terraform Code
+
+        * Update the infra env file `cloud/azure/az_sub_id/test/backend/env.auto.tfvars`
+
+        * Make sure these two files haveing the same values for `storage_account_name` and `resource_group_name`
+
+            * `cloud/azure/az_sub_id/test/backend/env.auto.tfvars`
+
+            * `cloud/azure/az_sub_id/test/backend/backend.tfvars`
+
+        * One time setup - in the first run, the backend storage class not available and so need to create it first
+
+            * Comment out these lines from the file `cloud/aws/aws_acc_id/test/backend/provider.tf`
+
+                ```bash
+                # backend "azurerm" {
+                #   container_name        = "terraform-state"
+                #   key                   = "backend/backend.tfstate"
+                # }
+                ```
+
+            * Initialize terraform by running this command `terraform init -backend-config="backend.tfvars"`
+
+            * Apply the changes by running `terraform apply"`, This will create the storage account for TF backend
+
+            * Uncomment these lines from the file `cloud/aws/aws_acc_id/test/backend/provider.tf`
+
+                ```bash
+                backend "azurerm" {
+                    container_name        = "terraform-state"
+                    key                   = "backend/backend.tfstate"
+                }
+                ```
+
+            * Run terraform initialization command again and this will migrate the local state file into storage account. `terraform init -backend-config="backend.tfvars"`
+
+    * `infra-setup` Terraform Code
+
+        * Update the infra env file `cloud/azure/az_sub_id/test/infra-setup/env.auto.tfvars`
+
+        * Make sure these two files haveing the same values for `storage_account_name` and `resource_group_name`
+
+            * `cloud/azure/az_sub_id/test/infra-setup/env.auto.tfvars`
+
+        * Enable all the infrastructure creation by updating the file `cloud/aws/az_sub_id/test/infra-setup/env.auto.tfvars`
+
+            ```bash
+            enable_self_keyvault_access                 = true
+            enable_vnet                                 = true
+            enable_des                                  = true
+            enable_redis                                = true
+            enable_postgres_deps                        = true
+            enable_postgres_primary                     = true
+            enable_postgres_secondary                   = true
+            enable_psql_seeding                         = true
+            enable_ssl_keyvault                         = true
+            enable_application_gw                       = true
+            enable_aks                                  = true
+            enable_aks_custom_nodepool                  = true
+            enable_svc_iam                              = true
+            enable_traffic_manager                      = true
+            ```
+
+        * Run these commands to create all resources specified in the code
+
+            ```bash
+            terraform init -backend-config="backend.tfvars"
+            terraform plan # Optional for listing the resources that is going to create
+            terraform apply
+            ```
+
+    * `k8s-addons` Terraform Code
+
+        * Run this command to download the kubconfig file for communicating with AKS from local for checking the access and status of the cluster
+
+            ```bash
+            export KUBECONFIG=~/.kube/javelin-test-aks.json # optional if you want to manage multiple kubeconfig files from the same host
+            az login --identity \
+                    && kubelogin convert-kubeconfig -l msi \
+                    && az aks get-credentials --resource-group javelin-test --name javelin-test-aks --overwrite-existing
+            ```
+
+        * Update the kubernetes addons env file `cloud/azure/az_sub_id/test/k8s-addons/env.auto.tfvars`
+
+        * Make sure these two files haveing the same values for `storage_account_name` and `resource_group_name`
+
+            * `cloud/azure/az_sub_id/test/k8s-addons/env.auto.tfvars`
+
+            * `cloud/azure/az_sub_id/test/k8s-addons/backend.tfvars`
+
+        * Enable required components to be deployed in the kubernetes by updating the file `cloud/azure/az_sub_id/test/k8s-addons/env.auto.tfvars`
+
+            ```bash
+            enable_storageclass             = true
+            enable_namespace                = true
+            enable_cert_manager             = true  # optional : If you want to use certbot ssl certificates from the AKS cluster
+            enable_docker_secret            = true
+            enable_prometheus               = true
+            enable_grafana                  = true
+            enable_aks_addons_secret        = true
+            ```
+
+        * Run these commands to create all resources specified in the code
+
+            ```bash
+            terraform init -backend-config="backend.tfvars"
+            terraform plan # Optional for listing the resources that is going to create
+            terraform apply
+            ```
+
+* Create `A` records for those 3 domain name with the Azure Application gateway IP

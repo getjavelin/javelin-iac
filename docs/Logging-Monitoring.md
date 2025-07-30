@@ -1,4 +1,4 @@
-# Service Logging & Monitoring Setup (AWS Cloud)
+# Service Logging & Monitoring Setup
 
 This document outlines the configuration of logging and monitoring systems deployed in an Amazon EKS (Elastic Kubernetes Service) cluster. The setup includes:
 
@@ -9,7 +9,7 @@ This document outlines the configuration of logging and monitoring systems deplo
 
 ---
 
-## 📄 Logging Architecture
+## 📄 Logging Architecture (AWS)
 
 ### 🔧 Fluent Bit
 
@@ -35,9 +35,31 @@ within the log group, there will be many log streams representing each microserv
 
 ![log streams](./img/aws-log-stream.png)
 
+
+## 📄 Logging Architecture (Azure)
+
+### 🔧 Fluent Bit
+
+Fluent Bit a managed solution from azure is deployed as a **DaemonSet** in the AKS cluster to collect logs from each node. It is configured to:
+
+- Fetch the logs from the `/var/log/containers/*.log` for each microsevrice deployed in the AKS
+- Filter the logs from the deployed namespace only
+- Parse Kubernetes logs using the Kubernetes filter and create individual log group with the javelin service name
+- Forward logs to **Azure log analytics workspace**
+
+### 🔗 Analytics workspace Logs Integration
+
+Logs are sent to **Analytics workspace** in the following format:
+
+`PROJECT_NAME-PROJECT_ENV-aks-service-log`. where,
+
+- `PROJECT_NAME` is the `project_name` variable passing in the terraform code
+
+- `PROJECT_ENV` is the `project_env` variable passing in the terraform code
+
 ---
 
-## 📊 Monitoring Architecture
+# 📊 Monitoring Architecture
 
 ### 🔧 Prometheus
 
@@ -94,8 +116,6 @@ Grafana is deployed with:
 ---
 
 ## 🔐 Security & Access
-
-- **IAM roles for service accounts (IRSA)** are used to grant least-privilege permissions to Fluent Bit.
 
 - Grafana access can be exposed via LoadBalancer or through an Ingress controller with HTTPS.
 

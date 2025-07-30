@@ -3,6 +3,7 @@
 **values-secrets.yml
 **.terraform**
 **terraform.tfstate**
+**errored.tfstate**
 .idea
 .DS_Store
 .vscode
