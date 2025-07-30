@@ -644,11 +644,11 @@ except Exception as e:
     console.log(f":x: [bold red]Failed to delete secret {secret_name}:[/] {e}")
 
 # Delete template
-# try:
-#     client.delete_template(template_name)
-#     console.log(f":bookmark_tabs: [bold green]Deleted template:[/] {template_name}")
-# except Exception as e:
-#     console.log(f":x: [bold red]Failed to delete template {template_name}:[/] {e}")
+try:
+    client.delete_template(template_name)
+    console.log(f":bookmark_tabs: [bold green]Deleted template:[/] {template_name}")
+except Exception as e:
+    console.log(f":x: [bold red]Failed to delete template {template_name}:[/] {e}")
 
 # Delete provider
 try:
