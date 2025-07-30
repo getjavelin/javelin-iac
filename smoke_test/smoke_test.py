@@ -566,11 +566,11 @@ for test in custom_prompts:
             securityfilters_output = processor_outputs.get(securityfilters_key, {}) if securityfilters_key else {}
             code_markdown_detected = securityfilters_output.get('code_markdown_detected', False)
             if code_markdown_detected is True:
-                test_results["Security Filter Guardrail"] = "FAIL"
-                console.log(":closed_lock_with_key: [bold red]Security Filter Guardrail FAILED (code detected)")
-            else:
                 test_results["Security Filter Guardrail"] = "PASS"
-                console.log(":closed_lock_with_key: [bold green]Security Filter Guardrail PASSED")
+                console.log(":closed_lock_with_key: [bold green]Security Filter Guardrail PASSED (code detected)")
+            else:
+                test_results["Security Filter Guardrail"] = "FAIL"
+                console.log(":closed_lock_with_key: [bold red]Security Filter Guardrail FAILED (code not detected)")
         elif test['desc'] == "DLP":
             javelin_metadata = response.get('javelin', {})
             processor_outputs = javelin_metadata.get('processor_outputs', {})
