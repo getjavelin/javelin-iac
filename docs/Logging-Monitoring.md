@@ -31,7 +31,7 @@ Logs are sent to **CloudWatch Log Groups** in the following format:
 
 - `PROJECT_ENV` is the `project_env` variable passing in the terraform code
 
-within the log group, there will be many log streams representing each microservices as the diagram below.
+within the log group, there will be one log stream representing all microservices as the diagram below.
 
 ![log streams](./img/aws-log-stream.png)
 
