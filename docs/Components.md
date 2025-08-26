@@ -73,7 +73,7 @@ These are the resources that we are provisioning in the cloud for setting up the
 
     * Private subnets - for deploying the internal application such as AKS, Postgres, Redis etc..
 
-*  Postgres Flexy Server
+*  Postgres Flexi Server
 
     * Required minimum 4 vCPU and 8 GB RAM
 
