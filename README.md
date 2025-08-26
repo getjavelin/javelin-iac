@@ -4,6 +4,8 @@
 
 [Javelin Architecture Details](./docs/Architecture.md)
 
+[Javelin Cloud Component Details](./docs/Components.md)
+
 **ℹ️ IMPORTANT NOTICE**
 
 This Terraform configuration is designed for general cloud provider environments without any custom networking or VPC-level policies and single region deployment. 
