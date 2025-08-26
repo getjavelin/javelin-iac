@@ -16,15 +16,15 @@ These are the resources that we are provisioning in the cloud for setting up the
 
     * Required minimum 4 vCPU and 8 GB RAM, This can be changed with respect to the load in the application
 
-    * Recommending a Global Aurora cluser for production
+    * Recommending a Global Aurora cluster for production
 
-* Memcache for Redis
+* ElastiCache for Redis
 
     * 4 GB RAM minimum
 
-* EKS cluster with workernodes
+* EKS cluster with worker nodes
 
-    * 3 node Masternodes (managed by AWS)
+    * 3 node Master nodes (managed by AWS)
 
     * Minimum 4 nodes with 4 vCPU and 16 GB RAM - Javelin core services
 
@@ -38,7 +38,7 @@ These are the resources that we are provisioning in the cloud for setting up the
 
     * ALB ingress controller
 
-    * Custom storageclass with high IOPS
+    * Custom storage class with high IOPS
 
     * AutoScaler
 
@@ -49,13 +49,13 @@ These are the resources that we are provisioning in the cloud for setting up the
 
 ### Permission and Communication
 
-* EKS workernodes permissions
+* EKS worker nodes permissions
 
     * AmazonEBSCSIDriverPolicy
 
     * Cloudwatch access
 
-* EKS workernodes ingress and egress
+* EKS worker nodes ingress and egress
 
     * Postgres access internally
 
@@ -83,9 +83,9 @@ These are the resources that we are provisioning in the cloud for setting up the
 
     * 4 GB RAM minimum
 
-* AKS cluster with workernodes
+* AKS cluster with worker nodes
 
-    * Masternodes (managed by Azure)
+    * Master nodes (managed by Azure)
 
     * Enable logging, metrics, auto scale 
 
@@ -99,13 +99,13 @@ These are the resources that we are provisioning in the cloud for setting up the
 
 * AKS Dependencies
 
-    * Cert manager for SSL termination - optional if we are not attaching the Certificates in the Applcation Gateway
+    * Cert manager for SSL termination - optional if we are not attaching the Certificates in the Application Gateway
 
-    * Custom storageclass with high IOPS
+    * Custom storage class with high IOPS
 
 ### Permission and Communication
 
-* AKS workernodes permissions
+* AKS worker nodes permissions
 
     * Disk Encryption Sets - Reader
 
@@ -121,7 +121,7 @@ These are the resources that we are provisioning in the cloud for setting up the
 
     * Subnet Network - Contributor
 
-* AKS workernodes ingress and egress
+* AKS worker nodes ingress and egress
 
     * Postgres access internally
 
