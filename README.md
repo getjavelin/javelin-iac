@@ -6,6 +6,8 @@
 
 [Javelin Cloud Component Details](./docs/Components.md)
 
+[Javelin K8s Ingress Details](./docs/Ingress-Setup.md)
+
 **ℹ️ IMPORTANT NOTICE**
 
 This Terraform configuration is designed for general cloud provider environments without any custom networking or VPC-level policies and single region deployment. 
