@@ -8,7 +8,7 @@ data "http" "my_public_ip" {
 data "azurerm_client_config" "current" {}
 
 locals {
-  my_public_ip_json                             = jsondecode(data.http.my_public_ip.body)
+  my_public_ip_json                             = jsondecode(data.http.my_public_ip.response_body)
   tags                                          = merge(var.common_tags,
                                                         {
                                                           Project       = var.project_name

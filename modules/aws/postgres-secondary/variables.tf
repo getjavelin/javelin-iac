@@ -82,6 +82,12 @@ variable "performance_insights_retention_period" {
   default     = 7
 }
 
+variable "performance_insights_enabled" {
+  description = "Enable Performance Insight"
+  type        = bool
+  default     = false
+}
+
 variable "subnet_grp" {
   description = "subnet group ID"
   type        = string

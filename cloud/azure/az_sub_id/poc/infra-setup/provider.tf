@@ -7,27 +7,27 @@ terraform {
     }
     time = {
       source  = "hashicorp/time"
-      version = "0.11.1"
+      version = "0.13.1"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.1"
+      version = "3.7.2"
     }
     null = {
       source  = "hashicorp/null"
-      version = "3.2.2"
+      version = "3.2.4"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "4.0.5"
+      version = "4.1.0"
     }
     cloudinit = {
       source  = "hashicorp/cloudinit"
-      version = "2.3.4"
+      version = "2.3.7"
     }
     http = {
-      source  = "terraform-aws-modules/http"
-      version = "2.4.1"
+      source  = "hashicorp/http"
+      version = "3.5.0"
     }
     postgresql = {
       source  = "cyrilgdn/postgresql"

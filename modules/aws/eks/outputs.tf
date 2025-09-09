@@ -23,11 +23,6 @@ output "eks_cluster_endpoint" {
   value       = module.eks_cluster.cluster_endpoint
 }
 
-output "eks_cluster_token" {
-  description = "EKS cluster token"
-  value       = data.aws_eks_cluster_auth.eks_cluster.token
-}
-
 output "eks_cluster_certificate_authority_data" {
   description = "EKS cluster certificate authority data"
   value       = module.eks_cluster.cluster_certificate_authority_data

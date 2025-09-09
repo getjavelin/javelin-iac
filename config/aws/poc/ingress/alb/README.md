@@ -1,1 +1,0 @@
-## ALB Ingress Helm Values.yml

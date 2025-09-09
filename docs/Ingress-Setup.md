@@ -1,4 +1,8 @@
-# AWS
+# Javelin K8s Ingress Setup Reference 
+
+The Javelin components are deploying as a microservices in the Kubernetes, there we will use the ingress controller provided by the cloud provider. the ingress configuration will change with respect to the cloud provider we are using and the following sample template we can consider as a reference for setting the ingress for the javelin components.
+
+## AWS
 
 ```code
 ingress:
@@ -31,7 +35,7 @@ ingress:
           pathType: Prefix
 ```
 
-# Azure
+## Azure
 
 * With Application Gateway SSL Certificate
 

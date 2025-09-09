@@ -91,6 +91,12 @@ variable "performance_insights_retention_period" {
   default     = 7
 }
 
+variable "performance_insights_enabled" {
+  description = "Enable Performance Insight"
+  type        = bool
+  default     = false
+}
+
 variable "secret_id" {
   description = "Secret ID"
   type        = string

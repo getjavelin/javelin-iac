@@ -38,8 +38,13 @@ postgres_storage_mb                         = 65536
 postgres_storage_tier                       = "P30"
 postgres_sku_name                           = "GP_Standard_D4ads_v5"
 postgres_source_server_id                   = ""
-pg_db_list                                  = []
-pg_extentions                               = []
+pg_db_list                                  = [ "javelin_redteam" ]
+pg_extentions                               = [
+                                                {
+                                                  name     = "vector"
+                                                  database = "javelin_redteam"
+                                                }
+                                              ]
 workload_identity                           = [
                                                 {
                                                   id             = 1
@@ -55,7 +60,7 @@ workload_identity                           = [
 enable_self_signed_cert                     = true
 appgw_zones                                 = [ "1", "2", "3" ]
 ssl_keyvault_secret_ids                     = []
-aks_version                                 = 1.32
+aks_version                                 = 1.33
 aks_default_node_vm_size                    = "Standard_D4as_v6"
 aks_service_cidr                            = "172.20.0.0/16"
 aks_dns_service_ip                          = "172.20.0.10"

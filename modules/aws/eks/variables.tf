@@ -43,6 +43,19 @@ variable "eks_cluster_version" {
   type        = string
 }
 
+variable "eks_enabled_log_types" {
+  description = "EKS cluster version"
+  type        = list(string)
+  # default     = []
+  default     = [
+                  "api",
+                  "audit",
+                  "authenticator",
+                  "controllerManager",
+                  "scheduler"
+                ]
+}
+
 variable "addons" {
   description = "EKS addons"
   type = list(object({

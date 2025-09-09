@@ -24,6 +24,11 @@ output "eks_cluster_endpoint" {
   value       = var.enable_eks ? module.eks[0].eks_cluster_endpoint : null
 }
 
+output "eks_cluster_certificate_authority_data" {
+  description = "EKS cluster certificate authority data"
+  value       = var.enable_eks ? module.eks[0].eks_cluster_certificate_authority_data : null
+}
+
 output "eks_cluster_oidc_provider" {
   description = "EKS cluster oidc provider"
   value       = var.enable_eks ? module.eks[0].eks_cluster_oidc_provider : null

@@ -8,7 +8,7 @@ enable_postgres_secondary                = false
 enable_psql_seeding                      = false
 enable_redis                             = false
 enable_eks                               = false
-enable_eks_custom_nodes                  = false
+enable_eks_managed_nodes                 = false
 enable_alb_sg                            = false
 enable_svc_iam                           = false
 enable_svc_kms                           = false
@@ -50,41 +50,41 @@ rds_instance_db_class                    = "db.m5.large"
 aurora_instance_db_class                 = "db.r6g.large"
 aurora_master_cluster_region             = "us-east-1"
 aurora_global_cluster_identifier         = ""
-pg_db_list                               = []
-pg_extentions                            = []
-rds_replicate_source_db                  = ""
-eks_cloudwatch_retention                 = 30
-eks_cluster_version                      = "1.32"
-eks_custom_template_properties           = [
+pg_db_list                               = [ "javelin_redteam" ]
+pg_extentions                            = [
                                                 {
-                                                    name                           = "generic"
-                                                    image_id                       = ""
-                                                    block_device_name              = "/dev/xvda"
-                                                    block_device_size              = 50
+                                                    name     = "vector"
+                                                    database = "javelin_redteam"
                                                 }
                                             ]
-eks_custom_nodes_properties              = [
+rds_replicate_source_db                  = ""
+eks_cloudwatch_retention                 = 30
+redis_cloudwatch_retention               = 30
+eks_cluster_version                      = "1.33"
+eks_managed_nodes_properties             = [
                                                 {
                                                     name                           = "general"
-                                                    eks_cluster_version            = "1.32" # "" for CUSTOM eks_node_ami_type
-                                                    eks_node_ami_type              = "AL2023_x86_64_STANDARD" # CUSTOM
-                                                    eks_node_instance_type         = "c5.4xlarge"
+                                                    eks_node_ami_type              = "AL2023_x86_64_STANDARD"
+                                                    eks_node_ami_id                = ""
+                                                    eks_node_instance_type         = "t3.xlarge"
                                                     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
-                                                    eks_launch_template_id         = "lt-aaaaaaaaaaaa"
-                                                    eks_launch_template_version    = 1
-                                                    eks_node_min_size              = 3
-                                                    eks_node_max_size              = 6
+                                                    eks_node_block_device_name     = "/dev/xvda"
+                                                    eks_node_block_device_size     = 50
+                                                    eks_node_min_size              = 1
+                                                    eks_node_max_size              = 1
+                                                    enable_bootstrap_user_data     = false # true only if you are using eks_node_ami_id
                                                 },
                                                 {
                                                     name                           = "gpu"
-                                                    eks_cluster_version            = "1.32" # "" for CUSTOM eks_node_ami_type
-                                                    eks_node_ami_type              = "AL2023_x86_64_NVIDIA" # CUSTOM
-                                                    eks_node_instance_type         = "g4dn.2xlarge"
+                                                    eks_node_ami_type              = "AL2023_x86_64_NVIDIA"
+                                                    eks_node_ami_id                = ""
+                                                    eks_node_instance_type         = "g4dn.xlarge"
                                                     eks_node_capacity_type         = "ON_DEMAND" # ON_DEMAND or SPOT
-                                                    eks_launch_template_id         = "lt-aaaaaaaaaaaa"
-                                                    eks_launch_template_version    = 1
+                                                    eks_node_block_device_name     = "/dev/xvda"
+                                                    eks_node_block_device_size     = 50
                                                     eks_node_min_size              = 2
                                                     eks_node_max_size              = 2
+                                                    enable_bootstrap_user_data     = false # true only if you are using eks_node_ami_id
                                                 }
                                             ]
 global_accelerator_listener_arn          = ""

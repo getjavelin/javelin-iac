@@ -68,8 +68,8 @@ variable "enable_eks" {
   type        = bool
 }
 
-variable "enable_eks_custom_nodes" {
-  description = "enable eks custom nodes"
+variable "enable_eks_managed_nodes" {
+  description = "enable eks managed node"
   type        = bool
 }
 
@@ -161,6 +161,11 @@ variable "eks_cloudwatch_retention" {
   type        = number
 }
 
+variable "redis_cloudwatch_retention" {
+  description = "Retention of CloudWatch Logs"
+  type        = number
+}
+
 variable "rds_allocated_storage" {
   description = "Allocated Storage"
   type        = number
@@ -178,28 +183,19 @@ variable "eks_cluster_version" {
   type        = string
 }
 
-variable "eks_custom_template_properties" {
-  description = "Custom launch template properties"
-  type = list(object({
-    name                         = string
-    image_id                     = string
-    block_device_name            = string
-    block_device_size            = number
-  }))
-}
-
-variable "eks_custom_nodes_properties" {
-  description = "EKS custom nodes properties"
+variable "eks_managed_nodes_properties" {
+  description = "EKS managed nodes properties"
   type = list(object({
     name                        = string
-    eks_cluster_version         = string
     eks_node_ami_type           = string
+    eks_node_ami_id             = string
     eks_node_instance_type      = string
     eks_node_capacity_type      = string
-    eks_launch_template_id      = string
-    eks_launch_template_version = number
+    eks_node_block_device_name  = string
+    eks_node_block_device_size  = number
     eks_node_min_size           = number
     eks_node_max_size           = number
+    enable_bootstrap_user_data  = bool
   }))
 }
 

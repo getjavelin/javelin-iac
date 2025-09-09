@@ -22,10 +22,11 @@ resource "kubernetes_namespace" "deploy_namespace" {
 
 ########## IAM_Account_Role ##########
 module "ingress_alb_role" {
-  depends_on      = [ kubernetes_namespace.deploy_namespace ]
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  depends_on                    = [ kubernetes_namespace.deploy_namespace ]
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version                       = "6.1.1"
 
-  role_name                              = local.role_name
+  name                          = local.role_name
   attach_load_balancer_controller_policy = true
 
   oidc_providers = {
@@ -46,7 +47,7 @@ resource "kubernetes_service_account" "service_account" {
       "app.kubernetes.io/component" = "controller"
     }
     annotations = {
-      "eks.amazonaws.com/role-arn"               = module.ingress_alb_role.iam_role_arn
+      "eks.amazonaws.com/role-arn"               = module.ingress_alb_role.arn
       "eks.amazonaws.com/sts-regional-endpoints" = "true"
     }
   }

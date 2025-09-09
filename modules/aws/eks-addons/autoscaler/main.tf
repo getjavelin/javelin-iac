@@ -95,8 +95,10 @@ resource "helm_release" "cluster_autoscaler" {
     aws_region             = var.region
     service_account_name   = var.service_account_name
   })]
-  set {
-    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = aws_iam_role.kubernetes_cluster_autoscaler.arn
-  }
+  set = [
+    {
+      name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = aws_iam_role.kubernetes_cluster_autoscaler.arn
+    }
+  ]
 }

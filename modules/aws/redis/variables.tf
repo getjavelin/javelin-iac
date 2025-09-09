@@ -109,7 +109,6 @@ variable "sg_ipv6_egress_cidr" {
 variable "redis_cloudwatch_retention" {
   description = "Cloudwatch log retention"
   type        = number
-  default     = 30
 }
 
 variable "additional_whitelist_cidr" {
