@@ -10,35 +10,28 @@ locals {
 ########## EKS_Cluster ##########
 module "eks_cluster" {
   source                                   = "terraform-aws-modules/eks/aws"
-  version                                  = "20.33.1"
+  version                                  = "21.1.0"
 
-  cluster_name                             = local.cluster_name
-  cluster_version                          = var.eks_cluster_version
+  name                                     = local.cluster_name
+  kubernetes_version                       = var.eks_cluster_version
   vpc_id                                   = var.vpc_id
   subnet_ids                               = var.private_subnet_ids
-  cluster_endpoint_private_access          = true
-  cluster_endpoint_public_access           = true
-  cluster_endpoint_public_access_cidrs     = [ var.devops_public_cidr ]
+  endpoint_private_access                  = true
+  endpoint_public_access                   = true
+  endpoint_public_access_cidrs             = [ var.devops_public_cidr ]
   create_cloudwatch_log_group              = true
   enable_irsa                              = true
   authentication_mode                      = "API_AND_CONFIG_MAP"
   enable_cluster_creator_admin_permissions = true
-  create_cluster_security_group            = false
+  create_security_group                    = false
   create_node_security_group               = false
-  cluster_security_group_id                = var.eks_cluster_sg_id
+  security_group_id                        = var.eks_cluster_sg_id
   node_security_group_id                   = var.eks_nodegroup_sg_id
 
-  cloudwatch_log_group_retention_in_days = var.eks_cloudwatch_retention
-  # cluster_enabled_log_types = []
-  cluster_enabled_log_types = [
-    "api",
-    "audit",
-    "authenticator",
-    "controllerManager",
-    "scheduler"
-  ]
+  cloudwatch_log_group_retention_in_days   = var.eks_cloudwatch_retention
+  enabled_log_types                        = var.eks_enabled_log_types
 
-  cluster_addons_timeouts = {
+  addons_timeouts = {
     create = "15m"
     update = "15m"
     delete = "15m"

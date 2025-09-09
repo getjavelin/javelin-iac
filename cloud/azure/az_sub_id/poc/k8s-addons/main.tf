@@ -17,6 +17,7 @@ module "namespace" {
 }
 
 module "docker_secret" {
+  depends_on                         = [ module.namespace ]
   count                              = var.enable_docker_secret == true ? 1 : 0
   source                             = "../../../../../modules/javelin/docker-secret"
   project_name                       = var.project_name

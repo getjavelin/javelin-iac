@@ -1,1 +1,0 @@
-# Javelin Terraform Script

@@ -33,18 +33,44 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "custom_nodes_properties" {
-  description = "EKS custom nodes properties"
+variable "eks_cluster_endpoint" {
+  description = "EKS cluster endpoint"
+  type        = string
+}
+
+variable "eks_cluster_ca_data" {
+  description = "EKS cluster ca data"
+  type        = string
+}
+
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type        = string
+}
+
+variable "region" {
+  description = "AWS Region"
+  type        = string
+}
+
+variable "eks_cluster_version" {
+  description = "EKS cluster version"
+  type        = string
+}
+
+variable "managed_nodes_properties" {
+  description = "EKS managed nodes properties"
   type = list(object({
     name                        = string
-    eks_cluster_version         = string
     eks_node_ami_type           = string
+    eks_node_ami_id             = string
     eks_node_instance_type      = string
     eks_node_capacity_type      = string
-    eks_launch_template_id      = string
-    eks_launch_template_version = number
+    eks_node_block_device_name  = string
+    eks_node_block_device_size  = number
     eks_node_min_size           = number
     eks_node_max_size           = number
+    enable_bootstrap_user_data  = bool
   }))
 }
 

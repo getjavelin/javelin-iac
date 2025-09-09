@@ -1,5 +1,8 @@
-######### K8s Addons #########
 data "aws_caller_identity" "current" {}
+
+data "aws_eks_cluster_auth" "eks" {
+  name                               = data.terraform_remote_state.infra_setup_tf.outputs.k8s_cluster_name
+}
 
 locals {
   aws_account_id                     = data.aws_caller_identity.current.account_id

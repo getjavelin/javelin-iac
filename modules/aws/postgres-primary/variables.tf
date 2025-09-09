@@ -76,6 +76,12 @@ variable "backup_retention_period" {
   default     = 7
 }
 
+variable "performance_insights_enabled" {
+  description = "Enable Performance Insight"
+  type        = bool
+  default     = false
+}
+
 variable "skip_final_snapshot" {
   description = "Skip final snapshot"
   type        = bool

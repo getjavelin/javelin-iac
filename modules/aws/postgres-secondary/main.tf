@@ -14,8 +14,8 @@ resource "aws_db_instance" "rds_postgres" {
   apply_immediately                     = true
   publicly_accessible                   = false
   storage_encrypted                     = true
-  performance_insights_enabled          = true
-  performance_insights_retention_period = var.performance_insights_retention_period
+  performance_insights_enabled          = var.performance_insights_enabled
+  # performance_insights_retention_period = var.performance_insights_retention_period
   performance_insights_kms_key_id       = var.kms_key_id
   kms_key_id                            = var.kms_key_id
   db_subnet_group_name                  = var.subnet_grp

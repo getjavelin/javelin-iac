@@ -187,6 +187,8 @@ To add a new `aws environment` for Javelin. consider the environment name is `te
 
 ### Azure Environment
 
+* [choose-az-regions] for supporting availability zone (https://learn.microsoft.com/en-us/azure/reliability/regions-list)
+
 To add a new `azure environment` for Javelin. consider the environment name is `test`, follow these steps
 
 #### Prerequisites

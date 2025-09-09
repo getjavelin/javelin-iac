@@ -8,11 +8,6 @@ variable "region" {
   type = string
 }
 
-variable "local_kube_config" {
-  description = "kube config for kubernetes access from local"
-  type        = string
-}
-
 variable "project_name" {
   description = "Project Name"
   type        = string

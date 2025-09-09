@@ -1,1 +1,0 @@
-## Nginx Ingress Helm Values.yml

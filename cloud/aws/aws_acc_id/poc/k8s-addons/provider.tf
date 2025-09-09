@@ -3,19 +3,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.88.0"
+      version = "6.9.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.29.0"
+      version = "2.38.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.13.1"
+      version = "3.0.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.1"
+      version = "3.7.2"
     }
   }
 
@@ -44,16 +44,22 @@ provider "aws" {
   }
 }
 
-# Deploying into the existing EKS
+## Deploying into the existing EKS
 provider "kubernetes" {
-  config_path    = var.local_kube_config
+  # config_path    = var.local_kube_config
   # config_context = "context"
+  host                   = data.terraform_remote_state.infra_setup_tf.outputs.eks_cluster_endpoint
+  cluster_ca_certificate = base64decode(data.terraform_remote_state.infra_setup_tf.outputs.eks_cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.eks.token
 }
 
 provider "helm" {
-  kubernetes {
-    config_path    = var.local_kube_config
+  kubernetes = {
+    # config_path    = var.local_kube_config
     # config_context = "context"
+    host                   = data.terraform_remote_state.infra_setup_tf.outputs.eks_cluster_endpoint
+    cluster_ca_certificate = base64decode(data.terraform_remote_state.infra_setup_tf.outputs.eks_cluster_certificate_authority_data)
+    token                  = data.aws_eks_cluster_auth.eks.token
   }
   burst_limit = 3600
   debug       = true

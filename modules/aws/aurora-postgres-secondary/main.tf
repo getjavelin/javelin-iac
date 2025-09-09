@@ -15,8 +15,8 @@ resource "aws_rds_cluster" "aurora_global" {
   deletion_protection                   = true
   apply_immediately                     = true
   storage_encrypted                     = true
-  performance_insights_enabled          = true
-  performance_insights_retention_period = var.performance_insights_retention_period
+  performance_insights_enabled          = var.performance_insights_enabled
+  # performance_insights_retention_period = var.performance_insights_retention_period
   performance_insights_kms_key_id       = var.kms_key_id
   kms_key_id                            = var.kms_key_id
   vpc_security_group_ids                = [ var.security_grp ]

@@ -70,8 +70,10 @@ resource "helm_release" "aws_cloudwatch_metrics" {
   values = [templatefile("../../../../../config/aws/${var.project_env}/helm/cloudwatch-metrics-values.yml", {
     k8s_cluster_name        = var.k8s_cluster_name
   })]
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = aws_iam_role.aws_cloudwatch.arn
-  }
+  set = [
+    {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = aws_iam_role.aws_cloudwatch.arn
+    }
+  ]
 }

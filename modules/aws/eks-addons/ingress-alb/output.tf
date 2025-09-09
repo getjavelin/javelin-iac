@@ -1,6 +1,6 @@
 output "alb_ingress_iam_role_arn" {
   description = "IAM Role for ALB Ingress Controller"
-  value       = module.ingress_alb_role.iam_role_arn
+  value       = module.ingress_alb_role.arn
 }
 
 output "name" {

@@ -7,19 +7,19 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.29.0"
+      version = "2.38.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.13.1"
-    }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = ">= 1.7.0"
+      version = "3.0.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.1"
+      version = "3.7.2"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "1.19.0"
     }
   }
 
@@ -66,7 +66,7 @@ provider "kubectl" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     # config_path    = var.local_kube_config
     # config_context = "context"
     host                   = data.terraform_remote_state.infra_setup_tf.outputs.aks_cluster_kubeconfig.host
