@@ -1,0 +1,93 @@
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /sign-in
+  type: NodePort
+  protocol: TCP
+  port: 3000
+
+image:
+  repository: "${DOCKER_IMAGE}"
+  pullPolicy: Always
+  tag: ${IMAGE_TAG}
+
+imagePullSecrets:
+  - name: javelin-registry-secret
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 200m
+  limits:
+    memory: 1024Mi
+    cpu: 500m
+
+secrets:
+  enabled: true
+  secretData:
+    REDIRECT_URI: 'https://dev.example.com/'
+    NEXT_PUBLIC_REDIRECT_URI: 'https://dev.example.com/'
+    NEXT_PUBLIC_DEFAULT_USAGE_PLAN_ID: 'd1jy0v'
+    NEXT_PUBLIC_DEFAULT_USER_ROLE: 'org:customer_admin'
+    NEXT_PUBLIC_PRESTRINGS: '${NEXT_PUBLIC_PRESTRINGS}'
+    NEXT_PUBLIC_USER_ROLES: '${NEXT_PUBLIC_USER_ROLES}'
+    NEXT_PUBLIC_BUID_MAX_GATEWAYS: '2'
+    NEXT_PUBLIC_CLERK_SIGNUP: 'visible'
+    NEXT_PUBLIC_DEPLOYED_TARGET: 'main'
+    NEXT_PUBLIC_FEATURE_FLAG_URL: 'http://javelin-flag:1031/'
+    NEXT_PUBLIC_ONBOARDING_ENABLED: 'false'
+    NEXT_PUBLIC_BUID_CLUSTER_MAP: '${NEXT_PUBLIC_BUID_CLUSTER_MAP}'
+    NEXT_PUBLIC_HA_PAIRS: '${NEXT_PUBLIC_HA_PAIRS}'
+    NEXT_PUBLIC_SECRET_STORE: 'kubernetes'
+    NEXT_PUBLIC_SAAS_SERVICE: 'FALSE'
+    SUPPORT_SMTP_PASSKEY: '${SUPPORT_SMTP_PASSKEY}'
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: '${CLERK_PUBLISHABLE_KEY}'
+    CLERK_SECRET_KEY: '${CLERK_SECRET_KEY}'
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=300"
+
+    alb.ingress.kubernetes.io/load-balancer-name: ${K8S_CLUSTER_NAME}-alb-ingress
+    alb.ingress.kubernetes.io/group.name: ${K8S_CLUSTER_NAME}-group
+    alb.ingress.kubernetes.io/subnets: ${PUBLIC_SUBNET_IDS}
+    alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/security-groups: ${ALB_SECURITY_GROUP_IDS}
+  hosts:
+    - host: dev.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kube/nodegroup
+          operator: In
+          values:
+          - general

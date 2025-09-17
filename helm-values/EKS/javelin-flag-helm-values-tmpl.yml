@@ -1,0 +1,54 @@
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  port: 1031
+
+image:
+  repository: "${DOCKER_IMAGE}"
+  pullPolicy: Always
+  tag: ${IMAGE_TAG}
+
+imagePullSecrets:
+  - name: javelin-registry-secret
+
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 50m
+  limits:
+    memory: 256Mi
+    cpu: 200m
+
+# kubectl -n K8S_NAMESPACE create secret generic javelin-flag-file --from-file=javelin.goff.yaml
+volumes:
+  - name: goff-volume
+    secret:
+      secretName: javelin-flag-file
+      optional: false
+
+volumeMounts:
+  - name: goff-volume
+    mountPath: /goff/config/javelin.goff.yaml
+    readOnly: true
+    subPath: javelin.goff.yaml
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kube/nodegroup
+          operator: In
+          values:
+          - general

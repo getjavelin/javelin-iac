@@ -1,0 +1,101 @@
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+  protocol: TCP
+  port: 8001
+
+image:
+  repository: "${DOCKER_IMAGE}"
+  pullPolicy: Always
+  tag: ${IMAGE_TAG}
+
+imagePullSecrets:
+  - name: javelin-registry-secret
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 100m
+  limits:
+    memory: 1024Mi
+    cpu: 500m
+
+secrets:
+  enabled: true
+  secretData:
+    HF_TOKEN: '${HF_TOKEN}'
+    DB_USERNAME: '${DB_USERNAME}'
+    DB_PASSWORD: '${DB_PASSWORD}'
+    DB_HOST: '${DB_HOST}'
+    REDIS_CONN_STR: '${REDIS_CONN_STR}'
+    AZURE_API_KEY: '${AZURE_API_KEY}'
+    AZURE_API_BASE: '${AZURE_API_BASE}'
+    AZURE_API_VERSION: '${AZURE_API_VERSION}'
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kube/nodegroup
+          operator: In
+          values:
+          - general
+
+worker:
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 200m
+    limits:
+      memory: 1024Mi
+      cpu: 1000m
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kube/nodegroup
+            operator: In
+            values:
+            - general
+
+seederJob:
+  enabled: true
+
+  secretsSeederSpecific:
+    enabled: true
+    secretData:
+      REDTEAM_SEEDER_DATASET: "javelinai/javelin-red5"
+      REDTEAM_SEEDER_DATASET_VER: "spg_v1"
+      REDTEAM_SEEDER_ARGS: ""
+
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
