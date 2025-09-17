@@ -1,0 +1,101 @@
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /v1/admin/healthz
+  type: NodePort
+  protocol: TCP
+  port: 8040
+
+image:
+  repository: "${DOCKER_IMAGE}"
+  pullPolicy: Always
+  tag: ${IMAGE_TAG}
+
+imagePullSecrets:
+  - name: javelin-registry-secret
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 200m
+  limits:
+    memory: 1024Mi
+    cpu: 500m
+
+secrets:
+  enabled: true
+  secretData:
+    DB_USERNAME: '${DB_USERNAME}'
+    DB_PASSWORD: '${DB_PASSWORD}'
+    DB_HOST: '${DB_HOST}'
+    DB_NAME: '${DB_NAME}'
+    REDIS_HOST: '${REDIS_HOST}'
+    AWS_KMS_KEY: '${AWS_KMS_KEY}'
+    AWS_SECRET_REPLICATION_REGION: '${AWS_SECRET_REPLICATION_REGION}'
+    AWS_REPLICATION_KMS_KEY: '${AWS_REPLICATION_KMS_KEY}'
+
+volumes:
+  - name: license-volume
+    secret:
+      secretName: javelin-admin-license
+      optional: false
+
+volumeMounts:
+  - name: license-volume
+    mountPath: "/app/license"
+    readOnly: true
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations:
+    eks.amazonaws.com/role-arn: "${SVC_IAM_ROLE}"
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/group.order: '2'
+    alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=300"
+
+    alb.ingress.kubernetes.io/load-balancer-name: ${K8S_CLUSTER_NAME}-alb-ingress
+    alb.ingress.kubernetes.io/group.name: ${K8S_CLUSTER_NAME}-group
+    alb.ingress.kubernetes.io/subnets: ${PUBLIC_SUBNET_IDS}
+    alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/security-groups: ${ALB_SECURITY_GROUP_IDS}
+  hosts:
+    - host: api-dev.example.com
+      paths:
+        - path: /v1/admin/
+          pathType: Prefix
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kube/nodegroup
+          operator: In
+          values:
+          - general

@@ -1,0 +1,97 @@
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /v1/system/healthz
+  type: NodePort
+  protocol: TCP
+  port: 8000
+
+image:
+  repository: "${DOCKER_IMAGE}"
+  pullPolicy: Always
+  tag: ${IMAGE_TAG}
+
+imagePullSecrets:
+  - name: javelin-registry-secret
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 200m
+  limits:
+    memory: 1024Mi
+    cpu: 500m
+
+secrets:
+  enabled: true
+  secretData:
+    BYPASS_GUARDRAILS: 'false'
+    REDIS_HOST: '${REDIS_HOST}'
+    REDIS_PASS: '${REDIS_PASS}'
+
+volumes:
+  - name: secret-volume
+    secret:
+      secretName: javelin-core-file
+      optional: false
+
+volumeMounts:
+  - name: secret-volume
+    mountPath: "/app/config/javelin-gcpjson.json"
+    readOnly: true
+    subPath: javelin-gcpjson.json
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations:
+    eks.amazonaws.com/role-arn: "${SVC_IAM_ROLE}"
+
+ingress:
+  enabled: true
+  className: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/group.order: '3'
+    alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=300"
+
+    alb.ingress.kubernetes.io/load-balancer-name: ${K8S_CLUSTER_NAME}-alb-ingress
+    alb.ingress.kubernetes.io/group.name: ${K8S_CLUSTER_NAME}-group
+    alb.ingress.kubernetes.io/subnets: ${PUBLIC_SUBNET_IDS}
+    alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/security-groups: ${ALB_SECURITY_GROUP_IDS}
+  hosts:
+    - host: api-dev.example.com
+      paths:
+        - path: /v1/
+          pathType: Prefix
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kube/nodegroup
+          operator: In
+          values:
+          - general
