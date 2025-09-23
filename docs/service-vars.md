@@ -17,8 +17,8 @@ Variable Name | Variable Value | Default Value
 `REDIS_PORT` | Redis port | `6379`
 `K8S_NAMESPACE` | Kubernetes namespace | `Deployed K8s namespace`
 `DB_PORT` | Postgres port | `5432`
+`DB_SSL_MODE` | Postgres sslmode | `disable` or `require`
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam`
-`SSL_MODE` | Postgres sslmode | `disable`
 `JAVELIN_FF_URL` | Javelin flag url | `http://javelin-flag:1031/`
 `JAVELIN_REDTEAM_URL` | Javelin redteam url | `http://javelin-redteam:8001/v1`
 
@@ -127,6 +127,7 @@ Variable Name | Variable Value | Default Value
 `AZURE_API_VERSION` | Azure OpenAI version | nil
 `GROK_MODEL_NAME` | Grok model name | nil
 `DB_PORT` | Postgres port | `5432`
+`DB_SSL_MODE` | Postgres sslmode | `disable` or `require`
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam`
 `JAVELIN_ADMIN_URL` | Javelin admin url | `http://javelin-admin:8040`
 
@@ -138,3 +139,10 @@ Variable Name | Variable Value | Default Value
 `LLM_MODEL` | Model name | nil
 `LLM_URL` | LLM complete URL | nil
 `LLM_API_KEY` | LLM API Key | nil
+
+### javelin-overwatch
+
+Variable Name | Variable Value | Default Value
+--------------|--------------|--------------
+`JAVELIN_URL` | Javelin API URL | nil
+`JAVELIN_API_KEY` | Javelin API Key | nil
