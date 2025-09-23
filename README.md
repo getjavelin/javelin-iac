@@ -6,4 +6,4 @@
 
 [Javelin Cloud Component Details](./docs/Components.md)
 
-[Javelin K8s Ingress Details](./docs/Ingress-Setup.md)
+[Javelin Overwatch](./docs/Javelin-Overwatch.md)
