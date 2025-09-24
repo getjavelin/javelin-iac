@@ -54,6 +54,6 @@ helm upgrade --install javelin-overwatch javelin-charts/javelin-overwatch \
 ```bash
 export JAVELIN_URL="https://be-domain/v1"
 export JAVELIN_API_KEY=""
-chmod +x ./overwatch
-./overwatch &
+chmod +x ./javelin-overwatch
+./javelin-overwatch --enable-javelin &
 ```
