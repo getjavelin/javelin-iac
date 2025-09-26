@@ -62,7 +62,7 @@ The **javelin-overwatch** service is distributed as a prebuilt binary. You need 
   - `amd64` → For most Linux servers and VMs (AWS EC2, GCP, Azure, bare metal servers).  
   - `arm64` → For ARM-based systems (AWS Graviton, Raspberry Pi, ARM servers).  
 
-### Example: Download for `amd64`
+#### Example: Download for `amd64`
 ```bash
 # Replace VERSION with the release tag (e.g., v0.0.2)
 wget https://github.com/getjavelin/javelin-overwatch/releases/download/VERSION/javelin-overwatch-linux-amd64
@@ -76,20 +76,37 @@ wget https://github.com/getjavelin/javelin-overwatch/releases/download/VERSION/j
 scp javelin-overwatch-linux-amd64 ubuntu@<your-vm-ip>:/home/ubuntu/
 ```
 
-### 2. Make the Binary Executable
+#### Set executable permission
 
-After downloading, set the execution permission
 ```bash
 chmod +x javelin-overwatch-linux-amd64
+sudo mv javelin-overwatch-linux-amd64 /usr/local/bin/javelin-overwatch
 ```
 
-(Optional) Rename it for convenience:
+### 2. Install and Configure Supervisor 
+
+#### 2.1 Install supervisor
+
 ```bash
-mv javelin-overwatch-linux-amd64 javelin-overwatch
+sudo apt update
+sudo apt install supervisor -y
 ```
 
+#### 2.2 Create supervisor config
 
-### 3. Configure Environment Variables
+Create /etc/supervisor/conf.d/javelin-overwatch.conf:
+
+```bash
+[program:javelin-overwatch]
+directory=/usr/local/bin                    ; path where binary will live
+command=/usr/local/bin/javelin-overwatch --enable-javelin
+autostart=true                              ; start on boot
+autorestart=true                            ; restart if it crashes
+stderr_logfile=/var/log/javelin-overwatch.err.log
+stdout_logfile=/var/log/javelin-overwatch.out.log
+environment=JAVELIN_URL="https://your-gateway-domain/v1",JAVELIN_API_KEY="your-gateway-api-key"
+user=root                                   ; run as root (sudo equivalent)
+```
 
 Before running the service, configure the following environment variables:
 
@@ -99,30 +116,23 @@ Before running the service, configure the following environment variables:
 
 By default, javelin-overwatch will automatically provision an **MCP Overwatch application** (mcp_overwatch) in your Javelin Gateway when started if it doesn't already exist.
 
-```bash
-export JAVELIN_URL="https://your-gateway-domain/v1"
-export JAVELIN_API_KEY="your-gateway-api-key"
+
+#### 2.3 Reload supervisor and start the service
+
+```
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start javelin-overwatch
 ```
 
-### 4. Run the service
+### 3. Verify the deployment
 
-Start the service with 
-
-```bash
-./javelin-overwatch --enable-javelin > overwatch.log 2>&1 &
-```
-
-The `--enable-javelin` flag ensures that Overwatch integrates with your Javelin Gateway.
-
-### 5. Verify the deployment
-
-1. Validate provisioning: Ensure the `mcp-overwatch` application is visible in your Javelin Gateway.
-2. Explore traffic live visibility on your gateway traces or inside application's chronicle tab. 
-3. Confirm the process started (e.g., `ps aux | grep javelin-overwatch`).
-4. Verify the logs  (e.g. `tail -f overwatch.log`)
+1. Check service status (`sudo supervisorctl status javelin-overwatch`)
+2. Verify the logs  (e.g. `tail -f /var/log/javelin-overwatch.out.log`)
+3. Explore traffic live visibility on your gateway traces or in the application's chronicle tab. 
 
 
-#### Setup: MCP client that calls DeepWiki
+### 4. Setup: MCP client that calls DeepWiki
 
 1. Below is a minimal Python client that calls the `read_wiki_structure` tool on the DeepWiki MCP. Save as deepwiki_call_read_structure.py (or a name you prefer).
 
@@ -260,3 +270,4 @@ if __name__ == "__main__":
         logging.exception("Error during MCP call: %s", exc)
         raise
 ```
+
