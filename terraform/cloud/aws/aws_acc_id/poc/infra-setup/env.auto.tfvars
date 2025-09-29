@@ -2,9 +2,6 @@
 bucket                                   = "javelin-tf-poc"
 ## Enable required services
 enable_vpc                               = false
-enable_postgres_deps                     = false
-enable_postgres_primary                  = false
-enable_postgres_secondary                = false
 enable_psql_seeding                      = false
 enable_redis                             = false
 enable_eks                               = false
@@ -46,7 +43,6 @@ database_subnets                         = [
                                                 "10.1.128.0/20"
                                             ]
 redis_node_type                          = "cache.m5.large"
-rds_instance_db_class                    = "db.m5.large"
 aurora_instance_db_class                 = "db.r6g.large"
 aurora_master_cluster_region             = "us-east-1"
 aurora_global_cluster_identifier         = ""
@@ -57,7 +53,6 @@ pg_extentions                            = [
                                                     database = "javelin_redteam"
                                                 }
                                             ]
-rds_replicate_source_db                  = ""
 eks_cloudwatch_retention                 = 30
 redis_cloudwatch_retention               = 30
 eks_cluster_version                      = "1.33"

@@ -8,10 +8,16 @@ resource "aws_rds_cluster_parameter_group" "aurora_postgres" {
   name                                 = "${local.aurora_prefix}-${var.family}-cluster-pg-grp"
   family                               = var.family
 
-  # parameter {
-  #   name                               = "rds.force_ssl"
-  #   value                              = "0"
-  # }
+  parameter {
+    name                               = "rds.force_ssl"
+    value                              = "1"
+  }
+
+  parameter {
+    name                               = "ssl"
+    value                              = "1"
+    apply_method                       = "pending-reboot"
+  }
 
   parameter {
     name                               = "log_min_duration_statement"

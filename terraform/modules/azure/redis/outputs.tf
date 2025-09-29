@@ -5,6 +5,11 @@ output "redis_server_id" {
 
 output "redis_host" {
   description = "redis host"
+  value       = "${azurerm_redis_cache.redis.name}.redis.cache.windows.net"
+}
+
+output "redis_privatelink" {
+  description = "redis privatelink"
   value       = "${azurerm_redis_cache.redis.name}.privatelink.redis.cache.windows.net"
 }
 
@@ -16,6 +21,11 @@ output "redis_private_ip" {
 output "redis_port" {
   description = "redis port"
   value       = azurerm_redis_cache.redis.port
+}
+
+output "redis_ssl_port" {
+  description = "redis ssl port"
+  value       = azurerm_redis_cache.redis.ssl_port
 }
 
 output "redis_primary_access_key" {

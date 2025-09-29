@@ -52,5 +52,5 @@ provider "postgresql" {
   database                = module.postgres_primary[0].postgres_db_name
   username                = module.postgres_primary[0].postgres_db_user
   password                = module.postgres_primary[0].postgres_db_pass
-  sslmode                 = "disable"
+  sslmode                 = "require"
 }

@@ -6,10 +6,10 @@ locals {
 ########## Security_Group ##########
 resource "aws_security_group" "redis_sg" {
   vpc_id                     = var.vpc_id
-  name                       = "${local.redis_prefix}-redis-sg"
+  name                       = "${local.redis_prefix}-redis-cluster-sg"
   description                = "Security Group for Elastic Cache Redis Traffic"
   tags                       = {
-                                "Name" = "${local.redis_prefix}-redis-sg"
+                                "Name" = "${local.redis_prefix}-redis-cluster-sg"
                               }
   lifecycle {
     create_before_destroy    = true
@@ -78,30 +78,90 @@ resource "aws_vpc_security_group_ingress_rule" "additional_redis_ingress_rule" {
                               }
 }
 
+########## KMS ##########
+resource "aws_kms_key" "redis_kms" {
+  description                 = "KMS key for encrypt/decrypt operations"
+  deletion_window_in_days     = 10
+  enable_key_rotation         = true
+}
+
+resource "aws_kms_alias" "redis_kms" {
+  name                        = "alias/${local.redis_prefix}-redis-cluster"
+  target_key_id               = aws_kms_key.redis_kms.key_id
+}
+
+data "aws_iam_policy_document" "redis_kms" {
+  statement {
+    effect                    = "Allow"
+    resources                 = [ aws_kms_key.redis_kms.arn ]
+    actions                   = [ "kms:*" ]
+
+    principals {
+      type                    = "AWS"
+      identifiers             = [ "arn:aws:iam::${var.aws_account_id}:root" ]
+    }
+  }
+
+  statement {
+    effect                    = "Allow"
+    resources                 = [ aws_kms_key.redis_kms.arn ]
+    actions                   = [
+                                  "kms:Encrypt",
+                                  "kms:Decrypt",
+                                  "kms:ReEncrypt*",
+                                  "kms:GenerateDataKey*",
+                                  "kms:CreateGrant",
+                                  "kms:DescribeKey"
+                                ]
+
+    principals {
+      type                   = "AWS"
+      identifiers            = [ "*" ]
+    }
+
+    condition {
+      test                   = "StringEquals"
+      variable               = "kms:CallerAccount"
+      values                 = [ "${var.aws_account_id}" ] 
+    }
+  }
+}
+
+resource "aws_kms_key_policy" "redis_kms" {
+  key_id                     = aws_kms_key.redis_kms.key_id
+  policy                     = data.aws_iam_policy_document.redis_kms.json
+}
+
 ########## Redis_SubnetGroup ##########
 resource "aws_elasticache_subnet_group" "redis_subnet_group" {
-  name                       = "${local.redis_prefix}-redis-subnet-grp"
+  name                       = "${local.redis_prefix}-redis-cluster-subnet-grp"
   subnet_ids                 = var.private_subnet_ids
 }
 
 ########## Redis_ParameterGroup ##########
 resource "aws_elasticache_parameter_group" "redis_params_group" {
-  name                       = "${local.redis_prefix}-redis-pg-grp"
+  name                       = "${local.redis_prefix}-redis-cluster-pg-grp"
   family                     = var.family
 }
 
 ########## CloudWatch ##########
 resource "aws_cloudwatch_log_group" "redis_log" {
-  name                       = "${local.redis_prefix}-redis-log"
+  name                       = "${local.redis_prefix}-redis-cluster-log"
   retention_in_days          = var.redis_cloudwatch_retention
 }
 
-########## Redis ##########
-resource "aws_elasticache_cluster" "redis" {
-  cluster_id                 = "${local.redis_prefix}-redis"
+########## Random_Pass ##########
+resource "random_password" "redis_password" {
+  length                     = 16
+  special                    = false
+}
+
+########## Redis_Cluster ##########
+resource "aws_elasticache_replication_group" "redis" {
+  replication_group_id       = "${local.redis_prefix}-redis-cluster"
+  description                = "${local.redis_prefix}-redis-cluster"
   engine                     = var.engine
   node_type                  = var.redis_node_type
-  num_cache_nodes            = 1
   engine_version             = var.engine_version
   apply_immediately          = true
   security_group_ids         = [aws_security_group.redis_sg.id]
@@ -112,6 +172,17 @@ resource "aws_elasticache_cluster" "redis" {
   snapshot_retention_limit   = var.snapshot_retention_limit
   snapshot_window            = var.snapshot_window
   auto_minor_version_upgrade = var.auto_minor_version_upgrade
+  cluster_mode               = "disabled"
+  num_cache_clusters         = 1
+  automatic_failover_enabled = false
+  multi_az_enabled           = false
+  network_type               = "ipv4"
+  transit_encryption_enabled = true
+  at_rest_encryption_enabled = true
+  transit_encryption_mode    = "required"
+  kms_key_id                 = aws_kms_key.redis_kms.arn
+  auth_token                 = random_password.redis_password.result
+  auth_token_update_strategy = "SET"
   log_delivery_configuration {
     destination              = aws_cloudwatch_log_group.redis_log.name
     destination_type         = "cloudwatch-logs"

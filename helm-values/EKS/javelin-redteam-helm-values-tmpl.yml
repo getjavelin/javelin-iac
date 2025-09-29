@@ -37,6 +37,7 @@ secrets:
     DB_USERNAME: '${DB_USERNAME}'
     DB_PASSWORD: '${DB_PASSWORD}'
     DB_HOST: '${DB_HOST}'
+    DB_SSL_MODE: 'require'
     REDIS_CONN_STR: '${REDIS_CONN_STR}'
     AZURE_API_KEY: '${AZURE_API_KEY}'
     AZURE_API_BASE: '${AZURE_API_BASE}'
@@ -88,14 +89,14 @@ seederJob:
   secretsSeederSpecific:
     enabled: true
     secretData:
-      REDTEAM_SEEDER_DATASET: "javelinai/javelin-red5"
+      REDTEAM_SEEDER_DATASET: "javelinai/javelin-red5-with-embeddings"
       REDTEAM_SEEDER_DATASET_VER: "spg_v1"
       REDTEAM_SEEDER_ARGS: ""
 
   resources:
     requests:
       memory: 1Gi
-      cpu: 500m
+      cpu: 2000m
     limits:
       memory: 2Gi
-      cpu: 1000m
+      cpu: 3000m
