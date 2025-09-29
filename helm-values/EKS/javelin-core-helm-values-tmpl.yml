@@ -38,6 +38,7 @@ secrets:
     BYPASS_GUARDRAILS: 'false'
     REDIS_HOST: '${REDIS_HOST}'
     REDIS_PASS: '${REDIS_PASS}'
+    REDIS_TLS: 'true'
 
 volumes:
   - name: secret-volume

@@ -270,4 +270,3 @@ if __name__ == "__main__":
         logging.exception("Error during MCP call: %s", exc)
         raise
 ```
-

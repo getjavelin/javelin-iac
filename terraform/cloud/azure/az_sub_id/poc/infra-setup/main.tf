@@ -132,7 +132,7 @@ module "psql_seeding" {
 
 module "ssl_keyvault" {
   count                                         = var.enable_ssl_keyvault == true ? 1 : 0
-  source                                        = "../../../../../modules/azure/ssl-key-vault"
+  source                                        = "../../../../../modules/azure/ssl-keyvault"
   project_name                                  = var.project_name
   project_env                                   = var.project_env
   location                                      = var.location

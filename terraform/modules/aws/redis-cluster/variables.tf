@@ -116,3 +116,8 @@ variable "additional_whitelist_cidr" {
   type        = list(string)
   default     = []
 }
+
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type        = string
+}

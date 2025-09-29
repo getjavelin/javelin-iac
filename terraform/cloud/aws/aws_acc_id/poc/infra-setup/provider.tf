@@ -55,10 +55,10 @@ provider "aws" {
 }
 
 provider "postgresql" {
-  host            = module.postgres_primary[0].db_host
-  port            = module.postgres_primary[0].db_port
-  database        = module.postgres_primary[0].db_name
-  username        = module.postgres_primary[0].db_user
-  password        = module.postgres_primary[0].db_pass
-  sslmode         = "disable"
+  host            = module.aurora_postgres_primary[0].db_host
+  port            = module.aurora_postgres_primary[0].db_port
+  database        = module.aurora_postgres_primary[0].db_name
+  username        = module.aurora_postgres_primary[0].db_user
+  password        = module.aurora_postgres_primary[0].db_pass
+  sslmode         = "require"
 }

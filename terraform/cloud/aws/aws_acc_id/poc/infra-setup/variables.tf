@@ -23,21 +23,6 @@ variable "enable_vpc" {
   type        = bool
 }
 
-variable "enable_postgres_deps" {
-  description = "enable postgre deps"
-  type        = bool
-}
-
-variable "enable_postgres_primary" {
-  description = "enable postgres primary"
-  type        = bool
-}
-
-variable "enable_postgres_secondary" {
-  description = "enable postgres secondary"
-  type        = bool
-}
-
 variable "enable_aurora_postgres_deps" {
   description = "enable aurora postgres deps"
   type        = bool
@@ -128,23 +113,6 @@ variable "redis_node_type" {
   type        = string
 }
 
-variable "rds_multi_az" {
-  description = "Specifies if the RDS instance is multi-AZ."
-  type        = bool
-  default     = true
-}
-
-variable "rds_replicate_source_db" {
-  description = "Source postgres for secondary"
-  type        = string
-  default     = ""
-}
-
-variable "rds_instance_db_class" {
-  description = "Database instance class"
-  type        = string
-}
-
 variable "svc_iam_policy_list" {
   description = "List of IAM Policies for Service"
   type        = list(string)
@@ -164,18 +132,6 @@ variable "eks_cloudwatch_retention" {
 variable "redis_cloudwatch_retention" {
   description = "Retention of CloudWatch Logs"
   type        = number
-}
-
-variable "rds_allocated_storage" {
-  description = "Allocated Storage"
-  type        = number
-  default     = 50
-}
-
-variable "rds_max_allocated_storage" {
-  description = "Max Allocated Storage"
-  type        = number
-  default     = 512
 }
 
 variable "eks_cluster_version" {

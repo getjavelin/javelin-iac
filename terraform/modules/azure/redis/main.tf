@@ -18,6 +18,20 @@ resource "azurerm_network_security_rule" "inbound_rule_6379" {
   network_security_group_name                   = var.vnet_nsg_name
 }
 
+resource "azurerm_network_security_rule" "inbound_rule_6380" {
+  name                                          = "allow-inbound-redis-ssl"
+  priority                                      = 106
+  direction                                     = "Inbound"
+  access                                        = "Allow"
+  protocol                                      = "Tcp"
+  source_port_range                             = "*"
+  destination_port_range                        = "6380"
+  source_address_prefix                         = "${var.vnet_cidr}"
+  destination_address_prefix                    = "*"
+  resource_group_name                           = var.resource_group_name
+  network_security_group_name                   = var.vnet_nsg_name
+}
+
 ########## Redis ##########
 resource "azurerm_redis_cache" "redis" {
   name                                          = "${local.redis_prefix}-redis"

@@ -35,10 +35,13 @@ secrets:
   secretData:
     DB_USERNAME: '${DB_USERNAME}'
     DB_PASSWORD: '${DB_PASSWORD}'
+    DB_SSL_MODE: 'require'
     DB_HOST: '${DB_HOST}'
     DB_NAME: '${DB_NAME}'
     REDIS_HOST: '${REDIS_HOST}'
     REDIS_PASS: '${REDIS_PASS}'
+    REDIS_TLS: 'true'
+    REDIS_PORT: '6380'
 
 volumes:
   - name: license-volume

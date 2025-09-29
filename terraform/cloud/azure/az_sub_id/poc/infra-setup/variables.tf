@@ -177,7 +177,7 @@ variable "postgres_server_params" {
   default = [
     {
       name    = "require_secure_transport"
-      value   = "OFF"
+      value   = "ON"
     },
     {
       name    = "azure.extensions"
