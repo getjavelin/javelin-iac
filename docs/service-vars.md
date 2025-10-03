@@ -34,6 +34,8 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `REDIS_PASS` | Redis password | nil | -
 `UNKEY_ROOT_KEY` | Unkey Root Key | nil | optional
 `UNKEY_API_ID` | Unkey api id | nil | optional
+`MODEL_ARMOR_LOCATION` | Model armor location | nil | -
+`MODEL_ARMOR_TEMPLATE` | Model armor template | nil | -
 `REDIS_PORT` | Redis port | `6379` | -
 `REDIS_TLS` | Redis TLS | `false` | -
 `DEPLOY_TYPE` | Deploy type | `dev` | `dev` or `prod`
