@@ -136,10 +136,20 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `OPENAI_MODEL_LOW` | OpenAI gpt low model name | nil | -
 `EMBEDDING_MODEL` | Embedding model name | nil | -
 `GROK_MODEL` | Grok3 model name | nil | -
+
+
+### javelin-redteam-lab1
+
+Variable Name | Variable Value | Default Value | Acceptable Value
+--------------|--------------|--------------|--------------
+
+`AZURE_API_KEY` | Azure OpenAI api key | nil | conflict with variable `OPENAI_API_KEY`
+`AZURE_API_BASE` | Azure OpenAI API base | nil | conflict with variable `OPENAI_API_KEY`
+`AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
+`OPENAI_MODEL_LOW` | OpenAI gpt low model name | nil | -
 `AZURE_MODEL` | Azure provider model | nil | -
 `BEDROCK_MODEL` | Bedrock provider model | nil | -
 `BEDROCK_REGION` | Bedrock model region | nil | -
-
 
 
 ### ramparts-server
