@@ -142,7 +142,6 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
-
 `AZURE_API_KEY` | Azure OpenAI api key | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_BASE` | Azure OpenAI API base | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
