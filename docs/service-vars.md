@@ -34,6 +34,8 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `REDIS_PASS` | Redis password | nil | -
 `UNKEY_ROOT_KEY` | Unkey Root Key | nil | optional
 `UNKEY_API_ID` | Unkey api id | nil | optional
+`MODEL_ARMOR_LOCATION` | Model armor location | nil | -
+`MODEL_ARMOR_TEMPLATE` | Model armor template | nil | -
 `REDIS_PORT` | Redis port | `6379` | -
 `REDIS_TLS` | Redis TLS | `false` | -
 `DEPLOY_TYPE` | Deploy type | `dev` | `dev` or `prod`
@@ -128,7 +130,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
 `GROK_MODEL_NAME` | Grok model name | nil | optional
 `DB_PORT` | Postgres port | `5432` | -
-`DB_SSL_MODE` | Postgres sslmode | `disable` or `require` | -
+`DB_SSL_MODE` | Postgres sslmode | `disable` | `disable` or `require`
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam` | -
 `JAVELIN_ADMIN_URL` | Javelin admin url | `http://javelin-admin:8040` | -
 
