@@ -42,11 +42,10 @@ secrets:
     AZURE_API_KEY: '${AZURE_API_KEY}'
     AZURE_API_BASE: '${AZURE_API_BASE}'
     AZURE_API_VERSION: '${AZURE_API_VERSION}'
-    OPENAI_MODEL4o: '${OPENAI_MODEL4o}'
-    OPENAI_MODEL35: '${OPENAI_MODEL35}'
-    EMBEDDING_MODEL: '${EMBEDDING_MODEL}'
-    GROK_MODEL: '${GROK_MODEL}'
-
+    OPENAI_MODEL4o: gpt-4o
+    OPENAI_MODEL35: gpt-3.5-turbo
+    EMBEDDING_MODEL: text-embedding-3-small
+    GROK_MODEL: grok-3
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
