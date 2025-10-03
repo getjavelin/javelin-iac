@@ -131,6 +131,13 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `DB_SSL_MODE` | Postgres sslmode | `disable` or `require` | -
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam` | -
 `JAVELIN_ADMIN_URL` | Javelin admin url | `http://javelin-admin:8040` | -
+`OPENAI_MODEL4o` | OpenAI gpt-4o model name | `gpt-4o` | -
+`OPENAI_MODEL35` | OpenAI gpt-3.5-turbo model name | `gpt-3.5-turbo` | -
+`OPENAI_MODEL35` | OpenAI gpt-3.5-turbo model name | `gpt-3.5-turbo` | -
+`EMBEDDING_MODEL` | Embedding model name | `text-embedding-3-small` | -
+`GROK_MODEL` | Grok3 model name | `grok-3` | -
+`AZURE_MODEL` | Azure provider model | `azure/gpt35` | -
+`BEDROCK_MODEL` | Bedrock provider model | `tbedrock/anthropic.claude-3-5-sonnet-20240620-v1:0` | -
 
 ### ramparts-server
 
