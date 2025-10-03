@@ -130,7 +130,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
 `GROK_MODEL_NAME` | Grok model name | nil | optional
 `DB_PORT` | Postgres port | `5432` | -
-`DB_SSL_MODE` | Postgres sslmode | `disable` or `require` | -
+`DB_SSL_MODE` | Postgres sslmode | `disable` | `disable` or `require`
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam` | -
 `JAVELIN_ADMIN_URL` | Javelin admin url | `http://javelin-admin:8040` | -
 `OPENAI_MODEL4o` | OpenAI gpt-4o model name | `gpt-4o` | -
