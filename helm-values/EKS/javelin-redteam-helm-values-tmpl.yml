@@ -45,7 +45,7 @@ secrets:
     OPENAI_MODEL4o: '${OPENAI_MODEL4o}'
     OPENAI_MODEL35: '${OPENAI_MODEL35}'
     EMBEDDING_MODEL: '${EMBEDDING_MODEL}'
-    GROK_MODEL: '${GROK_MODEL}
+    GROK_MODEL: '${GROK_MODEL}'
 
 affinity:
   nodeAffinity:
