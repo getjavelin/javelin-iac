@@ -50,6 +50,14 @@ secrets:
     AZURE_MODEL: azure/gpt35
     BEDROCK_MODEL: bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0
     BEDROCK_REGION: us-east-1
+    BEDROCK_BEARER_TOKEN: '${BEDROCK_BEARER_TOKEN}'
+    BEDROCK_ACCESS_KEY: '${BEDROCK_ACCESS_KEY}'
+    OPENAI_API_KEY_1: '${OPENAI_API_KEY_1}'
+    OPENAI_API_KEY_2: '${OPENAI_API_KEY_2}'
+    OPENAI_API_KEY_3: '${OPENAI_API_KEY_3}'
+    LOCAL_API_KEY: '${LOCAL_API_KEY}'
+    DEFAULT_PROVIDER: '${DEFAULT_PROVIDER}'
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
