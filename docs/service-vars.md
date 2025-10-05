@@ -137,7 +137,6 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `EMBEDDING_MODEL` | Embedding model name | nil | -
 `GROK_MODEL` | Grok3 model name | nil | -
 
-
 ### javelin-redteam-lab1
 
 Variable Name | Variable Value | Default Value | Acceptable Value
@@ -145,11 +144,18 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AZURE_API_KEY` | Azure OpenAI api key | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_BASE` | Azure OpenAI API base | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
-`OPENAI_MODEL_LOW` | OpenAI gpt low model name | nil | -
 `AZURE_MODEL` | Azure provider model | nil | -
+`OPENAI_MODEL_LOW` | OpenAI gpt low model name | nil | -
 `BEDROCK_MODEL` | Bedrock provider model | nil | -
 `BEDROCK_REGION` | Bedrock model region | nil | -
-
+`BEDROCK_BEARER_TOKEN` | Bedrock bearer token | nil | -
+`BEDROCK_ACCESS_KEY` | Bedrock access key | nil | -
+`BEDROCK_SECRET_KEY` | Bedrock secret key | nil | -
+`OPENAI_API_KEY_1` | OpenAi api key | nil | -
+`OPENAI_API_KEY_2` | OpenAi api key | nil | -
+`OPENAI_API_KEY_3` | OpenAi api key | nil | -
+`LOCAL_API_KEY` | Local api key | nil | -
+`DEFAULT_PROVIDER` | Deafult provider | nil | -
 
 ### ramparts-server
 
