@@ -141,21 +141,21 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
-`AZURE_API_KEY` | Azure OpenAI api key | nil | conflict with variable `OPENAI_API_KEY`
-`AZURE_API_BASE` | Azure OpenAI API base | nil | conflict with variable `OPENAI_API_KEY`
-`AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
-`AZURE_MODEL` | Azure provider model | nil | -
-`BEDROCK_MODEL` | Bedrock provider model | nil | -
-`BEDROCK_REGION` | Bedrock model region | nil | -
-`BEDROCK_BEARER_TOKEN` | Bedrock bearer token | nil | -
-`BEDROCK_ACCESS_KEY` | Bedrock access key | nil | -
-`BEDROCK_SECRET_KEY` | Bedrock secret key | nil | -
-`OPENAI_MODEL` | OpenAI gpt low model name | nil | -
-`OPENAI_API_KEY` | OpenAi api key | nil | -
-`OPENAI_API_KEY_1` | OpenAi api key | nil | -
-`OPENAI_API_KEY_2` | OpenAi api key | nil | -
-`OPENAI_API_KEY_3` | OpenAi api key | nil | -
-`LOCAL_API_KEY` | Local api key | nil | -
+`AZURE_API_KEY` | Azure OpenAI api key | nil | for `DEFAULT_PROVIDER=azure`
+`AZURE_API_BASE` | Azure OpenAI API base | nil | for `DEFAULT_PROVIDER=azure`
+`AZURE_API_VERSION` | Azure OpenAI version | nil | for `DEFAULT_PROVIDER=azure`
+`AZURE_MODEL` | Azure provider model | nil | for `DEFAULT_PROVIDER=azure`
+`BEDROCK_MODEL` | Bedrock provider model | nil | for `DEFAULT_PROVIDER=bedrock`
+`BEDROCK_REGION` | Bedrock model region | nil | for `DEFAULT_PROVIDER=bedrock`
+`BEDROCK_BEARER_TOKEN` | Bedrock bearer token | nil | for `DEFAULT_PROVIDER=bedrock`
+`BEDROCK_ACCESS_KEY` | Bedrock access key | nil | for `DEFAULT_PROVIDER=bedrock`
+`BEDROCK_SECRET_KEY` | Bedrock secret key | nil | for `DEFAULT_PROVIDER=bedrock`
+`OPENAI_MODEL` | OpenAI gpt low model name | nil | for `DEFAULT_PROVIDER=openai`
+`OPENAI_API_KEY` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai`
+`OPENAI_API_KEY_1` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai` and need rotational key for model access
+`OPENAI_API_KEY_2` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai` and need rotational key for model access
+`OPENAI_API_KEY_3` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai` and need rotational key for model access
+`LOCAL_API_KEY` | Local api key | nil | for `DEFAULT_PROVIDER=local`
 `DEFAULT_PROVIDER` | Default provider | nil | `openai` or `bedrock` or `azure` or `local` 
 
 ### ramparts-server
