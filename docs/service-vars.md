@@ -145,12 +145,13 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AZURE_API_BASE` | Azure OpenAI API base | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_MODEL` | Azure provider model | nil | -
-`OPENAI_MODEL` | OpenAI gpt low model name | nil | -
 `BEDROCK_MODEL` | Bedrock provider model | nil | -
 `BEDROCK_REGION` | Bedrock model region | nil | -
 `BEDROCK_BEARER_TOKEN` | Bedrock bearer token | nil | -
 `BEDROCK_ACCESS_KEY` | Bedrock access key | nil | -
 `BEDROCK_SECRET_KEY` | Bedrock secret key | nil | -
+`OPENAI_MODEL` | OpenAI gpt low model name | nil | -
+`OPENAI_API_KEY` | OpenAi api key | nil | -
 `OPENAI_API_KEY_1` | OpenAi api key | nil | -
 `OPENAI_API_KEY_2` | OpenAi api key | nil | -
 `OPENAI_API_KEY_3` | OpenAi api key | nil | -
