@@ -155,7 +155,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `OPENAI_API_KEY_2` | OpenAi api key | nil | -
 `OPENAI_API_KEY_3` | OpenAi api key | nil | -
 `LOCAL_API_KEY` | Local api key | nil | -
-`DEFAULT_PROVIDER` | Default provider | nil | `azure` or `bedrock`
+`DEFAULT_PROVIDER` | Default provider | nil | `openai` or `bedrock` or `azure` or `local` 
 
 ### ramparts-server
 
