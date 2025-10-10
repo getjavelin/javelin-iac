@@ -135,8 +135,8 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `DB_SSL_MODE` | Postgres sslmode | `disable` | `disable` or `require`
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam` | -
 `JAVELIN_ADMIN_URL` | Javelin admin url | `http://javelin-admin:8040` | -
-`OPENAI_MODEL_HIGH` | OpenAI gpt high model name | nil | -
-`OPENAI_MODEL_LOW` | OpenAI gpt low model name | nil | -
+`MODEL_HIGH_END` | Provider high model name | nil | -
+`MODEL_LOW_END` | Provider low model name | nil | -
 `EMBEDDING_MODEL` | Embedding model name | nil | -
 `GROK_MODEL` | Grok3 model name | nil | -
 
