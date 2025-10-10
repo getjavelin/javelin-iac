@@ -8,7 +8,7 @@ resource "postgresql_database" "javelin" {
 
 resource "postgresql_extension" "javelin" {
   depends_on                = [ postgresql_database.javelin ]
-  for_each                  = { for ext in var.pg_extentions : ext.name => ext }
+  for_each                  = { for ext in var.pg_extensions : ext.name => ext }
 
   name                      = each.value.name
   database                  = each.value.database

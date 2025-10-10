@@ -3,8 +3,8 @@ variable "pg_db_list" {
   type        = list(string)
 }
 
-variable "pg_extentions" {
-  description = "List of extentions and its databases"
+variable "pg_extensions" {
+  description = "List of extensions and its databases"
   type = list(object({
     name         = string
     database     = string

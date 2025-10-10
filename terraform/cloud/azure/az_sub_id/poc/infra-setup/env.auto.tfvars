@@ -39,7 +39,7 @@ postgres_storage_tier                       = "P30"
 postgres_sku_name                           = "GP_Standard_D4ads_v5"
 postgres_source_server_id                   = ""
 pg_db_list                                  = [ "javelin_redteam" ]
-pg_extentions                               = [
+pg_extensions                               = [
                                                 {
                                                   name     = "vector"
                                                   database = "javelin_redteam"

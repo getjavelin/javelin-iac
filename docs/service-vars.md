@@ -16,6 +16,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AWS_REPLICATION_KMS_KEY` | AWS KMS Key for secret manager enc in replication region | nil | optional
 `REDIS_PORT` | Redis port | `6379` | -
 `REDIS_TLS` | Redis TLS | `false` | -
+`REDIS_CACERT` | Redis CA Cert | `""` | -
 `K8S_NAMESPACE` | Kubernetes namespace | `Deployed K8s namespace` | -
 `DB_PORT` | Postgres port | `5432` | -
 `DB_SSL_MODE` | Postgres sslmode | `disable` | `disable` or `require`
@@ -38,6 +39,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `MODEL_ARMOR_TEMPLATE` | Model armor template | nil | -
 `REDIS_PORT` | Redis port | `6379` | -
 `REDIS_TLS` | Redis TLS | `false` | -
+`REDIS_CACERT` | Redis CA Cert | `""` | -
 `DEPLOY_TYPE` | Deploy type | `dev` | `dev` or `prod`
 `K8S_NAMESPACE` | Kubernetes namespace | `Deployed K8s namespace` | `Deployed K8s namespace`
 `JAVELIN_ADMIN_URL` | Javelin admin url | `http://javelin-admin:8040` | -
@@ -128,6 +130,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AZURE_API_KEY` | Azure OpenAI api key | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_BASE` | Azure OpenAI API base | nil | conflict with variable `OPENAI_API_KEY`
 `AZURE_API_VERSION` | Azure OpenAI version | nil | conflict with variable `OPENAI_API_KEY`
+`REDIS_CACERT` | Redis CA Cert | `""` | -
 `DB_PORT` | Postgres port | `5432` | -
 `DB_SSL_MODE` | Postgres sslmode | `disable` | `disable` or `require`
 `REDTEAM_DB_NAME` | Postgres database | `javelin_redteam` | -

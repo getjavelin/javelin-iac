@@ -39,18 +39,27 @@ secrets:
     REDIS_HOST: '${REDIS_HOST}'
     REDIS_PASS: '${REDIS_PASS}'
     REDIS_TLS: 'true'
+    # REDIS_CACERT: '/app/certs/redis-ca.pem'
 
 volumes:
   - name: secret-volume
     secret:
       secretName: javelin-core-file
       optional: false
+  # - name: redis-cert-volume
+  #   secret:
+  #     secretName: javelin-core-redis-cert
+  #     optional: false
 
 volumeMounts:
   - name: secret-volume
     mountPath: "/app/config/javelin-gcpjson.json"
     readOnly: true
     subPath: javelin-gcpjson.json
+  # - name: redis-cert-volume
+  #   mountPath: "/app/certs/redis-ca.pem"
+  #   readOnly: true
+  #   subPath: redis-ca.pem
 
 serviceAccount:
   create: true

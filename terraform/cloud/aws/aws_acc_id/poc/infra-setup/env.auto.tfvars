@@ -47,7 +47,7 @@ aurora_instance_db_class                 = "db.r6g.large"
 aurora_master_cluster_region             = "us-east-1"
 aurora_global_cluster_identifier         = ""
 pg_db_list                               = [ "javelin_redteam" ]
-pg_extentions                            = [
+pg_extensions                            = [
                                                 {
                                                     name     = "vector"
                                                     database = "javelin_redteam"
