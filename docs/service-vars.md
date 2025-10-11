@@ -158,6 +158,8 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `OPENAI_API_KEY_1` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai` and need rotational key for model access
 `OPENAI_API_KEY_2` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai` and need rotational key for model access
 `OPENAI_API_KEY_3` | OpenAi api key | nil | for `DEFAULT_PROVIDER=openai` and need rotational key for model access
+`LOCAL_MODEL` | Local model | `local/llama2` | for `DEFAULT_PROVIDER=local`
+`LOCAL_API_BASE` | Local API base | `http://javelin-chat-tester:8080` | for `DEFAULT_PROVIDER=local`
 `LOCAL_API_KEY` | Local api key | nil | for `DEFAULT_PROVIDER=local`
 `DEFAULT_PROVIDER` | Default provider | nil | `openai` or `bedrock` or `azure` or `local` 
 
