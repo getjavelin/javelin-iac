@@ -145,6 +145,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
 `MODEL_NAME` | Provider model | nil | -
+`LOCAL_MODEL_NAME` | Local Provider model | nil | -
 `AZURE_API_KEY` | Azure OpenAI api key | nil | for `DEFAULT_PROVIDER=azure`
 `AZURE_API_BASE` | Azure OpenAI API base | nil | for `DEFAULT_PROVIDER=azure`
 `AZURE_API_VERSION` | Azure OpenAI version | nil | for `DEFAULT_PROVIDER=azure`
