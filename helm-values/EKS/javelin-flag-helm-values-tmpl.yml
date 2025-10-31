@@ -1,3 +1,28 @@
+fullnameOverride: "javelin-flag"
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 1031
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 1031
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+nodeSelector:
+  kube/nodegroup: "general"
+
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -30,7 +55,6 @@ resources:
     memory: 256Mi
     cpu: 200m
 
-# kubectl -n K8S_NAMESPACE create secret generic javelin-flag-file --from-file=javelin.goff.yaml
 volumes:
   - name: goff-volume
     secret:
@@ -42,13 +66,3 @@ volumeMounts:
     mountPath: /goff/config/javelin.goff.yaml
     readOnly: true
     subPath: javelin.goff.yaml
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kube/nodegroup
-          operator: In
-          values:
-          - general

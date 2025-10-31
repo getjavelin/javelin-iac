@@ -43,23 +43,7 @@ resources:
 secrets:
   enabled: true
   secretData:
-    DEFAULT_PROVIDER: '${DEFAULT_PROVIDER}'
-    # azure
-    AZURE_API_KEY: '${AZURE_API_KEY}'
-    AZURE_API_BASE: '${AZURE_API_BASE}'
-    AZURE_API_VERSION: '${AZURE_API_VERSION}'
-    AZURE_MODEL: azure/gpt35
-    # # bedrock
-    # BEDROCK_MODEL: bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0
-    # BEDROCK_REGION: us-east-1
-    # BEDROCK_BEARER_TOKEN: '${BEDROCK_BEARER_TOKEN}'
-    # BEDROCK_ACCESS_KEY: '${BEDROCK_ACCESS_KEY}'
-    # BEDROCK_SECRET_KEY: '${BEDROCK_SECRET_KEY}'
-    # # openai
-    # OPENAI_MODEL: gpt-3.5-turbo
-    # OPENAI_API_KEY: '${OPENAI_API_KEY}'
-    # # local
-    # LOCAL_API_KEY: '${LOCAL_API_KEY}'
+    # Please refer https://github.com/getjavelin/javelin-iac/blob/main/docs/service-vars.md
 
 secretsApiSpecific:
   enabled: false

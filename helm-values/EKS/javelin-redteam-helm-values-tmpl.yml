@@ -33,24 +33,7 @@ resources:
 secrets:
   enabled: true
   secretData:
-    HF_TOKEN: '${HF_TOKEN}'
-    DB_USERNAME: '${DB_USERNAME}'
-    DB_PASSWORD: '${DB_PASSWORD}'
-    DB_HOST: '${DB_HOST}'
-    DB_SSL_MODE: 'require'
-    REDIS_CONN_STR: '${REDIS_CONN_STR}'
-    # REDIS_CACERT: '/app/certs/redis-ca.pem'
-    MODEL_HIGH_END: 'azure/gpt-4o'
-    MODEL_LOW_END: 'azure/gpt35'
-    # # openai
-    # OPENAI_API_KEY: '${OPENAI_API_KEY}'
-    # GROK_MODEL: grok-3
-    # XAI_API_KEY: '${XAI_API_KEY}'
-    # azure
-    AZURE_API_KEY: '${AZURE_API_KEY}'
-    AZURE_API_BASE: '${AZURE_API_BASE}'
-    AZURE_API_VERSION: '${AZURE_API_VERSION}'
-    EMBEDDING_MODEL: text-embedding-3-small
+    # Please refer https://github.com/getjavelin/javelin-iac/blob/main/docs/service-vars.md
 
 # volumes:
 #   - name: redis-cert-volume
@@ -106,13 +89,6 @@ worker:
 
 seederJob:
   enabled: true
-
-  secretsSeederSpecific:
-    enabled: true
-    secretData:
-      REDTEAM_SEEDER_DATASET: "javelinai/javelin-red5-with-embeddings"
-      REDTEAM_SEEDER_DATASET_VER: "spg_v1"
-      REDTEAM_SEEDER_ARGS: ""
 
   resources:
     requests:

@@ -1,3 +1,28 @@
+fullnameOverride: "javelin-core"
+
+livenessProbe:
+  httpGet:
+    path: /v1/system/healthz
+    port: 8000
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+readinessProbe:
+  httpGet:
+    path: /v1/system/healthz
+    port: 8000
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+nodeSelector:
+  kube/nodegroup: "general"
+
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -33,12 +58,7 @@ resources:
 secrets:
   enabled: true
   secretData:
-    BYPASS_GUARDRAILS: 'false'
-    REDIS_HOST: '${REDIS_HOST}'
-    REDIS_PASS: '${REDIS_PASS}'
-    REDIS_TLS: 'true'
-    REDIS_PORT: '6380'
-    # REDIS_CACERT: '/app/certs/redis-ca.pem'
+    # Please refer https://github.com/getjavelin/javelin-iac/blob/main/docs/service-vars.md
 
 volumes:
   - name: secret-volume
@@ -65,6 +85,10 @@ serviceAccount:
   automount: true
   # annotations:
   #   azure.workload.identity/client-id: "${SVC_IAM_CLIENT_ID}"
+  rules:
+    - apiGroups: [ "" ]
+      resources: [ "secrets" ]
+      verbs: [ "get", "list" ]
 
 ingress:
   enabled: true
@@ -90,13 +114,3 @@ ingress:
       paths:
         - path: /v1/
           pathType: Prefix
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kube/nodegroup
-          operator: In
-          values:
-          - general

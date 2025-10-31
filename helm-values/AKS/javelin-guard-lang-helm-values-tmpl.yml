@@ -1,3 +1,28 @@
+fullnameOverride: "javelin-guard-lang"
+
+livenessProbe:
+  httpGet:
+    path: /v1/internal/guard-language-detect/health
+    port: 8020
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+readinessProbe:
+  httpGet:
+    path: /v1/internal/guard-language-detect/health
+    port: 8020
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+nodeSelector:
+  kube/nodegroup: "general"
+
 autoscaling:
   enabled: false
   minReplicas: 2
@@ -60,13 +85,3 @@ ingress:
       paths:
         - path: /v1/internal/guard-language-detect/
           pathType: Prefix
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kube/nodegroup
-          operator: In
-          values:
-          - general

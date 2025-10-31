@@ -1,3 +1,29 @@
+fullnameOverride: "javelin-dlp"
+progressDeadlineSeconds: 1200
+
+livenessProbe:
+  httpGet:
+    path: /v1/guard/local_dlp/healthz
+    port: 8888
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+readinessProbe:
+  httpGet:
+    path: /v1/guard/local_dlp/healthz
+    port: 8888
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+nodeSelector:
+  kube/nodegroup: "general"
+
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -29,13 +55,3 @@ resources:
   limits:
     memory: 2048Mi
     cpu: 1000m
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kube/nodegroup
-          operator: In
-          values:
-          - general

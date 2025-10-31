@@ -1,3 +1,28 @@
+fullnameOverride: "javelin-webapp"
+
+livenessProbe:
+  httpGet:
+    path: /sign-in
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 4
+
+readinessProbe:
+  httpGet:
+    path: /sign-in
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 4
+
+nodeSelector:
+  kube/nodegroup: "general"
+
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -35,24 +60,7 @@ resources:
 secrets:
   enabled: true
   secretData:
-    REDIRECT_URI: 'https://dev.example.com/'
-    NEXT_PUBLIC_REDIRECT_URI: 'https://dev.example.com/'
-    NEXT_PUBLIC_DEFAULT_USAGE_PLAN_ID: 'd1jy0v'
-    NEXT_PUBLIC_DEFAULT_USER_ROLE: 'org:customer_admin'
-    NEXT_PUBLIC_PRESTRINGS: '${NEXT_PUBLIC_PRESTRINGS}'
-    NEXT_PUBLIC_USER_ROLES: '${NEXT_PUBLIC_USER_ROLES}'
-    NEXT_PUBLIC_BUID_MAX_GATEWAYS: '2'
-    NEXT_PUBLIC_CLERK_SIGNUP: 'visible'
-    NEXT_PUBLIC_DEPLOYED_TARGET: 'main'
-    NEXT_PUBLIC_FEATURE_FLAG_URL: 'http://javelin-flag:1031/'
-    NEXT_PUBLIC_ONBOARDING_ENABLED: 'false'
-    NEXT_PUBLIC_BUID_CLUSTER_MAP: '${NEXT_PUBLIC_BUID_CLUSTER_MAP}'
-    NEXT_PUBLIC_HA_PAIRS: '${NEXT_PUBLIC_HA_PAIRS}'
-    NEXT_PUBLIC_SECRET_STORE: 'kubernetes'
-    NEXT_PUBLIC_SAAS_SERVICE: 'FALSE'
-    SUPPORT_SMTP_PASSKEY: '${SUPPORT_SMTP_PASSKEY}'
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: '${CLERK_PUBLISHABLE_KEY}'
-    CLERK_SECRET_KEY: '${CLERK_SECRET_KEY}'
+    # Please refer https://github.com/getjavelin/javelin-iac/blob/main/docs/service-vars.md
 
 ingress:
   enabled: true
@@ -81,13 +89,3 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kube/nodegroup
-          operator: In
-          values:
-          - general
