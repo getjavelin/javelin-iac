@@ -1,3 +1,28 @@
+fullnameOverride: "javelin-admin"
+
+livenessProbe:
+  httpGet:
+    path: /v1/admin/healthz
+    port: 8040
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+readinessProbe:
+  httpGet:
+    path: /v1/admin/healthz
+    port: 8040
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 2
+
+nodeSelector:
+  kube/nodegroup: "general"
+
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -35,18 +60,7 @@ resources:
 secrets:
   enabled: true
   secretData:
-    DB_USERNAME: '${DB_USERNAME}'
-    DB_PASSWORD: '${DB_PASSWORD}'
-    DB_HOST: '${DB_HOST}'
-    DB_NAME: '${DB_NAME}'
-    DB_SSL_MODE: 'require'
-    REDIS_HOST: '${REDIS_HOST}'
-    REDIS_PASS: '${REDIS_PASS}'
-    REDIS_TLS: 'true'
-    # REDIS_CACERT: '/app/certs/redis-ca.pem'
-    AWS_KMS_KEY: '${AWS_KMS_KEY}'
-    AWS_SECRET_REPLICATION_REGION: '${AWS_SECRET_REPLICATION_REGION}'
-    AWS_REPLICATION_KMS_KEY: '${AWS_REPLICATION_KMS_KEY}'
+    # Please refer https://github.com/getjavelin/javelin-iac/blob/main/docs/service-vars.md
 
 volumes:
   - name: license-volume
@@ -72,6 +86,10 @@ serviceAccount:
   automount: true
   annotations:
     eks.amazonaws.com/role-arn: "${SVC_IAM_ROLE}"
+  rules:
+    - apiGroups: [ "" ]
+      resources: [ "secrets" ]
+      verbs: [ "get", "list", "create", "update", "patch", "delete" ]
 
 ingress:
   enabled: true
@@ -101,13 +119,3 @@ ingress:
       paths:
         - path: /v1/admin/
           pathType: Prefix
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kube/nodegroup
-          operator: In
-          values:
-          - general

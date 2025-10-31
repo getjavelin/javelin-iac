@@ -4,6 +4,7 @@
 
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
+`ACCOUNT_ID` | Account ID | nil | -
 `DB_USERNAME` | Postgres username | nil | -
 `DB_PASSWORD` | Postgres password | nil | -
 `DB_HOST` | Postgres host | nil | -
@@ -28,6 +29,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
+`ACCOUNT_ID` | Account ID | nil | -
 `LLAMA_GUARD_URL` | Llama gaurd url | nil | optional
 `LLAMA_GUARD_API_KEY` | Llama gaurd api key | nil | optional
 `REDIS_HOST` | Redis host | nil | -
@@ -112,14 +114,13 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `CORS_ALLOWED_METHODS` | CORS allowed methods | `POST,GET,OPTIONS` | -
 `CORS_ALLOWED_HEADERS` | CORS allowed headers | `Authorization,Content-Type,x-api-key,x-javelin-user,x-javelin-userrole` | -
 
-### javelin-redteam / javelin-redteam-worker / javelin-redteam-seeder
+### javelin-redteam
 
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
-`REDTEAM_MODULE` | Redteam module name | nil | `api` or `queue` or `seeder`
-`REDTEAM_SEEDER_DATASET` | Redteam seeder dataset name | nil | `seeder` specific variable
-`REDTEAM_SEEDER_DATASET_VER` | Redteam seeder dataset version | nil | `seeder` specific variable
-`REDTEAM_SEEDER_ARGS` | Redteam seeder command args | nil | `seeder` specific variable
+`REDTEAM_SEEDER_DATASET` | Redteam seeder dataset name | nil | -
+`REDTEAM_SEEDER_DATASET_VER` | Redteam seeder dataset version | nil | -
+`REDTEAM_SEEDER_ARGS` | Redteam seeder command args | nil | `--force`
 `HF_TOKEN` | HF token | nil | -
 `OPENAI_API_KEY` | OpenAI api key | nil | conflict with variables `AZURE_*`
 `DB_USERNAME` | Postgres username | nil | -
@@ -170,7 +171,7 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `LLM_URL` | LLM complete URL | nil | -
 `LLM_API_KEY` | LLM API Key | nil | -
 
-### javelin-overwatch
+### javelin-scout
 
 Variable Name | Variable Value | Default Value | Acceptable Value
 --------------|--------------|--------------|--------------
