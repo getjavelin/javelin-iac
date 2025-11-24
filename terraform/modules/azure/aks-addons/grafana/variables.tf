@@ -35,11 +35,6 @@ variable "prometheus_url" {
   default     = "http://javelin-prometheus-server"
 }
 
-variable "ingress_type" {
-  description = "Ingress Type"
-  type        = string
-}
-
 variable "grafana_domain" {
   description = "Grafana domain"
   type        = string

@@ -69,8 +69,3 @@ variable "alb_security_group_ids" {
   type        = string
   default     = ""
 }
-
-variable "ingress_type" {
-  description = "Ingress Type"
-  type        = string
-}

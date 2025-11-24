@@ -152,12 +152,6 @@ variable "grafana_domain" {
   type        = string
 }
 
-variable "ingress_type" {
-  description = "Ingress Type"
-  type        = string
-  default     = "alb"
-}
-
 variable "common_tags" {
   description = "Common tags"
   type        = map(string)

@@ -84,7 +84,7 @@ resource "helm_release" "dummy_ingress" {
   namespace        = var.namespace
   create_namespace = false
   values = [
-    templatefile("../../../../../config/aws/${var.project_env}/ingress/${var.ingress_type}/dummy-ingress-values.yml", {
+    templatefile("../../../../../config/aws/${var.project_env}/helm/dummy-ingress-values.yml", {
       public_subnet_ids       = join(", ", var.public_subnet_ids)
       acm_certificate_arn     = var.acm_certificate_arn
       k8s_cluster_name        = var.k8s_cluster_name

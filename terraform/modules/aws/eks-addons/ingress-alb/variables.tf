@@ -65,8 +65,3 @@ variable "alb_security_group_ids" {
   description = "ALB Security Group IDs"
   type        = string
 }
-
-variable "ingress_type" {
-  description = "Ingress Type"
-  type        = string
-}
