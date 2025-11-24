@@ -67,6 +67,8 @@ Variable Name | Variable Value | Default Value | Acceptable Value
 `AWS_REGION` | AWS Region | `""` | optional
 `ENABLE_SENTRY` | Sentry dsn | `false` | optional
 `SENTRY_DSN` | Sentry dsn | `""` | optional
+`OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | OTEL exporter endpoint | `""` | optional
+`OTEL_EXPORTER_OTLP_HEADERS` | OTEL exporter headers | `""` | optional
 
 ### javelin-webapp
 

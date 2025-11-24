@@ -30,14 +30,6 @@ resource "helm_release" "grafana" {
   namespace        = var.namespace
   create_namespace = false
   values = [
-    templatefile("../../../../../config/aws/${var.project_env}/ingress/${var.ingress_type}/grafana-values.yml", {
-      grafana_domain         = var.grafana_domain
-      public_subnet_ids      = join(", ", var.public_subnet_ids)
-      acm_certificate_arn    = var.acm_certificate_arn
-      k8s_cluster_name       = var.k8s_cluster_name
-      alb_security_group_ids = var.alb_security_group_ids
-      grafana_subpath        = var.grafana_subpath
-    }),
     templatefile("../../../../../config/aws/${var.project_env}/helm/grafana-values.yml", {
       project_name            = var.project_name
       grafana_disk_size       = var.grafana_disk_size
@@ -45,6 +37,11 @@ resource "helm_release" "grafana" {
       grafana_secret          = random_password.grafana_secret.result
       prometheus_url          = var.prometheus_url
       grafana_subpath         = var.grafana_subpath
+      grafana_domain         = var.grafana_domain
+      public_subnet_ids      = join(", ", var.public_subnet_ids)
+      acm_certificate_arn    = var.acm_certificate_arn
+      k8s_cluster_name       = var.k8s_cluster_name
+      alb_security_group_ids = var.alb_security_group_ids
     })
   ]
 }

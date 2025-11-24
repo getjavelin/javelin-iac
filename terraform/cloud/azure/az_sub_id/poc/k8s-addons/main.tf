@@ -66,7 +66,6 @@ module "grafana" {
   project_env                        = var.project_env
   namespace                          = var.service_namespace
   grafana_domain                     = var.grafana_domain
-  ingress_type                       = var.ingress_type
   storage_classname                  = var.storage_classname
   grafana_disk_size                  = var.grafana_disk_size
 }

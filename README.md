@@ -6,4 +6,6 @@
 
 [Javelin Cloud Component Details](./docs/Components.md)
 
+[Javelin Helm Charts Deployment](./helm-values/README.md)
+
 [Javelin Overwatch](./docs/Javelin-Overwatch.md)

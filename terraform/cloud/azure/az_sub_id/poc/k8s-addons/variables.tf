@@ -97,12 +97,6 @@ variable "grafana_domain" {
   type        = string
 }
 
-variable "ingress_type" {
-  description = "Ingress Type"
-  type        = string
-  default     = "agic"
-}
-
 variable "registry_server" {
   description = "Docker Registry Name"
   type        = string

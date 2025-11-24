@@ -67,8 +67,6 @@ module "ingress_alb" {
   ingress_replicas                   = var.ingress_replicas
   eks_cluster_oidc_provider_arn      = data.terraform_remote_state.infra_setup_tf.outputs.eks_cluster_oidc_provider_arn
   javelin_ingress_helm_version       = var.javelin_ingress_helm_version
-  ## Ingress Variables 
-  ingress_type                       = var.ingress_type
   acm_certificate_arn                = var.frontend_acm_certificate_arn
   k8s_cluster_name                   = data.terraform_remote_state.infra_setup_tf.outputs.k8s_cluster_name
   public_subnet_ids                  = data.terraform_remote_state.infra_setup_tf.outputs.vpc_public_subnet_ids
@@ -94,8 +92,6 @@ module "grafana" {
   namespace                          = var.service_namespace
   storage_classname                  = var.storage_classname
   grafana_disk_size                  = var.grafana_disk_size
-  ## Ingress Variables 
-  ingress_type                       = var.ingress_type
   grafana_domain                     = var.grafana_domain
   acm_certificate_arn                = var.grafana_acm_certificate_arn
   k8s_cluster_name                   = data.terraform_remote_state.infra_setup_tf.outputs.k8s_cluster_name

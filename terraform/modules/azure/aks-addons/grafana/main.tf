@@ -30,10 +30,6 @@ resource "helm_release" "grafana" {
   namespace        = var.namespace
   create_namespace = false
   values = [
-    templatefile("../../../../../config/azure/${var.project_env}/ingress/${var.ingress_type}/grafana-values.yml", {
-      grafana_domain          = var.grafana_domain
-      grafana_subpath         = var.grafana_subpath
-    }),
     templatefile("../../../../../config/azure/${var.project_env}/helm/grafana-values.yml", {
       project_name            = var.project_name
       grafana_disk_size       = var.grafana_disk_size
@@ -42,6 +38,7 @@ resource "helm_release" "grafana" {
       grafana_secret          = random_password.grafana_secret.result
       prometheus_url          = var.prometheus_url
       grafana_subpath         = var.grafana_subpath
+      grafana_domain          = var.grafana_domain
     })
   ]
 }
